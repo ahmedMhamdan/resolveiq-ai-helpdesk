@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+#[Fillable(['name', 'email', 'password', 'role_id'])]
+#[Hidden(['password', 'remember_token'])]
+class User extends Authenticatable
+{
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'agent_id');
+    }
+
+    public function ticketReplies()
+    {
+        return $this->hasMany(TicketReply::class);
+    }
+
+    public function ticketAttachments()
+    {
+        return $this->hasMany(TicketAttachment::class);
+    }
+
+    public function ticketActivityLogs()
+    {
+        return $this->hasMany(TicketActivityLog::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+}
