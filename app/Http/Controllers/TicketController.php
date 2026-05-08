@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -36,5 +38,148 @@ class TicketController extends Controller
         ]);
 
         return view('tickets.show', compact('ticket'));
+    }
+    public function create()
+    {
+        $departments = Department::orderBy('name', 'asc')->get();
+
+        $agents = User::whereHas('role', function ($query) {
+        $query->where('name', 'agent');
+        })->orderBy('name', 'asc')->get();
+
+        return view('tickets.create', compact('departments', 'agents'));
+    }
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:180'],
+            'description' => ['required', 'string', 'max:5000'],
+            'department_id' => ['required', 'exists:departments,id'],
+            'agent_id' => ['nullable', 'exists:users,id'],
+            'priority' => ['required', 'in:low,medium,high,urgent'],
+            'due_at' => ['nullable', 'date'],
+        ]);
+
+        $requesterId = User::whereHas('role', function ($query) {
+            $query->where('name', 'user');
+        })->value('id');
+
+        $actorId = User::whereHas('role', function ($query) {
+            $query->where('name', 'admin');
+        })->value('id');
+
+        $latestTicket = Ticket::latest('id')->first();
+        $nextNumber = $latestTicket ? $latestTicket->id + 1001 : 1001;
+
+        $ticket = Ticket::create([
+            'ticket_number' => 'RIQ-' . $nextNumber,
+            'user_id' => $requesterId,
+            'agent_id' => $data['agent_id'] ?? null,
+            'department_id' => $data['department_id'],
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'status' => 'open',
+            'priority' => $data['priority'],
+            'due_at' => $data['due_at'] ?? null,
+        ]);
+
+        $ticket->activityLogs()->create([
+            'user_id' => $actorId,
+            'action' => 'Ticket created',
+            'old_value' => null,
+            'new_value' => 'open',
+        ]);
+
+        return redirect()
+            ->route('tickets.show', $ticket)
+            ->with('success', 'Ticket created successfully.');
+    }
+    public function edit(Ticket $ticket)
+    {
+        $departments = Department::orderBy('name', 'asc')->get();
+
+        $agents = User::whereHas('role', function ($query) {
+            $query->where('name', 'agent');
+        })->orderBy('name', 'asc')->get();
+
+        return view('tickets.edit', compact('ticket', 'departments', 'agents'));
+    }
+
+    public function update(Request $request, Ticket $ticket)
+    {
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:180'],
+            'description' => ['required', 'string', 'max:5000'],
+            'department_id' => ['required', 'exists:departments,id'],
+            'agent_id' => ['nullable', 'exists:users,id'],
+            'status' => ['required', 'in:open,pending,solved,closed'],
+            'priority' => ['required', 'in:low,medium,high,urgent'],
+            'due_at' => ['nullable', 'date'],
+        ]);
+
+        $oldStatus = $ticket->status;
+
+        $ticket->update([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'department_id' => $data['department_id'],
+            'agent_id' => $data['agent_id'] ?? null,
+            'status' => $data['status'],
+            'priority' => $data['priority'],
+            'due_at' => $data['due_at'] ?? null,
+        ]);
+
+        $actorId = User::whereHas('role', function ($query) {
+            $query->where('name', 'admin');
+        })->value('id');
+
+        $ticket->activityLogs()->create([
+            'user_id' => $actorId,
+            'action' => 'Ticket updated',
+            'old_value' => $oldStatus,
+            'new_value' => $ticket->status,
+        ]);
+
+        return redirect()
+            ->route('tickets.show', $ticket)
+            ->with('success', 'Ticket updated successfully.');
+    }
+    public function deleted()
+    {
+        $tickets = Ticket::onlyTrashed()
+            ->with(['user', 'agent', 'department'])
+            ->latest('deleted_at')
+            ->paginate(10);
+
+        return view('tickets.deleted', compact('tickets'));
+    }
+
+    public function destroy(Ticket $ticket)
+    {
+        $ticket->delete();
+
+        return redirect()
+            ->route('tickets.index')
+            ->with('success', 'Ticket moved to deleted tickets.');
+    }
+
+    public function restore($id)
+    {
+        $ticket = Ticket::onlyTrashed()->findOrFail($id);
+        $ticket->restore();
+
+        return redirect()
+            ->route('tickets.deleted')
+            ->with('success', 'Ticket restored successfully.');
+    }
+
+    public function forceDelete($id)
+    {
+        $ticket = Ticket::onlyTrashed()->findOrFail($id);
+        $ticket->forceDelete();
+
+        return redirect()
+            ->route('tickets.deleted')
+            ->with('success', 'Ticket permanently deleted.');
     }
 }

@@ -3,8 +3,15 @@
 @section('title', 'Tickets')
 
 @section('content')
-    <h1 class="page-title">Tickets</h1>
-    <p class="page-subtitle">Manage support requests, priorities, and assigned agents.</p>
+    <div class="page-actions tickets-top-actions">
+    <a href="{{ route('tickets.deleted') }}" class="btn btn-deleted-tickets">
+        Deleted Tickets
+    </a>
+
+    <a href="{{ route('tickets.create') }}" class="btn btn-primary new-ticket-btn">
+        + New Ticket
+    </a>
+    </div>
 
     <section class="card table-card">
         <div class="table-head">
@@ -28,6 +35,10 @@
                 </select>
 
                 <button type="submit">Filter</button>
+
+                @if(request()->hasAny(['search', 'status', 'priority']))
+                    <a class="btn secondary" href="{{ route('tickets.index') }}">Reset</a>
+                @endif
             </form>
         </div>
 
@@ -47,13 +58,36 @@
                 @forelse($tickets as $ticket)
                     <tr>
                         <td>
-                            <a href="{{ route('tickets.show', $ticket) }}">
-                                #{{ $ticket->ticket_number }}<br>
-                                {{ $ticket->title }}
+                            <a class="ticket-link" href="{{ route('tickets.show', $ticket) }}">
+                                <strong>#{{ $ticket->ticket_number }}</strong>
+                                <span>{{ $ticket->title }}</span>
                             </a>
                         </td>
-                        <td>{{ $ticket->user->name }}</td>
-                        <td>{{ $ticket->agent?->name ?? 'Unassigned' }}</td>
+
+                        <td>
+                            <div class="person">
+                                <div class="mini-avatar">{{ strtoupper(substr($ticket->user->name, 0, 1)) }}</div>
+                                <div>
+                                    <strong>{{ $ticket->user->name }}</strong><br>
+                                    <small>Requester</small>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            @if($ticket->agent)
+                                <div class="person">
+                                    <div class="mini-avatar">{{ strtoupper(substr($ticket->agent->name, 0, 1)) }}</div>
+                                    <div>
+                                        <strong>{{ $ticket->agent->name }}</strong><br>
+                                        <small>Agent</small>
+                                    </div>
+                                </div>
+                            @else
+                                <span class="page-subtitle">Unassigned</span>
+                            @endif
+                        </td>
+
                         <td>{{ $ticket->department->name }}</td>
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
                         <td><span class="priority {{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span></td>
@@ -61,7 +95,9 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7">No tickets found.</td>
+                        <td colspan="7">
+                            <div class="empty">No tickets found.</div>
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
