@@ -36,7 +36,7 @@
                 <tr>
                     <th>Department</th>
                     <th>Description</th>
-                    <th>Tickets</th>
+                    <th class="tickets-col">TICKETS</th>
                     <th>Created</th>
                     <th>Actions</th>
                 </tr>
@@ -53,10 +53,10 @@
                             {{ $department->description ?? 'No description' }}
                         </td>
 
-                        <td>
-                            <span class="badge open">
-                                {{ $department->tickets_count }}
-                            </span>
+                        <td class="tickets-col">
+                        <span class="badge open ticket-count-badge">
+                            {{ $department->tickets_count }}
+                        </span>
                         </td>
 
                         <td>

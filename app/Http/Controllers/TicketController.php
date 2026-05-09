@@ -184,14 +184,14 @@ public function update(Request $request, Ticket $ticket)
         ->route('tickets.show', $ticket)
         ->with('success', 'Ticket updated successfully.');
 }
-    public function deleted()
+    public function trashed()
     {
         $tickets = Ticket::onlyTrashed()
             ->with(['user', 'agent', 'department'])
             ->latest('deleted_at')
             ->paginate(10);
 
-        return view('tickets.deleted', compact('tickets'));
+        return view('tickets.trashed', compact('tickets'));
     }
 
     public function destroy(Ticket $ticket)
@@ -211,7 +211,7 @@ public function update(Request $request, Ticket $ticket)
         $ticket->restore();
 
         return redirect()
-            ->route('tickets.deleted')
+            ->route('tickets.trashed')
             ->with('success', 'Ticket restored successfully.');
     }
 
@@ -221,7 +221,7 @@ public function update(Request $request, Ticket $ticket)
         $ticket->forceDelete();
 
         return redirect()
-            ->route('tickets.deleted')
+            ->route('tickets.trashed')
             ->with('success', 'Ticket permanently deleted.');
     }
 }

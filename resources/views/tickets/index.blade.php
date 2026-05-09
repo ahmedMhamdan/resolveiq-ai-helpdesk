@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="page-actions tickets-top-actions">
-    <a href="{{ route('tickets.deleted') }}" class="btn btn-deleted-tickets">
+    <a href="{{ route('tickets.trashed') }}" class="btn btn-deleted-tickets">
         Deleted Tickets
     </a>
 

@@ -31,31 +31,31 @@
                 <span>Departments</span>
                 </a>
 
-                <div class="disabled">
-                    <span class="nav-icon">A</span>
-                    Agents
-                </div>
+                <a href="{{ route('agents.index') }}" class="{{ request()->routeIs('agents.*') ? 'active' : '' }}">
+                <span class="nav-icon">A</span>
+                <span>Agents</span>
+                </a>
             </nav>
 
             <div class="nav-section">AI Powered</div>
             <nav class="nav">
-                <div class="disabled">
-                    <span class="nav-icon">AI</span>
-                    AI Assistant
-                </div>
+                <a href="{{ route('ai.index') }}" class="{{ request()->routeIs('ai.*') ? 'active' : '' }}">
+                <span class="nav-icon">AI</span>
+                <span>AI Assistant</span>
+                </a>
 
-                <div class="disabled">
-                    <span class="nav-icon">KB</span>
-                    Knowledge Base
-                </div>
+                <a href="{{ route('knowledge.index') }}" class="{{ request()->routeIs('knowledge.*') ? 'active' : '' }}">
+                <span class="nav-icon">KB</span>
+                <span>Knowledge Base</span>
+                </a>
             </nav>
 
             <div class="nav-section">System</div>
             <nav class="nav">
-                <div class="disabled">
-                    <span class="nav-icon">S</span>
-                    Settings
-                </div>
+                <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+                </a>
             </nav>
 
             <div class="sidebar-card">
@@ -67,8 +67,14 @@
         <main class="main">
             <div class="topbar">
                 <div class="search-wrap">
-                    <input class="search" type="text" placeholder="Search tickets, users, or departments...">
-                    <span class="shortcut">Ctrl /</span>
+                <span class="search-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M20 20L16.65 16.65"></path>
+                    </svg>
+                </span>
+
+                <input class="search" type="text" placeholder="Search tickets, users, or departments...">
                 </div>
 
                 <div class="top-actions">

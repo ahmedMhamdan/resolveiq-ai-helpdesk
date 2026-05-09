@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\SettingsController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -13,17 +17,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-
-Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
-Route::post('/tickets', [TicketController::class, 'store'])->name('tickets.store');
-
-Route::get('/tickets/deleted', [TicketController::class, 'deleted'])->name('tickets.deleted');
-
-Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('tickets.edit');
-Route::put('/tickets/{ticket}', [TicketController::class, 'update'])->name('tickets.update');
-Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy'])->name('tickets.destroy');
-
+// Ticket extra actions must stay before the resource route.
+Route::get('/tickets/trashed', [TicketController::class, 'trashed'])->name('tickets.trashed');
 Route::post('/tickets/{id}/restore', [TicketController::class, 'restore'])->name('tickets.restore');
 Route::delete('/tickets/{id}/force-delete', [TicketController::class, 'forceDelete'])->name('tickets.forceDelete');
 
@@ -36,11 +31,21 @@ Route::delete('/tickets/{ticket}/replies/{reply}', [TicketReplyController::class
 Route::delete('/tickets/{ticket}/attachments/{attachment}', [TicketAttachmentController::class, 'destroy'])
     ->name('tickets.attachments.destroy');
 
-Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+Route::resource('tickets', TicketController::class);
 
-Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
-Route::get('/departments/create', [DepartmentController::class, 'create'])->name('departments.create');
-Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
-Route::get('/departments/{department}/edit', [DepartmentController::class, 'edit'])->name('departments.edit');
-Route::put('/departments/{department}', [DepartmentController::class, 'update'])->name('departments.update');
-Route::delete('/departments/{department}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
+Route::resource('departments', DepartmentController::class)->except(['show']);
+
+Route::resource('agents', AgentController::class)->except(['show']);
+
+Route::resource('knowledge-base', KnowledgeBaseController::class)
+    ->parameters(['knowledge-base' => 'article'])
+    ->names('knowledge')
+    ->except(['show']);
+
+Route::get('/ai-assistant', [AiAssistantController::class, 'index'])
+    ->name('ai.index');
+
+Route::post('/ai-assistant/use-as-reply', [AiAssistantController::class, 'useAsReply'])
+    ->name('ai.useAsReply');
+
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
