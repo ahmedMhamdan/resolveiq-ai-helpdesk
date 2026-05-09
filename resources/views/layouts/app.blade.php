@@ -75,6 +75,7 @@
                 </span>
 
                 <input class="search" type="text" placeholder="Search tickets, users, or departments...">
+
                 </div>
 
                 <div class="top-actions">
@@ -100,13 +101,13 @@
                     </span>
                 </button>
 
-                    <div class="user-box">
+                    <a href="{{ route('profile.show') }}" class="user-box">
                         <div class="avatar">AM</div>
                         <div class="user-meta">
                             <strong>Ahmed M.</strong>
                             <span>Admin</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             @if (session('success'))

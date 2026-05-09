@@ -10,6 +10,7 @@ use App\Http\Controllers\TicketReplyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AiAssistantController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -49,3 +50,12 @@ Route::post('/ai-assistant/use-as-reply', [AiAssistantController::class, 'useAsR
     ->name('ai.useAsReply');
 
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+
+Route::get('/profile', [ProfileController::class, 'show'])
+    ->name('profile.show');
+
+Route::get('/profile/edit', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
+
+Route::put('/profile', [ProfileController::class, 'update'])
+    ->name('profile.update');
