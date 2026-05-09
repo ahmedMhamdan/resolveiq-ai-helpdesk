@@ -30,12 +30,13 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         $ticket->load([
-            'user',
-            'agent',
-            'department',
-            'replies.user',
-            'activityLogs.user',
-        ]);
+        'user',
+        'agent',
+        'department',
+        'replies.user',
+        'replies.attachments',
+        'activityLogs.user',
+    ]);
 
         return view('tickets.show', compact('ticket'));
     }
@@ -105,45 +106,84 @@ class TicketController extends Controller
         return view('tickets.edit', compact('ticket', 'departments', 'agents'));
     }
 
-    public function update(Request $request, Ticket $ticket)
-    {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:180'],
-            'description' => ['required', 'string', 'max:5000'],
-            'department_id' => ['required', 'exists:departments,id'],
-            'agent_id' => ['nullable', 'exists:users,id'],
-            'status' => ['required', 'in:open,pending,solved,closed'],
-            'priority' => ['required', 'in:low,medium,high,urgent'],
-            'due_at' => ['nullable', 'date'],
-        ]);
+public function update(Request $request, Ticket $ticket)
+{
+    $data = $request->validate([
+        'title' => ['required', 'string', 'max:180'],
+        'description' => ['required', 'string', 'max:5000'],
+        'department_id' => ['required', 'exists:departments,id'],
+        'agent_id' => ['nullable', 'exists:users,id'],
+        'status' => ['required', 'in:open,pending,solved,closed'],
+        'priority' => ['required', 'in:low,medium,high,urgent'],
+        'due_at' => ['nullable', 'date'],
+    ]);
 
-        $oldStatus = $ticket->status;
+    $oldStatus = $ticket->status;
+    $oldPriority = $ticket->priority;
 
-        $ticket->update([
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'department_id' => $data['department_id'],
-            'agent_id' => $data['agent_id'] ?? null,
-            'status' => $data['status'],
-            'priority' => $data['priority'],
-            'due_at' => $data['due_at'] ?? null,
-        ]);
+    $resolvedAt = $ticket->resolved_at;
+    $closedAt = $ticket->closed_at;
 
-        $actorId = User::whereHas('role', function ($query) {
-            $query->where('name', 'admin');
-        })->value('id');
+    if ($data['status'] === 'solved' && $ticket->status !== 'solved') {
+        $resolvedAt = now();
+    }
 
+    if ($data['status'] === 'closed' && $ticket->status !== 'closed') {
+        $closedAt = now();
+    }
+
+    if (! in_array($data['status'], ['solved', 'closed'])) {
+        $resolvedAt = null;
+        $closedAt = null;
+    }
+
+    $ticket->update([
+        'title' => $data['title'],
+        'description' => $data['description'],
+        'department_id' => $data['department_id'],
+        'agent_id' => $data['agent_id'] ?? null,
+        'status' => $data['status'],
+        'priority' => $data['priority'],
+        'due_at' => $data['due_at'] ?? null,
+        'resolved_at' => $resolvedAt,
+        'closed_at' => $closedAt,
+    ]);
+
+    $actorId = User::whereHas('role', function ($query) {
+        $query->where('name', 'admin');
+    })->value('id');
+
+    if ($oldStatus !== $ticket->status) {
         $ticket->activityLogs()->create([
             'user_id' => $actorId,
-            'action' => 'Ticket updated',
+            'action' => 'Status changed',
             'old_value' => $oldStatus,
             'new_value' => $ticket->status,
         ]);
-
-        return redirect()
-            ->route('tickets.show', $ticket)
-            ->with('success', 'Ticket updated successfully.');
     }
+
+    if ($oldPriority !== $ticket->priority) {
+        $ticket->activityLogs()->create([
+            'user_id' => $actorId,
+            'action' => 'Priority changed',
+            'old_value' => $oldPriority,
+            'new_value' => $ticket->priority,
+        ]);
+    }
+
+    if ($oldStatus === $ticket->status && $oldPriority === $ticket->priority) {
+        $ticket->activityLogs()->create([
+            'user_id' => $actorId,
+            'action' => 'Ticket updated',
+            'old_value' => null,
+            'new_value' => null,
+        ]);
+    }
+
+    return redirect()
+        ->route('tickets.show', $ticket)
+        ->with('success', 'Ticket updated successfully.');
+}
     public function deleted()
     {
         $tickets = Ticket::onlyTrashed()
@@ -156,7 +196,9 @@ class TicketController extends Controller
 
     public function destroy(Ticket $ticket)
     {
-        $ticket->delete();
+        Ticket::query()
+            ->whereKey($ticket->id)
+            ->delete();
 
         return redirect()
             ->route('tickets.index')

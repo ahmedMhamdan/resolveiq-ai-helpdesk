@@ -3,6 +3,18 @@
 @section('title', 'Dashboard')
 
 @section('content')
+    @php
+        $stats = $stats ?? [
+            'open' => 0,
+            'pending' => 0,
+            'solved' => 0,
+            'urgent' => 0,
+        ];
+
+        $latestTickets = $latestTickets ?? collect();
+        $latestActivities = $latestActivities ?? collect();
+    @endphp
+
     <div class="page-head">
         <div>
             <h1 class="page-title">Dashboard</h1>
@@ -18,7 +30,7 @@
                 <span>Open Tickets</span>
                 <span class="stat-icon">O</span>
             </div>
-            <div class="stat-number">{{ $stats['open'] }}</div>
+            <div class="stat-number">{{ $stats['open'] ?? 0 }}</div>
             <div class="stat-trend">Active requests</div>
         </div>
 
@@ -27,7 +39,7 @@
                 <span>Pending</span>
                 <span class="stat-icon">P</span>
             </div>
-            <div class="stat-number">{{ $stats['pending'] }}</div>
+            <div class="stat-number">{{ $stats['pending'] ?? 0 }}</div>
             <div class="stat-trend">Waiting for updates</div>
         </div>
 
@@ -36,7 +48,7 @@
                 <span>Solved</span>
                 <span class="stat-icon">S</span>
             </div>
-            <div class="stat-number">{{ $stats['solved'] }}</div>
+            <div class="stat-number">{{ $stats['solved'] ?? 0 }}</div>
             <div class="stat-trend">Resolved tickets</div>
         </div>
 
@@ -45,7 +57,7 @@
                 <span>Urgent</span>
                 <span class="stat-icon">U</span>
             </div>
-            <div class="stat-number">{{ $stats['urgent'] }}</div>
+            <div class="stat-number">{{ $stats['urgent'] ?? 0 }}</div>
             <div class="stat-trend">Needs attention</div>
         </div>
     </section>
@@ -68,6 +80,7 @@
                     <th>Department</th>
                     <th>Status</th>
                     <th>Priority</th>
+                    <th>Updated</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,26 +95,82 @@
 
                         <td>
                             <div class="person">
-                                <div class="mini-avatar">{{ strtoupper(substr($ticket->user->name, 0, 1)) }}</div>
+                                <div class="mini-avatar">
+                                    {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                </div>
                                 <div>
-                                    <strong>{{ $ticket->user->name }}</strong><br>
+                                    <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong><br>
                                     <small>Requester</small>
                                 </div>
                             </div>
                         </td>
 
-                        <td>{{ $ticket->department->name }}</td>
+                        <td>{{ $ticket->department?->name ?? 'No department' }}</td>
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
                         <td><span class="priority {{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span></td>
+                        <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="empty">No tickets found.</div>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
+    </section>
+
+    <section class="card table-card dashboard-activity-card">
+        <div class="table-head">
+            <div>
+                <h2>Recent Activity</h2>
+                <p class="page-subtitle">Latest ticket updates and workspace actions.</p>
+            </div>
+        </div>
+
+        <div class="activity-list">
+            @forelse($latestActivities as $activity)
+                <div class="activity-item">
+                    <div class="activity-dot"></div>
+
+                    <div class="activity-content">
+                        <strong>{{ $activity->action }}</strong>
+
+                        <span>
+                            @if($activity->ticket)
+                                #{{ $activity->ticket->ticket_number }}
+                            @else
+                                Ticket removed
+                            @endif
+
+                            @if($activity->user)
+                                by {{ $activity->user->name }}
+                            @endif
+                        </span>
+
+                        @if($activity->old_value || $activity->new_value)
+                            <small>
+                                @if($activity->old_value)
+                                    From: {{ $activity->old_value }}
+                                @endif
+
+                                @if($activity->old_value && $activity->new_value)
+                                    →
+                                @endif
+
+                                @if($activity->new_value)
+                                    To: {{ $activity->new_value }}
+                                @endif
+                            </small>
+                        @endif
+                    </div>
+
+                    <small>{{ $activity->created_at?->diffForHumans() }}</small>
+                </div>
+            @empty
+                <div class="empty">No recent activity yet.</div>
+            @endforelse
+        </div>
     </section>
 @endsection

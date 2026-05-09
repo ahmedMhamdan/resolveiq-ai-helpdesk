@@ -9,10 +9,10 @@
 <body>
     <div class="app">
         <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-mark">R</div>
-                <div class="brand-text">Resolve<span>IQ</span></div>
-            </div>
+            <a href="{{ url('/') }}" class="brand">
+            <div class="brand-mark">R</div>
+            <div class="brand-text">Resolve<span>IQ</span></div>
+            </a>
 
             <div class="nav-section">Overview</div>
             <nav class="nav">
@@ -26,10 +26,10 @@
                     Tickets
                 </a>
 
-                <div class="disabled">
-                    <span class="nav-icon">DP</span>
-                    Departments
-                </div>
+                <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                <span class="nav-icon">DP</span>
+                <span>Departments</span>
+                </a>
 
                 <div class="disabled">
                     <span class="nav-icon">A</span>
