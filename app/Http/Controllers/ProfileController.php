@@ -4,32 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\TicketReply;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-    private function currentUser()
+    private function currentUser(Request $request)
     {
-        return User::query()
-            ->whereHas('role', function ($query) {
-                $query->where('name', 'admin');
-            })
-            ->firstOrFail();
+        return $request->user();
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        $user = $this->currentUser();
+        $user = $this->currentUser($request);
 
         $assignedTicketsCount = Ticket::query()
             ->where('agent_id', $user->id)
-            ->count();
+            ->count('id');
 
         $repliesCount = TicketReply::query()
             ->where('user_id', $user->id)
-            ->count();
+            ->count('id');
 
         $latestReplies = TicketReply::query()
             ->with('ticket')
@@ -46,16 +41,16 @@ class ProfileController extends Controller
         ));
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
-        $user = $this->currentUser();
+        $user = $this->currentUser($request);
 
         return view('profile.edit', compact('user'));
     }
 
     public function update(Request $request)
     {
-        $user = $this->currentUser();
+        $user = $this->currentUser($request);
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
