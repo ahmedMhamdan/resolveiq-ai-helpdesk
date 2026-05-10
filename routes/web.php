@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    // Ticket extra actions must stay before the resource route.
     Route::get('/tickets/trashed', [TicketController::class, 'trashed'])
         ->name('tickets.trashed');
 
@@ -38,16 +39,19 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tickets', TicketController::class);
 
-    Route::resource('departments', DepartmentController::class)
-        ->except(['show']);
+    // Admin only pages.
+    Route::middleware('admin')->group(function () {
+        Route::resource('departments', DepartmentController::class)
+            ->except(['show']);
 
-    Route::resource('agents', AgentController::class)
-        ->except(['show']);
+        Route::resource('agents', AgentController::class)
+            ->except(['show']);
 
-    Route::resource('knowledge-base', KnowledgeBaseController::class)
-        ->parameters(['knowledge-base' => 'article'])
-        ->names('knowledge')
-        ->except(['show']);
+        Route::resource('knowledge-base', KnowledgeBaseController::class)
+            ->parameters(['knowledge-base' => 'article'])
+            ->names('knowledge')
+            ->except(['show']);
+    });
 
     Route::get('/ai-assistant', [AiAssistantController::class, 'index'])
         ->name('ai.index');

@@ -2466,3 +2466,235 @@ body:not(.dark) .profile-stat-member {
 .auth-alert {
   margin: 0 0 18px;
 }
+/* Disabled sidebar links for non-admin users */
+.nav a.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+.nav a.is-disabled:hover {
+    transform: none;
+    background: transparent;
+}
+
+.nav a.is-disabled .lock-icon {
+    margin-inline-start: auto;
+    font-size: 0.85rem;
+}
+
+/* =========================
+   403 Access Denied Page
+========================= */
+.error-403-page {
+  width: 100%;
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 130px 20px 40px;
+}
+
+.error-page-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 46px 34px;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  animation: errorCardBreath 6s ease-in-out infinite;
+}
+
+/* Soft aurora glow instead of the old diagonal block shine */
+.error-page-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(37, 99, 235, .10), transparent 34%),
+    radial-gradient(circle at 72% 76%, rgba(124, 58, 237, .11), transparent 36%),
+    linear-gradient(135deg, transparent 30%, rgba(37, 99, 235, .06), transparent 66%);
+  background-size: 150% 150%;
+  background-position: 0% 50%;
+  opacity: .75;
+  animation: errorCardAurora 8s ease-in-out infinite alternate;
+  z-index: 0;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .error-page-card::before,
+body.dark .error-page-card::before {
+  background:
+    radial-gradient(circle at 28% 20%, rgba(56, 189, 248, .13), transparent 34%),
+    radial-gradient(circle at 72% 76%, rgba(139, 92, 246, .16), transparent 36%),
+    linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, .055), transparent 66%);
+  opacity: .85;
+}
+
+.error-page-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Disable the global button shine only inside the 403 card */
+.error-page-card .btn::before,
+.error-page-card .btn::after {
+  content: none !important;
+  display: none !important;
+}
+
+.error-icon {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, .13);
+  font-size: 42px;
+  box-shadow: 0 18px 38px rgba(239, 68, 68, .12);
+}
+
+.error-page-card h1 {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.error-page-card p {
+  margin: 0 0 26px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+@keyframes errorCardAurora {
+  0% {
+    background-position: 0% 50%;
+    opacity: .60;
+  }
+
+  50% {
+    background-position: 100% 50%;
+    opacity: .88;
+  }
+
+  100% {
+    background-position: 40% 100%;
+    opacity: .70;
+  }
+}
+
+@keyframes errorCardBreath {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: var(--shadow);
+  }
+
+  50% {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 60px rgba(99, 102, 241, .14);
+  }
+}
+/* =========================
+   SIMPLE 403 PAGE FINAL FIX
+========================= */
+
+.error-403-page {
+    width: 100%;
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 120px 20px 40px;
+}
+
+.error-page-card {
+    position: relative;
+    overflow: hidden;
+    max-width: 720px;
+    width: 100%;
+    padding: 46px 34px;
+    text-align: center;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    animation: none !important;
+    transform: none !important;
+}
+
+/* soft static background only - no moving shine */
+.error-page-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at center, rgba(99, 102, 241, 0.08), transparent 45%);
+    pointer-events: none;
+    animation: none !important;
+    transform: none !important;
+}
+
+.error-page-card::after {
+    content: none !important;
+    display: none !important;
+}
+
+.error-page-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.error-icon {
+    width: 92px;
+    height: 92px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.13);
+    font-size: 40px;
+    animation: lockPulse 2.4s ease-in-out infinite;
+}
+
+.error-page-card h1 {
+    margin: 0 0 12px;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.error-page-card p {
+    margin: 0 0 26px;
+    color: var(--muted);
+    font-size: 16px;
+}
+
+/* remove button shine only in 403 page */
+.error-page-card .btn::before,
+.error-page-card .btn::after {
+    content: none !important;
+    display: none !important;
+}
+
+@keyframes lockPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(239, 68, 68, 0);
+    }
+
+    50% {
+        transform: scale(1.04);
+        box-shadow: 0 0 28px rgba(239, 68, 68, 0.18);
+    }
+}

@@ -11,6 +11,7 @@
         $currentUser = auth()->user();
         $currentUserName = $currentUser?->name ?? 'Guest';
         $currentUserRole = ucfirst($currentUser?->role?->name ?? 'User');
+        $isAdmin = strtolower($currentUser?->role?->name ?? '') === 'admin';
         $currentUserInitials = collect(explode(' ', $currentUserName))
             ->filter()
             ->take(2)
@@ -37,15 +38,31 @@
                     <span>Tickets</span>
                 </a>
 
-                <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">
-                    <span class="nav-icon">DP</span>
-                    <span>Departments</span>
-                </a>
+                @if ($isAdmin)
+                    <a href="{{ route('departments.index') }}" class="{{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                        <span class="nav-icon">DP</span>
+                        <span>Departments</span>
+                    </a>
+                @else
+                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
+                        <span class="nav-icon">DP</span>
+                        <span>Departments</span>
+                        <span class="lock-icon">🔒</span>
+                    </a>
+                @endif
 
-                <a href="{{ route('agents.index') }}" class="{{ request()->routeIs('agents.*') ? 'active' : '' }}">
-                    <span class="nav-icon">A</span>
-                    <span>Agents</span>
-                </a>
+                @if ($isAdmin)
+                    <a href="{{ route('agents.index') }}" class="{{ request()->routeIs('agents.*') ? 'active' : '' }}">
+                        <span class="nav-icon">A</span>
+                        <span>Agents</span>
+                    </a>
+                @else
+                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
+                        <span class="nav-icon">A</span>
+                        <span>Agents</span>
+                        <span class="lock-icon">🔒</span>
+                    </a>
+                @endif
             </nav>
 
             <div class="nav-section">AI Powered</div>
@@ -55,10 +72,18 @@
                     <span>AI Assistant</span>
                 </a>
 
-                <a href="{{ route('knowledge.index') }}" class="{{ request()->routeIs('knowledge.*') ? 'active' : '' }}">
-                    <span class="nav-icon">KB</span>
-                    <span>Knowledge Base</span>
-                </a>
+                @if ($isAdmin)
+                    <a href="{{ route('knowledge.index') }}" class="{{ request()->routeIs('knowledge.*') ? 'active' : '' }}">
+                        <span class="nav-icon">KB</span>
+                        <span>Knowledge Base</span>
+                    </a>
+                @else
+                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
+                        <span class="nav-icon">KB</span>
+                        <span>Knowledge Base</span>
+                        <span class="lock-icon">🔒</span>
+                    </a>
+                @endif
             </nav>
 
             <div class="nav-section">System</div>
