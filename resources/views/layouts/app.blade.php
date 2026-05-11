@@ -8,15 +8,21 @@
 </head>
 <body>
     @php
-        $currentUser = auth()->user();
-        $currentUserName = $currentUser?->name ?? 'Guest';
-        $currentUserRole = ucfirst($currentUser?->role?->name ?? 'User');
-        $isAdmin = strtolower($currentUser?->role?->name ?? '') === 'admin';
-        $currentUserInitials = collect(explode(' ', $currentUserName))
-            ->filter()
-            ->take(2)
-            ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
-            ->implode('') ?: 'U';
+    $currentUser = auth()->user();
+
+    $currentUserName = $currentUser?->name ?? 'Guest';
+    $currentUserRoleName = strtolower($currentUser?->role?->name ?? 'user');
+    $currentUserRole = ucfirst($currentUserRoleName);
+
+    $isAdmin = $currentUserRoleName === 'admin';
+    $isAgent = $currentUserRoleName === 'agent';
+    $isUser = $currentUserRoleName === 'user';
+
+    $currentUserInitials = collect(explode(' ', $currentUserName))
+        ->filter()
+        ->take(2)
+        ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
+        ->implode('') ?: 'U';
     @endphp
 
     <div class="app">
@@ -43,48 +49,30 @@
                         <span class="nav-icon">DP</span>
                         <span>Departments</span>
                     </a>
-                @else
-                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
-                        <span class="nav-icon">DP</span>
-                        <span>Departments</span>
-                        <span class="lock-icon">🔒</span>
-                    </a>
-                @endif
 
-                @if ($isAdmin)
                     <a href="{{ route('agents.index') }}" class="{{ request()->routeIs('agents.*') ? 'active' : '' }}">
                         <span class="nav-icon">A</span>
                         <span>Agents</span>
                     </a>
-                @else
-                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
-                        <span class="nav-icon">A</span>
-                        <span>Agents</span>
-                        <span class="lock-icon">🔒</span>
-                    </a>
                 @endif
             </nav>
 
-            <div class="nav-section">AI Powered</div>
-            <nav class="nav">
-                <a href="{{ route('ai.index') }}" class="{{ request()->routeIs('ai.*') ? 'active' : '' }}">
-                    <span class="nav-icon">AI</span>
-                    <span>AI Assistant</span>
-                </a>
+            @if ($isAdmin || $isAgent)
+                <div class="nav-section">AI Powered</div>
+                <nav class="nav">
+                    <a href="{{ route('ai.index') }}" class="{{ request()->routeIs('ai.*') ? 'active' : '' }}">
+                        <span class="nav-icon">AI</span>
+                        <span>AI Assistant</span>
+                    </a>
 
-                @if ($isAdmin)
-                    <a href="{{ route('knowledge.index') }}" class="{{ request()->routeIs('knowledge.*') ? 'active' : '' }}">
-                        <span class="nav-icon">KB</span>
-                        <span>Knowledge Base</span>
-                    </a>
-                @else
-                    <a href="#" class="is-disabled" aria-disabled="true" title="Admin only" onclick="return false;">
-                        <span class="nav-icon">KB</span>
-                        <span>Knowledge Base</span>
-                        <span class="lock-icon">🔒</span>
-                    </a>
-                @endif
-            </nav>
+                    @if ($isAdmin)
+                        <a href="{{ route('knowledge.index') }}" class="{{ request()->routeIs('knowledge.*') ? 'active' : '' }}">
+                            <span class="nav-icon">KB</span>
+                            <span>Knowledge Base</span>
+                        </a>
+                    @endif
+                </nav>
+            @endif
 
             <div class="nav-section">System</div>
             <nav class="nav">
@@ -94,10 +82,12 @@
                 </a>
             </nav>
 
-            <div class="sidebar-card">
-                <h4>AI Helpdesk</h4>
-                <p>Resolve tickets faster with summaries, suggested replies, and support insights.</p>
-            </div>
+            @if ($isAdmin || $isAgent)
+                <div class="sidebar-card">
+                    <h4>AI Helpdesk</h4>
+                    <p>Resolve tickets faster with summaries, suggested replies, and support insights.</p>
+                </div>
+            @endif
         </aside>
 
         <main class="main">
@@ -110,13 +100,19 @@
                         </svg>
                     </span>
 
-                    <input class="search" type="text" placeholder="Search tickets, users, or departments...">
+                    <input
+                        class="search"
+                        type="text"
+                        placeholder="{{ $isAdmin ? 'Search tickets, users, or departments...' : 'Search your tickets...' }}"
+                    >
                 </div>
 
                 <div class="top-actions">
-                    <a href="{{ route('tickets.create') }}" class="btn btn-primary new-ticket-btn">
+                    @if ($isAdmin || $isUser)
+                    <a href="{{ route('tickets.create') }}" class="btn new-ticket-btn">
                         + New Ticket
                     </a>
+                    @endif
 
                     <button type="button" class="theme-switch" id="themeToggle" aria-label="Toggle theme">
                         <span class="theme-icon sun">

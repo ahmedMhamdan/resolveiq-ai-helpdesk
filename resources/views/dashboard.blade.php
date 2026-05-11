@@ -13,12 +13,33 @@
 
         $latestTickets = $latestTickets ?? collect();
         $latestActivities = $latestActivities ?? collect();
+
+        $currentUser = auth()->user();
+        $role = strtolower($role ?? $currentUser?->role?->name ?? 'user');
+
+        $dashboardTitle = $role === 'agent' ? 'Agent Dashboard' : ($role === 'user' ? 'My Dashboard' : 'Dashboard');
+        $dashboardSubtitle = $role === 'agent'
+            ? 'Overview of your assigned tickets, pending work, and urgent requests.'
+            : ($role === 'user'
+                ? 'Track your support tickets and recent request updates.'
+                : 'Overview of support performance, ticket volume, and urgent issues.');
+
+        $ticketsTitle = $role === 'agent' ? 'Assigned Tickets' : ($role === 'user' ? 'My Tickets' : 'Latest Tickets');
+        $ticketsSubtitle = $role === 'agent'
+            ? 'Latest tickets assigned to you.'
+            : ($role === 'user'
+                ? 'Latest support requests created by you.'
+                : 'Newest support requests in the workspace.');
+
+        $activitySubtitle = $role === 'admin'
+            ? 'Latest ticket updates and workspace actions.'
+            : 'Latest updates related to your tickets.';
     @endphp
 
     <div class="page-head">
         <div>
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">Overview of support performance, ticket volume, and urgent issues.</p>
+            <h1 class="page-title">{{ $dashboardTitle }}</h1>
+            <p class="page-subtitle">{{ $dashboardSubtitle }}</p>
         </div>
 
         <a class="btn secondary" href="{{ route('tickets.index') }}">View Tickets</a>
@@ -65,8 +86,8 @@
     <section class="card table-card">
         <div class="table-head">
             <div>
-                <h2>Latest Tickets</h2>
-                <p class="page-subtitle">Newest support requests in the workspace.</p>
+                <h2>{{ $ticketsTitle }}</h2>
+                <p class="page-subtitle">{{ $ticketsSubtitle }}</p>
             </div>
 
             <a class="btn" href="{{ route('tickets.index') }}">View All</a>
@@ -76,7 +97,11 @@
             <thead>
                 <tr>
                     <th>Ticket</th>
-                    <th>Requester</th>
+
+                    @if ($role !== 'user')
+                        <th>Requester</th>
+                    @endif
+
                     <th>Department</th>
                     <th>Status</th>
                     <th>Priority</th>
@@ -93,17 +118,19 @@
                             </a>
                         </td>
 
-                        <td>
-                            <div class="person">
-                                <div class="mini-avatar">
-                                    {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                        @if ($role !== 'user')
+                            <td>
+                                <div class="person">
+                                    <div class="mini-avatar">
+                                        {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong><br>
+                                        <small>Requester</small>
+                                    </div>
                                 </div>
-                                <div>
-                                    <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong><br>
-                                    <small>Requester</small>
-                                </div>
-                            </div>
-                        </td>
+                            </td>
+                        @endif
 
                         <td>{{ $ticket->department?->name ?? 'No department' }}</td>
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
@@ -112,7 +139,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">
+                        <td colspan="{{ $role === 'user' ? 5 : 6 }}">
                             <div class="empty">No tickets found.</div>
                         </td>
                     </tr>
@@ -125,7 +152,7 @@
         <div class="table-head">
             <div>
                 <h2>Recent Activity</h2>
-                <p class="page-subtitle">Latest ticket updates and workspace actions.</p>
+                <p class="page-subtitle">{{ $activitySubtitle }}</p>
             </div>
         </div>
 

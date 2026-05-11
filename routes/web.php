@@ -18,15 +18,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Ticket extra actions must stay before the resource route.
-    Route::get('/tickets/trashed', [TicketController::class, 'trashed'])
-        ->name('tickets.trashed');
+    Route::middleware('admin')->group(function () {
+        Route::get('/tickets/trashed', [TicketController::class, 'trashed'])
+            ->name('tickets.trashed');
 
-    Route::post('/tickets/{id}/restore', [TicketController::class, 'restore'])
-        ->name('tickets.restore');
+        Route::post('/tickets/{id}/restore', [TicketController::class, 'restore'])
+            ->name('tickets.restore');
 
-    Route::delete('/tickets/{id}/force-delete', [TicketController::class, 'forceDelete'])
-        ->name('tickets.forceDelete');
+        Route::delete('/tickets/{id}/force-delete', [TicketController::class, 'forceDelete'])
+            ->name('tickets.forceDelete');
+    });
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store'])
         ->name('tickets.replies.store');
@@ -39,7 +40,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tickets', TicketController::class);
 
-    // Admin only pages.
     Route::middleware('admin')->group(function () {
         Route::resource('departments', DepartmentController::class)
             ->except(['show']);

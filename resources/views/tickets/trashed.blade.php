@@ -73,8 +73,8 @@
                                 <form action="{{ route('tickets.restore', $ticket->id) }}" method="POST">
                                     @csrf
 
-                                    <button type="submit" class="btn btn-secondary btn-sm">
-                                        Restore
+                                    <button type="submit" class="btn btn-sm btn-restore-soft">
+                                    Restore
                                     </button>
                                 </form>
 
