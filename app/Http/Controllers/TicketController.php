@@ -56,13 +56,16 @@ class TicketController extends Controller
         $user = $this->currentUser($request);
         $role = $this->roleName($user);
 
-        $departments = Department::orderBy('name')->get();
+        $departments = Department::orderBy('name' , 'asc')->get();
         $agents = collect();
 
         if ($role === 'admin') {
-            $agents = User::whereHas('role', function (Builder $query) {
-                $query->where('name', 'agent');
-            })->orderBy('name')->get();
+            $agents = User::query()
+                ->whereHas('role', function (Builder $query) {
+                    $query->where('name', 'agent');
+                })
+                ->orderBy('name', 'asc')
+                ->get();
         }
 
         return view('tickets.create', compact('departments', 'agents', 'role'));
@@ -118,13 +121,16 @@ class TicketController extends Controller
 
         abort_unless($this->canManageTicket($user, $ticket), 403);
 
-        $departments = Department::orderBy('name')->get();
+        $departments = Department::orderBy('name', 'asc')->get();
         $agents = collect();
 
         if ($role === 'admin') {
-            $agents = User::whereHas('role', function (Builder $query) {
-                $query->where('name', 'agent');
-            })->orderBy('name')->get();
+            $agents = User::query()
+                ->whereHas('role', function (Builder $query) {
+                    $query->where('name', 'agent');
+                })
+                ->orderBy('name', 'asc')
+                ->get();
         }
 
         return view('tickets.edit', compact('ticket', 'departments', 'agents', 'role'));
@@ -261,7 +267,9 @@ class TicketController extends Controller
 
         abort_unless($this->roleName($user) === 'admin', 403);
 
-        $ticket->delete();
+        Ticket::query()
+        ->whereKey($ticket->getKey())
+        ->delete();
 
         return redirect()
             ->route('tickets.index')

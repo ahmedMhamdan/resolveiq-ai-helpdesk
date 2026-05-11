@@ -90,7 +90,7 @@
     </div>
 
     <div class="pagination">
-        {{ $departments->links() }}
+        {{ $departments->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
 @endsection

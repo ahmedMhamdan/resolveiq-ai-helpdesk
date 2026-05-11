@@ -134,7 +134,9 @@
 
                         <td>{{ $ticket->department?->name ?? 'No department' }}</td>
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                        <td><span class="priority {{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span></td>
+                        <td><span class="priority {{ $ticket->priority ?? 'unset' }}">
+                            {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                        </span></td>
                         <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
@@ -199,5 +201,11 @@
                 <div class="empty">No recent activity yet.</div>
             @endforelse
         </div>
+
+        @if (method_exists($latestActivities, 'hasPages') && $latestActivities->hasPages())
+            <div class="pagination-wrap">
+                {{ $latestActivities->links('vendor.pagination.resolveiq') }}
+            </div>
+        @endif
     </section>
 @endsection

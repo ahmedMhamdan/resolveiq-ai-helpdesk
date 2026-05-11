@@ -83,7 +83,7 @@
     </div>
 
     <div class="pagination">
-        {{ $articles->links() }}
+        {{ $articles->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
 @endsection

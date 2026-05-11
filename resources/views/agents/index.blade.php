@@ -102,7 +102,7 @@
     </div>
 
     <div class="pagination">
-        {{ $agents->links() }}
+        {{ $agents->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
 @endsection

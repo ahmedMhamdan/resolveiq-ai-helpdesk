@@ -26,20 +26,20 @@ class DashboardController extends Controller
         $stats = [
             'open' => (clone $ticketQuery)
                 ->where('status', 'open')
-                ->count(),
+                ->count('*'),
 
             'pending' => (clone $ticketQuery)
                 ->where('status', 'pending')
-                ->count(),
+                ->count('*'),
 
             'solved' => (clone $ticketQuery)
                 ->where('status', 'solved')
-                ->count(),
+                ->count('*'),
 
             'urgent' => (clone $ticketQuery)
                 ->where('priority', 'urgent')
-                ->whereNotIn('status', ['solved', 'closed'])
-                ->count(),
+                ->whereNotIn('status', ['solved', 'closed'], 'and')
+                ->count('*'),
         ];
 
         $latestTickets = (clone $ticketQuery)
@@ -64,9 +64,10 @@ class DashboardController extends Controller
         }
 
         $latestActivities = $activityQuery
-            ->latest()
-            ->take(6)
-            ->get();
+        ->orderByDesc('created_at')
+        ->orderByDesc('id')
+        ->paginate(15, ['*'], 'activity_page')
+        ->withQueryString();
 
         return view('dashboard', compact(
             'stats',

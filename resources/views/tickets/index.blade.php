@@ -142,7 +142,10 @@
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
 
                         @if ($showPriorityColumn)
-                            <td><span class="priority {{ $ticket->priority }}">{{ ucfirst($ticket->priority) }}</span></td>
+                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">
+                            {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                        </span>
+                    </td>
                         @endif
 
                         <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
@@ -158,7 +161,7 @@
         </table>
 
         <div class="pagination">
-            {{ $tickets->links() }}
+            {{ $tickets->links('vendor.pagination.resolveiq') }}
         </div>
     </section>
 @endsection

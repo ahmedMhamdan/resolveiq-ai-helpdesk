@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('status', 30)->default('open');
             // open, pending, solved, closed
 
-            $table->string('priority', 30)->default('medium');
+            $table->string('priority', 30)->nullable();
             // low, medium, high, urgent
 
             $table->timestamp('due_at')->nullable();

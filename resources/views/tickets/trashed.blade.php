@@ -101,7 +101,7 @@
     </div>
 
     <div class="pagination-wrap">
-        {{ $tickets->links() }}
+        {{ $tickets->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
 @endsection

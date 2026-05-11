@@ -3,6 +3,17 @@
 @section('title', $ticket->ticket_number)
 
 @section('content')
+    @php
+        $role = strtolower($role ?? auth()->user()?->role?->name ?? 'user');
+        $isAdmin = $role === 'admin';
+        $isAgent = $role === 'agent';
+        $isUser = $role === 'user';
+        $canManageTicket = $isAdmin || $isAgent;
+        $visibleReplies = $ticket->replies->filter(function ($reply) use ($isUser) {
+            return ! ($isUser && $reply->is_internal_note);
+        });
+    @endphp
+
     <div class="page-head">
         <div>
             <h1>{{ $ticket->ticket_number }}</h1>
@@ -14,18 +25,22 @@
                 Back
             </a>
 
-            <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-edit-soft">
-                Edit Ticket
-            </a>
+            @if ($canManageTicket)
+                <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-edit-soft">
+                    Edit Ticket
+                </a>
+            @endif
 
-            <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" onsubmit="return confirm('Move this ticket to deleted tickets?')">
-                @csrf
-                @method('DELETE')
+            @if ($isAdmin)
+                <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" onsubmit="return confirm('Move this ticket to deleted tickets?')">
+                    @csrf
+                    @method('DELETE')
 
-                <button type="submit" class="btn btn-danger-soft">
-                    Delete
-                </button>
-            </form>
+                    <button type="submit" class="btn btn-danger-soft">
+                        Delete
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 
@@ -42,32 +57,34 @@
                         <p class="page-subtitle">{{ $ticket->title }}</p>
                     </div>
 
-                    <span class="priority {{ $ticket->priority }}">
-                        {{ ucfirst($ticket->priority) }}
+                    <span class="priority {{ $ticket->priority ?? 'unset' }}">
+                        {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                     </span>
                 </div>
 
                 <div class="ticket-meta-grid">
-                <div class="meta-box meta-requester">
-                    <small>Requester</small>
-                    <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
-                </div>
+                    @if (! $isUser)
+                        <div class="meta-box meta-requester">
+                            <small>Requester</small>
+                            <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                        </div>
+                    @endif
 
-                <div class="meta-box meta-agent">
-                    <small>Agent</small>
-                    <strong>{{ $ticket->agent?->name ?? 'Unassigned' }}</strong>
-                </div>
+                    <div class="meta-box meta-agent">
+                        <small>Agent</small>
+                        <strong>{{ $ticket->agent?->name ?? 'Unassigned' }}</strong>
+                    </div>
 
-                <div class="meta-box meta-department">
-                    <small>Department</small>
-                    <strong>{{ $ticket->department?->name ?? 'No department' }}</strong>
-                </div>
+                    <div class="meta-box meta-department">
+                        <small>Department</small>
+                        <strong>{{ $ticket->department?->name ?? 'No department' }}</strong>
+                    </div>
 
-                <div class="meta-box meta-created">
-                    <small>Created</small>
-                    <strong>{{ $ticket->created_at->format('M d, Y') }}</strong>
+                    <div class="meta-box meta-created">
+                        <small>Created</small>
+                        <strong>{{ $ticket->created_at->format('M d, Y') }}</strong>
+                    </div>
                 </div>
-            </div>
 
                 <p class="ticket-description">
                     {{ $ticket->description }}
@@ -75,7 +92,7 @@
             </div>
 
             <div class="thread">
-                @forelse ($ticket->replies as $reply)
+                @forelse ($visibleReplies as $reply)
                     <div class="reply {{ $reply->is_internal_note ? 'internal' : '' }}">
                         <div class="reply-meta">
                             <div>
@@ -83,7 +100,7 @@
                                     {{ $reply->user?->name ?? 'Unknown user' }}
                                 </span>
 
-                                @if ($reply->is_internal_note)
+                                @if ($reply->is_internal_note && ($isAdmin || $isAgent))
                                     <span class="internal-label">Internal note</span>
                                 @endif
                             </div>
@@ -96,47 +113,51 @@
                         </div>
 
                         @if ($reply->attachments->count())
-                        <div class="reply-attachments">
-                            @foreach ($reply->attachments as $attachment)
-                                <div class="attachment-chip">
-                                    <a
-                                        href="{{ asset('storage/' . $attachment->file_path) }}"
-                                        target="_blank"
-                                        class="attachment-link"
-                                    >
-                                        {{ $attachment->file_name }}
-                                    </a>
+                            <div class="reply-attachments">
+                                @foreach ($reply->attachments as $attachment)
+                                    <div class="attachment-chip">
+                                        <a
+                                            href="{{ asset('storage/' . $attachment->file_path) }}"
+                                            target="_blank"
+                                            class="attachment-link"
+                                        >
+                                            {{ $attachment->file_name }}
+                                        </a>
 
-                                    <form
-                                        action="{{ route('tickets.attachments.destroy', [$ticket, $attachment]) }}"
-                                        method="POST"
-                                        onsubmit="return confirm('Delete this attachment?')"
-                                    >
-                                        @csrf
-                                        @method('DELETE')
+                                        @if ($isAdmin)
+                                            <form
+                                                action="{{ route('tickets.attachments.destroy', [$ticket, $attachment]) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Delete this attachment?')"
+                                            >
+                                                @csrf
+                                                @method('DELETE')
 
-                                        <button type="submit" class="attachment-delete-btn">
-                                            ×
-                                        </button>
-                                    </form>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+                                                <button type="submit" class="attachment-delete-btn">
+                                                    ×
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
 
-                        <form
-                            action="{{ route('tickets.replies.destroy', [$ticket, $reply]) }}"
-                            method="POST"
-                            class="reply-delete-form"
-                            onsubmit="return confirm('Delete this reply?')"
-                        >
-                            @csrf
-                            @method('DELETE')
+                        @if ($isAdmin)
+                            <form
+                                action="{{ route('tickets.replies.destroy', [$ticket, $reply]) }}"
+                                method="POST"
+                                class="reply-delete-form"
+                                onsubmit="return confirm('Delete this reply?')"
+                            >
+                                @csrf
+                                @method('DELETE')
 
-                            <button type="submit" class="reply-delete-btn">
-                                Delete
-                            </button>
-                        </form>
+                                <button type="submit" class="reply-delete-btn">
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 @empty
                     <div class="empty-replies">
@@ -183,10 +204,12 @@
                     </div>
 
                     <div class="reply-options">
-                        <label class="check-row">
-                            <input type="checkbox" name="is_internal_note" value="1">
-                            <span>Internal note</span>
-                        </label>
+                        @if ($isAdmin || $isAgent)
+                            <label class="check-row">
+                                <input type="checkbox" name="is_internal_note" value="1">
+                                <span>Internal note</span>
+                            </label>
+                        @endif
 
                         <button type="submit" class="btn btn-primary">
                             Send Reply
@@ -209,15 +232,17 @@
 
                 <div class="detail-row">
                     <small>Priority</small>
-                    <span class="priority {{ $ticket->priority }}">
-                        {{ ucfirst($ticket->priority) }}
+                    <span class="priority {{ $ticket->priority ?? 'unset' }}">
+                        {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                     </span>
                 </div>
 
-                <div class="detail-row">
-                    <small>Requester</small>
-                    <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
-                </div>
+                @if (! $isUser)
+                    <div class="detail-row">
+                        <small>Requester</small>
+                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                    </div>
+                @endif
 
                 <div class="detail-row">
                     <small>Assigned Agent</small>
@@ -251,33 +276,36 @@
                 </div>
             </div>
 
-            <div class="card side-card ai-card">
-                <h3>AI Assistant</h3>
-                <p>
-                    AI ticket summaries and suggested replies will be added after the main CRUD workflow is finished.
-                </p>
+            @if ($isAdmin || $isAgent)
+                <div class="card side-card ai-card">
+                    <h3>AI Assistant</h3>
+                    <p>
+                        AI ticket summaries and suggested replies will be added after the main CRUD workflow is finished.
+                    </p>
 
-                <button class="btn secondary" type="button">
-                    Generate Summary
-                </button>
-            </div>
+                    <a href="{{ route('ai.index') }}" class="btn secondary">
+                        Open AI Assistant
+                    </a>
+                </div>
 
-            <div class="card side-card">
-                <h3>Activity Log</h3>
+                <div class="card side-card">
+                    <h3>Activity Log</h3>
 
-                @forelse ($ticket->activityLogs as $log)
-                    <div class="log-item">
-                        <strong>{{ $log->action }}</strong>
-                        <span class="page-subtitle">
-                            {{ $log->user?->name ?? 'System' }} · {{ $log->created_at?->diffForHumans() }}
-                        </span>
-                    </div>
-                @empty
-                    <p class="page-subtitle">No activity yet.</p>
-                @endforelse
-            </div>
+                    @forelse ($ticket->activityLogs as $log)
+                        <div class="log-item">
+                            <strong>{{ $log->action }}</strong>
+                            <span class="page-subtitle">
+                                {{ $log->user?->name ?? 'System' }} · {{ $log->created_at?->diffForHumans() }}
+                            </span>
+                        </div>
+                    @empty
+                        <p class="page-subtitle">No activity yet.</p>
+                    @endforelse
+                </div>
+            @endif
         </aside>
     </div>
+
     <script>
         const attachmentsInput = document.getElementById('attachments');
         const selectedFilesList = document.getElementById('selectedFilesList');
