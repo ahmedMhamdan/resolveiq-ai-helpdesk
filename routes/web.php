@@ -11,8 +11,16 @@ use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\UserRoleController;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return view('welcome');
+})->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -27,6 +35,12 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/tickets/{id}/force-delete', [TicketController::class, 'forceDelete'])
             ->name('tickets.forceDelete');
+
+        Route::get('/users', [UserRoleController::class, 'index'])
+                ->name('users.index');
+
+        Route::patch('/users/{user}/role', [UserRoleController::class, 'updateRole'])
+                ->name('users.updateRole');
     });
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store'])

@@ -55,6 +55,12 @@
                         <span>Agents</span>
                     </a>
                 @endif
+                @if (strtolower(auth()->user()->role?->name ?? '') === 'admin')
+                <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <span class="nav-icon">U</span>
+                    Users
+                </a>
+            @endif
             </nav>
 
             @if ($isAdmin || $isAgent)

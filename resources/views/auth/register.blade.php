@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Login | ResolveIQ</title>
+    <title>Register | ResolveIQ</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('css/resolveiq.css') }}">
@@ -16,24 +16,35 @@
             </a>
 
             <div class="auth-head">
-                <h1>Welcome back</h1>
-                <p>Login to manage tickets, agents, departments, and AI support tools.</p>
+                <h1>Create account</h1>
+                <p>Join ResolveIQ and start creating support tickets easily.</p>
             </div>
-
-            @if (session('status'))
-                <div class="flash-message">
-                    {{ session('status') }}
-                </div>
-            @endif
 
             @if ($errors->any())
                 <div class="alert alert-danger auth-alert">
-                    {{ $errors->first() }}
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
 
-            <form action="{{ route('login') }}" method="POST" class="auth-form">
+            <form action="{{ route('register') }}" method="POST" class="auth-form">
                 @csrf
+
+                <div class="form-group full">
+                    <label for="name">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Enter your name"
+                        required
+                        autofocus
+                    >
+                </div>
 
                 <div class="form-group full">
                     <label for="email">Email</label>
@@ -42,9 +53,8 @@
                         id="email"
                         name="email"
                         value="{{ old('email') }}"
-                        placeholder="admin@resolveiq.test"
+                        placeholder="you@example.com"
                         required
-                        autofocus
                     >
                 </div>
 
@@ -59,20 +69,24 @@
                     >
                 </div>
 
-                <div class="auth-row">
-                    <label class="check-row auth-remember">
-                        <input type="checkbox" name="remember" value="1">
-                        <span>Remember me</span>
-                    </label>
+                <div class="form-group full">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        placeholder="Confirm your password"
+                        required
+                    >
                 </div>
 
                 <button type="submit" class="btn btn-primary auth-submit">
-                    Login
+                    Register
                 </button>
 
                 <div class="auth-bottom-link">
-                    Don’t have an account?
-                    <a href="{{ route('register') }}">Register</a>
+                    Already have an account?
+                    <a href="{{ route('login') }}">Login</a>
                 </div>
             </form>
         </section>
