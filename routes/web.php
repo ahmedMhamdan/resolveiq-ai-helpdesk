@@ -27,6 +27,12 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard');
 
     Route::middleware('admin')->group(function () {
+
+        Route::get('/tickets/unassigned', [TicketController::class, 'unassigned'])
+        ->name('tickets.unassigned');
+
+        Route::patch('/tickets/{ticket}/assign-agent', [TicketController::class, 'assignAgent'])
+        ->name('tickets.assignAgent');
         Route::get('/tickets/trashed', [TicketController::class, 'trashed'])
             ->name('tickets.trashed');
 

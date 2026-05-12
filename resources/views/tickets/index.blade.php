@@ -40,6 +40,11 @@
                 + New Ticket
             </a>
         @endif
+        @if ($role === 'admin')
+        <a href="{{ route('tickets.unassigned') }}" class="btn btn-unassigned-tickets">
+            Unassigned Tickets
+        </a>
+    @endif
     </div>
 
     <section class="card table-card">

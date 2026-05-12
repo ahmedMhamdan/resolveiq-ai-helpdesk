@@ -6,15 +6,17 @@ use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketReply;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AgentController extends Controller
 {
     public function index()
     {
         $agents = User::query()
-            ->whereHas('role', function ($query) {
+            ->whereHas('role', function (Builder $query) {
                 $query->where('name', 'agent');
             })
             ->withCount(['assignedTickets', 'ticketReplies'])
@@ -33,19 +35,19 @@ class AgentController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:150', 'unique:users,email'],
+            'email' => ['required', 'email', 'max:150', Rule::unique(User::class, 'email')],
             'password' => ['required', 'string', 'min:6'],
         ]);
 
-        $agentRoleId = Role::query()
+        $agentRole = Role::query()
             ->where('name', 'agent')
-            ->value('id');
+            ->firstOrFail();
 
         User::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role_id' => $agentRoleId,
+            'role_id' => $agentRole->id,
         ]);
 
         return redirect()
@@ -55,24 +57,36 @@ class AgentController extends Controller
 
     public function edit(User $agent)
     {
+        $this->abortIfNotAgent($agent);
+
         return view('agents.edit', compact('agent'));
     }
 
     public function update(Request $request, User $agent)
     {
+        $this->abortIfNotAgent($agent);
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'email' => ['required', 'email', 'max:150', 'unique:users,email,' . $agent->id],
+            'email' => [
+                'required',
+                'email',
+                'max:150',
+                Rule::unique(User::class, 'email')->ignore($agent->id),
+            ],
             'password' => ['nullable', 'string', 'min:6'],
         ]);
 
-        $agent->update([
+        $agent->fill([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => $data['password']
-                ? Hash::make($data['password'])
-                : $agent->password,
         ]);
+
+        if (! empty($data['password'])) {
+            $agent->password = Hash::make($data['password']);
+        }
+
+        $agent->save();
 
         return redirect()
             ->route('agents.index')
@@ -81,6 +95,8 @@ class AgentController extends Controller
 
     public function destroy(User $agent)
     {
+        $this->abortIfNotAgent($agent);
+
         $hasTickets = Ticket::query()
             ->where('agent_id', $agent->id)
             ->exists();
@@ -102,5 +118,14 @@ class AgentController extends Controller
         return redirect()
             ->route('agents.index')
             ->with('success', 'Agent deleted successfully.');
+    }
+
+    private function abortIfNotAgent(User $user): void
+    {
+        $isAgent = $user->role()
+            ->where('name', 'agent')
+            ->exists();
+
+        abort_unless($isAgent, 404);
     }
 }

@@ -2734,14 +2734,10 @@ body:not(.dark) .profile-stat-member {
 }
 
 .public-hero h1 span {
-    display: inline-block;
-    padding-right: 8px;
-    padding-bottom: 6px;
     background: linear-gradient(135deg, var(--primary), var(--accent));
+    background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
 }
 
 .public-hero p {
@@ -2949,4 +2945,103 @@ body:not(.dark) .profile-stat-member {
   border-color: rgba(99, 102, 241, .65);
   box-shadow: 0 0 0 4px var(--ring-primary);
 }
-لهف 
+/* =========================
+   Unassigned Tickets
+========================= */
+
+.btn-unassigned-tickets {
+    color: #fff;
+    background: linear-gradient(135deg, #0ea5e9, #14b8a6);
+    border: 1px solid rgba(20, 184, 166, .28);
+    box-shadow: 0 14px 34px rgba(14, 165, 233, .22);
+}
+
+.btn-unassigned-tickets:hover {
+    box-shadow: 0 18px 45px rgba(20, 184, 166, .30);
+}
+
+.unassigned-table-card {
+    width: 100%;
+}
+
+.unassigned-table th,
+.unassigned-table td {
+    vertical-align: middle;
+}
+
+.unassigned-table .users-center-col {
+    text-align: center !important;
+}
+
+.unassigned-table .badge,
+.unassigned-table .priority {
+    margin-inline: auto;
+}
+
+.unassigned-table .users-role-actions {
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.unassigned-table .role-select {
+    min-width: 145px;
+}
+
+.btn-assign-agent {
+    color: #fff;
+    background: linear-gradient(135deg, #22c55e, #14b8a6);
+    border: 1px solid rgba(34, 197, 94, .28);
+    box-shadow: 0 12px 28px rgba(34, 197, 94, .20);
+}
+
+.btn-assign-agent:hover {
+    box-shadow: 0 16px 36px rgba(20, 184, 166, .30);
+}
+/* Fix priority select style in Unassigned Tickets page */
+.unassigned-table .priority-assign-select,
+.unassigned-table select.role-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    min-width: 150px;
+    height: 48px;
+    padding: 0 48px 0 18px;
+
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, .28);
+    background-color: rgba(15, 23, 42, .85);
+
+    background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-position: right 18px center;
+
+    color: var(--text);
+    font-weight: 750;
+    outline: none;
+}
+
+.unassigned-table .priority-assign-select:focus,
+.unassigned-table select.role-select:focus {
+    border-color: rgba(99, 102, 241, .65);
+    box-shadow: 0 0 0 4px var(--ring-primary);
+}
+
+.unassigned-table .users-role-actions {
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.unassigned-table .btn-assign-agent {
+    height: 48px;
+    padding-inline: 20px;
+    border-radius: 14px;
+}
+/* Make Assign button smaller in Unassigned Tickets */
+.unassigned-table .btn-assign-agent {
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 13px;
+    font-size: 0.9rem;
+}

@@ -83,14 +83,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="priority">Priority</label>
-                        <select id="priority" name="priority" required>
-                            <option value="low" @selected(old('priority') === 'low')>Low</option>
-                            <option value="medium" @selected(old('priority', 'medium') === 'medium')>Medium</option>
-                            <option value="high" @selected(old('priority') === 'high')>High</option>
-                            <option value="urgent" @selected(old('priority') === 'urgent')>Urgent</option>
-                        </select>
-                    </div>
+                    <label for="priority">Priority</label>
+                    <select id="priority" name="priority">
+                        <option value="" @selected(old('priority') === null || old('priority') === '')>
+                            Not set
+                        </option>
+                        <option value="low" @selected(old('priority') === 'low')>Low</option>
+                        <option value="medium" @selected(old('priority') === 'medium')>Medium</option>
+                        <option value="high" @selected(old('priority') === 'high')>High</option>
+                        <option value="urgent" @selected(old('priority') === 'urgent')>Urgent</option>
+                    </select>
+                </div>
 
                     <div class="form-group">
                         <label for="due_at">Due Date</label>
