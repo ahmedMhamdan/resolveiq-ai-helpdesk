@@ -9,6 +9,7 @@
         $isAgent = $role === 'agent';
         $isUser = $role === 'user';
         $canManageTicket = $isAdmin || $isAgent;
+        $canCloseTicket = $isAdmin || ($isAgent && (int) $ticket->agent_id === (int) auth()->id());
         $visibleReplies = $ticket->replies->filter(function ($reply) use ($isUser) {
             return ! ($isUser && $reply->is_internal_note);
         });
@@ -29,6 +30,36 @@
                 <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-edit-soft">
                     Edit Ticket
                 </a>
+            @endif
+
+            @if ($canCloseTicket && $ticket->status !== 'closed')
+                <form
+                    action="{{ route('tickets.close', $ticket) }}"
+                    method="POST"
+                    onsubmit="return confirm('Close this ticket?')"
+                >
+                    @csrf
+                    @method('PATCH')
+
+                    <button type="submit" class="btn btn-close-ticket">
+                        Close Ticket
+                    </button>
+                </form>
+            @endif
+
+            @if (in_array($ticket->status, ['solved', 'closed'], true))
+                <form
+                    action="{{ route('tickets.reopen', $ticket) }}"
+                    method="POST"
+                    onsubmit="return confirm('Reopen this ticket?')"
+                >
+                    @csrf
+                    @method('PATCH')
+
+                    <button type="submit" class="btn btn-reopen-ticket">
+                        Reopen Ticket
+                    </button>
+                </form>
             @endif
 
             @if ($isAdmin)

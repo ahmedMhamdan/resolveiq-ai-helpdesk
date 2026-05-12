@@ -3045,3 +3045,79 @@ body:not(.dark) .profile-stat-member {
     border-radius: 13px;
     font-size: 0.9rem;
 }
+/* =========================
+   Overdue Tickets
+========================= */
+
+.btn-overdue-tickets {
+    color: #fff;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    border: 1px solid rgba(249, 115, 22, .32);
+    box-shadow: 0 14px 34px rgba(239, 68, 68, .22);
+}
+
+.btn-overdue-tickets:hover {
+    box-shadow: 0 18px 45px rgba(249, 115, 22, .32);
+}
+
+.overdue-table th,
+.overdue-table td {
+    vertical-align: middle;
+}
+
+.overdue-table .users-center-col {
+    text-align: center !important;
+}
+
+.overdue-table .badge,
+.overdue-table .priority,
+.overdue-date-badge {
+    margin-inline: auto;
+}
+
+.overdue-date-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 11px;
+    border-radius: 999px;
+    color: #fb7185;
+    background: rgba(248, 113, 113, .13);
+    border: 1px solid rgba(248, 113, 113, .26);
+    font-size: .82rem;
+    font-weight: 800;
+}
+/* Agent info in Overdue Tickets table */
+.overdue-agent-person {
+    display: inline-flex;
+    text-align: left;
+    justify-content: flex-start;
+}
+/* =========================
+   Reopen Ticket
+========================= */
+
+.btn-reopen-ticket {
+    color: #fff;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    border: 1px solid rgba(249, 115, 22, .32);
+    box-shadow: 0 14px 34px rgba(245, 158, 11, .22);
+}
+
+.btn-reopen-ticket:hover {
+    box-shadow: 0 18px 45px rgba(249, 115, 22, .32);
+}
+/* =========================
+   Close Ticket
+========================= */
+
+.btn-close-ticket {
+    color: #fff;
+    background: linear-gradient(135deg, #ef4444, #fb7185);
+    border: 1px solid rgba(248, 113, 113, .32);
+    box-shadow: 0 14px 34px rgba(239, 68, 68, .22);
+}
+
+.btn-close-ticket:hover {
+    box-shadow: 0 18px 45px rgba(239, 68, 68, .32);
+}

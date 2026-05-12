@@ -34,7 +34,11 @@
                 Deleted Tickets
             </a>
         @endif
-
+        @if ($role === 'admin')
+        <a href="{{ route('tickets.overdue') }}" class="btn btn-overdue-tickets">
+            Overdue Tickets
+        </a>
+        @endif
         @if ($isAdmin || $isUser)
             <a href="{{ route('tickets.create') }}" class="btn btn-primary new-ticket-btn">
                 + New Ticket

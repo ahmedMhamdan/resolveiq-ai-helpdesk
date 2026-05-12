@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
+
 class TicketController extends Controller
 {
     public function index(Request $request)
@@ -255,7 +256,36 @@ class TicketController extends Controller
             ->route('tickets.show', $ticket)
             ->with('success', 'Ticket updated successfully.');
     }
+    public function overdue(Request $request)
+    {
+        $user = $this->currentUser($request);
 
+        if ($this->roleName($user) !== 'admin') {
+            abort(403);
+        }
+
+        $search = $request->query('search');
+
+        /** @var Builder $ticketsQuery */
+        $ticketsQuery = Ticket::query();
+
+        $tickets = $ticketsQuery
+            ->whereNotNull('due_at')
+            ->where('due_at', '<', now())
+            ->whereNotIn('status', ['solved', 'closed'])
+            ->with(['user', 'agent', 'department'])
+            ->when($search, function (Builder $query, string $search) {
+                $query->where(function (Builder $query) use ($search) {
+                    $query->where('ticket_number', 'like', "%{$search}%")
+                        ->orWhere('title', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('due_at', 'asc')
+            ->paginate(8)
+            ->withQueryString();
+
+        return view('tickets.overdue', compact('tickets'));
+    }
     public function unassigned(Request $request)
     {
         $user = $this->currentUser($request);
@@ -340,7 +370,68 @@ class TicketController extends Controller
 
         return view('tickets.trashed', compact('tickets'));
     }
+    public function reopen(Request $request, Ticket $ticket)
+    {
+        $user = $this->currentUser($request);
 
+        abort_unless($this->canManageTicket($user, $ticket), 403);
+
+        if (! in_array($ticket->status, ['solved', 'closed'], true)) {
+            return back()->with('error', 'Only solved or closed tickets can be reopened.');
+        }
+
+        $oldStatus = $ticket->status;
+
+        $ticket->fill([
+            'status' => 'open',
+            'resolved_at' => null,
+            'closed_at' => null,
+        ]);
+
+        $ticket->save();
+
+        $ticket->activityLogs()->create([
+            'user_id' => $user->id,
+            'action' => 'Ticket reopened',
+            'old_value' => $oldStatus,
+            'new_value' => 'open',
+        ]);
+
+        return back()->with('success', 'Ticket reopened successfully.');
+    }
+    public function close(Request $request, Ticket $ticket)
+    {
+        $user = $this->currentUser($request);
+        $role = $this->roleName($user);
+
+        $canClose = $role === 'admin'
+            || ($role === 'agent' && (int) $ticket->agent_id === (int) $user->id);
+
+        abort_unless($canClose, 403);
+
+        if ($ticket->status === 'closed') {
+            return back()->with('error', 'Ticket is already closed.');
+        }
+
+        $oldStatus = $ticket->status;
+
+        $ticket->fill([
+            'status' => 'closed',
+            'resolved_at' => $ticket->resolved_at ?? now(),
+            'closed_at' => now(),
+        ]);
+
+        $ticket->save();
+
+        $ticket->activityLogs()->create([
+            'user_id' => $user->id,
+            'action' => 'Ticket closed',
+            'old_value' => $oldStatus,
+            'new_value' => 'closed',
+        ]);
+
+        return back()->with('success', 'Ticket closed successfully.');
+    }
     public function destroy(Request $request, Ticket $ticket)
     {
         $user = $this->currentUser($request);

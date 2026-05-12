@@ -10,9 +10,9 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserRoleController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -26,13 +26,33 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Ticket workflow routes
+    |--------------------------------------------------------------------------
+    | These routes must be defined before Route::resource('tickets', ...)
+    | so Laravel does not treat words like "overdue" or "unassigned" as {ticket}.
+    */
+
+    // Authenticated ticket actions.
+    // Access rules are enforced inside TicketController methods.
+    Route::patch('/tickets/{ticket}/close', [TicketController::class, 'close'])
+        ->name('tickets.close');
+
+    Route::patch('/tickets/{ticket}/reopen', [TicketController::class, 'reopen'])
+        ->name('tickets.reopen');
+
+    // Admin-only ticket management pages/actions.
     Route::middleware('admin')->group(function () {
+        Route::get('/tickets/overdue', [TicketController::class, 'overdue'])
+            ->name('tickets.overdue');
 
         Route::get('/tickets/unassigned', [TicketController::class, 'unassigned'])
-        ->name('tickets.unassigned');
+            ->name('tickets.unassigned');
 
         Route::patch('/tickets/{ticket}/assign-agent', [TicketController::class, 'assignAgent'])
-        ->name('tickets.assignAgent');
+            ->name('tickets.assignAgent');
+
         Route::get('/tickets/trashed', [TicketController::class, 'trashed'])
             ->name('tickets.trashed');
 
@@ -43,10 +63,10 @@ Route::middleware('auth')->group(function () {
             ->name('tickets.forceDelete');
 
         Route::get('/users', [UserRoleController::class, 'index'])
-                ->name('users.index');
+            ->name('users.index');
 
         Route::patch('/users/{user}/role', [UserRoleController::class, 'updateRole'])
-                ->name('users.updateRole');
+            ->name('users.updateRole');
     });
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store'])
