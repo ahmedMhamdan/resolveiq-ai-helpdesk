@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use App\Models\User;
+use App\Services\TicketAiService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AiAssistantController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+        $role = $this->roleName($user);
+
+        abort_unless(in_array($role, ['admin', 'agent'], true), 403);
+
         $tickets = Ticket::query()
             ->with(['user', 'agent', 'department', 'replies.user'])
-            ->whereNotIn('status', ['closed'])
+            ->where('status', '!=', 'closed')
+            ->when($role === 'agent', function ($query) use ($user) {
+                $query->where('agent_id', $user->id);
+            })
             ->orderByDesc('created_at')
             ->take(12)
             ->get();
@@ -20,8 +29,68 @@ class AiAssistantController extends Controller
         return view('ai-assistant.index', compact('tickets'));
     }
 
+    public function generateForTicket(Request $request, Ticket $ticket, TicketAiService $aiService)
+    {
+        $user = $request->user();
+
+        abort_unless($this->canUseTicketAi($user, $ticket), 403);
+
+        $data = $request->validate([
+            'mode' => ['required', Rule::in(['summary', 'reply', 'priority', 'custom'])],
+            'custom_prompt' => ['nullable', 'string', 'max:1500'],
+        ]);
+
+        if ($data['mode'] === 'custom' && empty(trim($data['custom_prompt'] ?? ''))) {
+            return back()
+                ->withErrors(['custom_prompt' => 'Please write a custom instruction first.'])
+                ->withInput();
+        }
+
+        $mode = $data['mode'];
+        $body = $aiService->generate(
+            $ticket,
+            $mode,
+            $data['custom_prompt'] ?? null
+        );
+
+        $suggestedPriority = null;
+
+        if ($mode === 'priority') {
+            $suggestedPriority = $this->extractSuggestedPriority($body);
+        }
+
+        return redirect()
+            ->route('ai.index', ['ticket_id' => $ticket->id])
+            ->with('ticket_ai', [
+                'ticket_id' => $ticket->id,
+                'mode' => $mode,
+                'title' => $this->makeAiTitle($mode, $ticket),
+                'body' => $body,
+                'suggested_priority' => $suggestedPriority,
+            ])
+            ->with('success', 'AI suggestion generated successfully.');
+    }
+
+    public function useTicketAiAsReply(Request $request, Ticket $ticket)
+    {
+        $user = $request->user();
+
+        abort_unless($this->canUseTicketAi($user, $ticket), 403);
+
+        $data = $request->validate([
+            'message' => ['required', 'string', 'max:5000'],
+            'is_internal_note' => ['nullable', 'boolean'],
+        ]);
+
+        return $this->storeAiReply($request, $ticket, $data['message']);
+    }
+
     public function useAsReply(Request $request)
     {
+        $user = $request->user();
+
+        abort_unless(in_array($this->roleName($user), ['admin', 'agent'], true), 403);
+
         $data = $request->validate([
             'ticket_id' => ['required', 'exists:tickets,id'],
             'message' => ['required', 'string', 'max:5000'],
@@ -30,29 +99,63 @@ class AiAssistantController extends Controller
 
         $ticket = Ticket::query()->findOrFail($data['ticket_id']);
 
-        $actorId = User::query()
-            ->whereHas('role', function ($query) {
-                $query->where('name', 'agent');
-            })
-            ->value('id');
+        abort_unless($this->canUseTicketAi($user, $ticket), 403);
 
+        return $this->storeAiReply($request, $ticket, $data['message']);
+    }
+
+    public function applyPriority(Request $request, Ticket $ticket)
+    {
+        $user = $request->user();
+
+        abort_unless($this->roleName($user) === 'admin', 403);
+
+        $data = $request->validate([
+            'priority' => ['required', Rule::in(['low', 'medium', 'high', 'urgent'])],
+        ]);
+
+        $oldPriority = $ticket->priority;
+
+        $ticket->fill([
+            'priority' => $data['priority'],
+        ]);
+
+        $ticket->save();
+
+        $ticket->activityLogs()->create([
+            'user_id' => $user->id,
+            'action' => 'AI priority applied',
+            'old_value' => $oldPriority ?? 'Not set',
+            'new_value' => $ticket->priority,
+        ]);
+
+        return redirect()
+            ->route('tickets.show', $ticket)
+            ->with('success', 'AI suggested priority applied successfully.');
+    }
+
+    private function storeAiReply(Request $request, Ticket $ticket, string $message)
+    {
+        $user = $request->user();
         $isInternalNote = $request->boolean('is_internal_note');
 
         $reply = $ticket->replies()->create([
-            'user_id' => $actorId,
-            'message' => $data['message'],
+            'user_id' => $user->id,
+            'message' => $message,
             'is_internal_note' => $isInternalNote,
         ]);
 
         if (! $isInternalNote && is_null($ticket->first_response_at)) {
-            $ticket->update([
+            $ticket->fill([
                 'first_response_at' => now(),
                 'status' => $ticket->status === 'open' ? 'pending' : $ticket->status,
             ]);
+
+            $ticket->save();
         }
 
         $ticket->activityLogs()->create([
-            'user_id' => $actorId,
+            'user_id' => $user->id,
             'action' => $isInternalNote ? 'AI internal note added' : 'AI suggested reply used',
             'old_value' => null,
             'new_value' => $reply->message,
@@ -61,5 +164,45 @@ class AiAssistantController extends Controller
         return redirect()
             ->route('tickets.show', $ticket)
             ->with('success', $isInternalNote ? 'AI internal note added successfully.' : 'AI reply added successfully.');
+    }
+
+    private function canUseTicketAi($user, Ticket $ticket): bool
+    {
+        $role = $this->roleName($user);
+
+        if ($role === 'admin') {
+            return true;
+        }
+
+        return $role === 'agent' && (int) $ticket->agent_id === (int) $user->id;
+    }
+
+    private function roleName($user): string
+    {
+        return strtolower($user->role?->name ?? 'user');
+    }
+
+    private function makeAiTitle(string $mode, Ticket $ticket): string
+    {
+        return match ($mode) {
+            'summary' => "AI Summary for {$ticket->ticket_number}",
+            'reply' => "Suggested Reply for {$ticket->ticket_number}",
+            'priority' => "Suggested Priority for {$ticket->ticket_number}",
+            'custom' => "Custom AI Response for {$ticket->ticket_number}",
+            default => "AI Result for {$ticket->ticket_number}",
+        };
+    }
+
+    private function extractSuggestedPriority(string $body): ?string
+    {
+        $text = strtolower($body);
+
+        foreach (['urgent', 'high', 'medium', 'low'] as $priority) {
+            if (str_contains($text, $priority)) {
+                return $priority;
+            }
+        }
+
+        return null;
     }
 }

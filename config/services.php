@@ -13,7 +13,14 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'ai' => [
+    'provider' => env('AI_PROVIDER', 'mock'),
+    ],
 
+    'openrouter' => [
+        'key' => env('OPENROUTER_API_KEY'),
+        'model' => env('OPENROUTER_MODEL', 'openrouter/free'),
+    ],
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],

@@ -308,16 +308,16 @@
             </div>
 
             @if ($isAdmin || $isAgent)
-                <div class="card side-card ai-card">
-                    <h3>AI Assistant</h3>
-                    <p>
-                        AI ticket summaries and suggested replies will be added after the main CRUD workflow is finished.
-                    </p>
+            <div class="card side-card ai-card ticket-ai-mini-card">
+                <h3>AI Assistant</h3>
+                <p>
+                    Generate AI summary, reply, or priority suggestion for this ticket.
+                </p>
 
-                    <a href="{{ route('ai.index') }}" class="btn secondary">
-                        Open AI Assistant
-                    </a>
-                </div>
+               <a href="{{ route('ai.index', ['ticket_id' => $ticket->id]) }}" class="btn btn-ai-workspace">
+                Open AI Assistant
+               </a>
+            </div>
 
                 <div class="card side-card">
                     <h3>Activity Log</h3>

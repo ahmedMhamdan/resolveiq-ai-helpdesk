@@ -34,13 +34,23 @@ Route::middleware('auth')->group(function () {
     | so Laravel does not treat words like "overdue" or "unassigned" as {ticket}.
     */
 
-    // Authenticated ticket actions.
-    // Access rules are enforced inside TicketController methods.
+    // Authenticated ticket actions. Access rules are enforced inside controllers.
     Route::patch('/tickets/{ticket}/close', [TicketController::class, 'close'])
         ->name('tickets.close');
 
     Route::patch('/tickets/{ticket}/reopen', [TicketController::class, 'reopen'])
         ->name('tickets.reopen');
+
+    // Ticket-level AI assistant actions.
+    Route::post('/tickets/{ticket}/ai/generate', [AiAssistantController::class, 'generateForTicket'])
+        ->middleware('throttle:8,1')
+        ->name('tickets.ai.generate');
+
+    Route::post('/tickets/{ticket}/ai/use-as-reply', [AiAssistantController::class, 'useTicketAiAsReply'])
+        ->name('tickets.ai.useAsReply');
+
+    Route::patch('/tickets/{ticket}/ai/apply-priority', [AiAssistantController::class, 'applyPriority'])
+        ->name('tickets.ai.applyPriority');
 
     // Admin-only ticket management pages/actions.
     Route::middleware('admin')->group(function () {
