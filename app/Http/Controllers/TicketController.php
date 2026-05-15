@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Notifications\TicketEventNotification;
 
 
 class TicketController extends Controller
@@ -115,7 +116,32 @@ class TicketController extends Controller
             'old_value' => null,
             'new_value' => 'open',
         ]);
+        $ticket->loadMissing('agent');
 
+        $admins = User::query()
+        ->whereHas('role', fn ($query) => $query->where('name', 'admin'))
+        ->whereKeyNot($user->id)
+        ->get();
+
+    foreach ($admins as $admin) {
+        $admin->notify(new TicketEventNotification(
+            'New ticket created',
+            "{$user->name} created ticket {$ticket->ticket_number}.",
+            $ticket,
+            'created',
+            $user
+        ));
+    }
+
+    if ($ticket->agent_id && (int) $ticket->agent_id !== (int) $user->id) {
+        $ticket->agent?->notify(new TicketEventNotification(
+            'New ticket assigned',
+            "Ticket {$ticket->ticket_number} was assigned to you.",
+            $ticket,
+            'assigned',
+            $user
+        ));
+    }
         return redirect()
             ->route('tickets.show', $ticket)
             ->with('success', 'Ticket created successfully.');
@@ -345,6 +371,15 @@ class TicketController extends Controller
             'new_value' => $ticket->agent?->name ?? 'Unassigned',
         ]);
 
+        if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+        $ticket->agent->notify(new TicketEventNotification(
+            'Ticket assigned to you',
+            "You were assigned to ticket {$ticket->ticket_number}.",
+            $ticket,
+            'assigned',
+            $user
+        ));
+    }
         if ($oldPriority !== $ticket->priority) {
             $ticket->activityLogs()->create([
                 'user_id' => $user->id,

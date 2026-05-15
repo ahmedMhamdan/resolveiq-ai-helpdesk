@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\TicketAttachment;
+use App\Notifications\TicketEventNotification;
 
 class TicketReplyController extends Controller
 {
@@ -60,7 +61,29 @@ class TicketReplyController extends Controller
             'old_value' => null,
             'new_value' => $isInternalNote ? 'internal_note' : 'reply',
         ]);
+        $ticket->loadMissing(['user', 'agent']);
 
+        if (! $isInternalNote) {
+            if (in_array($role, ['admin', 'agent'], true) && (int) $ticket->user_id !== (int) $user->id) {
+                $ticket->user?->notify(new TicketEventNotification(
+                    'New reply on your ticket',
+                    "{$user->name} replied to ticket {$ticket->ticket_number}.",
+                    $ticket,
+                    'reply',
+                    $user
+                ));
+            }
+
+            if ($role === 'user' && $ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Customer replied',
+                    "{$user->name} replied to ticket {$ticket->ticket_number}.",
+                    $ticket,
+                    'reply',
+                    $user
+                ));
+            }
+        }
         return redirect()
             ->route('tickets.show', $ticket)
             ->with('success', 'Reply added successfully.');

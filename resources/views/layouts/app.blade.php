@@ -10,6 +10,11 @@
     @php
     $currentUser = auth()->user();
 
+    $unreadNotificationsCount = $currentUser?->unreadNotifications()->count() ?? 0;
+    $latestNotifications = $currentUser
+        ? $currentUser->notifications()->latest()->take(5)->get()
+        : collect();
+
     $currentUserName = $currentUser?->name ?? 'Guest';
     $currentUserRoleName = strtolower($currentUser?->role?->name ?? 'user');
     $currentUserRole = ucfirst($currentUserRoleName);
@@ -119,7 +124,78 @@
                         + New Ticket
                     </a>
                     @endif
+                    <div class="notifications-dropdown" id="notificationsDropdown">
+                        <button
+                            type="button"
+                            class="top-notification-btn {{ $unreadNotificationsCount > 0 ? 'has-unread' : '' }}"
+                            id="notificationsToggle"
+                            aria-label="Notifications"
+                            title="Notifications"
+                        >
+                            <svg
+                                class="notification-svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.9"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
+                                <path d="M10 20a2 2 0 0 0 4 0" />
+                            </svg>
 
+                            @if ($unreadNotificationsCount > 0)
+                                <strong>{{ $unreadNotificationsCount > 9 ? '9+' : $unreadNotificationsCount }}</strong>
+                            @endif
+                        </button>
+
+                        <div class="notifications-menu" id="notificationsMenu">
+                            <div class="notifications-menu-head">
+                                <div>
+                                    <h4>Notifications</h4>
+                                    <span>{{ $unreadNotificationsCount }} unread</span>
+                                </div>
+
+                                <a href="{{ route('notifications.index') }}">View all</a>
+                            </div>
+
+                            <div class="notifications-menu-list">
+                                @forelse ($latestNotifications as $notification)
+                                    @php
+                                        $data = $notification->data;
+                                        $isUnread = is_null($notification->read_at);
+                                    @endphp
+
+                                    <form
+                                        action="{{ route('notifications.read', $notification) }}"
+                                        method="POST"
+                                        class="notification-mini-item {{ $isUnread ? 'unread' : '' }}"
+                                    >
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button type="submit">
+                                            <span class="notification-mini-icon">
+                                                {{ strtoupper(substr($data['type'] ?? 'T', 0, 1)) }}
+                                            </span>
+
+                                            <span class="notification-mini-content">
+                                                <strong>{{ $data['title'] ?? 'Notification' }}</strong>
+                                                <small>{{ $data['message'] ?? '' }}</small>
+                                                <em>{{ $notification->created_at?->diffForHumans() }}</em>
+                                            </span>
+                                        </button>
+                                    </form>
+                                @empty
+                                    <div class="notification-mini-empty">
+                                        No notifications yet.
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
                     <button type="button" class="theme-switch" id="themeToggle" aria-label="Toggle theme">
                         <span class="theme-icon sun">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
@@ -191,6 +267,20 @@
                 const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
                 applyTheme(nextTheme);
+            });
+
+            const notificationsDropdown = document.getElementById('notificationsDropdown');
+            const notificationsToggle = document.getElementById('notificationsToggle');
+
+            notificationsToggle?.addEventListener('click', event => {
+                event.stopPropagation();
+                notificationsDropdown?.classList.toggle('open');
+            });
+
+            document.addEventListener('click', event => {
+                if (! notificationsDropdown?.contains(event.target)) {
+                    notificationsDropdown?.classList.remove('open');
+                }
             });
         })();
     </script>
