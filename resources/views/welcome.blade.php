@@ -108,20 +108,31 @@
 
         .landing-title {
             margin: 28px 0 22px;
-            max-width: 800px;
+            max-width: 840px;
+            overflow: visible;
             font-size: clamp(48px, 6vw, 86px);
-            line-height: .98;
-            letter-spacing: -.07em;
+            line-height: 1.02;
+            letter-spacing: -.055em;
             font-weight: 900;
         }
 
         .landing-title span {
             display: inline-block;
+            overflow: visible;
+            padding-right: .12em;
+            margin-right: .02em;
             color: transparent;
-            background: linear-gradient(135deg, #22d3ee, #60a5fa, #8b5cf6);
+            background: linear-gradient(135deg, #22d3ee 0%, #60a5fa 48%, #a78bfa 100%);
             background-clip: text;
             -webkit-background-clip: text;
+            filter: drop-shadow(0 12px 30px rgba(56, 189, 248, .22));
         }
+
+        .landing-page .brand-text span {
+            color: #22d3ee;
+            text-shadow: 0 0 18px rgba(34, 211, 238, .24);
+        }
+
 
         .landing-description {
             max-width: 720px;

@@ -9,10 +9,15 @@ class NotificationController extends Controller
 {
     public function index(Request $request)
     {
+        $filter = $request->query('filter', 'all');
+
         $notifications = $request->user()
             ->notifications()
+            ->when($filter === 'unread', fn ($query) => $query->whereNull('read_at'))
+            ->when($filter === 'read', fn ($query) => $query->whereNotNull('read_at'))
             ->latest()
-            ->paginate(12);
+            ->paginate(12)
+            ->withQueryString();
 
         return view('notifications.index', compact('notifications'));
     }
@@ -33,6 +38,28 @@ class NotificationController extends Controller
             ->update(['read_at' => now()]);
 
         return back()->with('success', 'All notifications marked as read.');
+    }
+
+    public function deleteRead(Request $request)
+    {
+        $request->user()
+            ->readNotifications()
+            ->delete();
+
+        return redirect()
+            ->route('notifications.index')
+            ->with('success', 'Read notifications deleted successfully.');
+    }
+
+    public function deleteAll(Request $request)
+    {
+        $request->user()
+            ->notifications()
+            ->delete();
+
+        return redirect()
+            ->route('notifications.index')
+            ->with('success', 'All notifications deleted successfully.');
     }
 
     public function destroy(Request $request, DatabaseNotification $notification)

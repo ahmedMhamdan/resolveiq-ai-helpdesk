@@ -10,6 +10,9 @@
         $isUser = $role === 'user';
         $canManageTicket = $isAdmin || $isAgent;
         $canCloseTicket = $isAdmin || ($isAgent && (int) $ticket->agent_id === (int) auth()->id());
+        $isOverdue = $ticket->due_at
+            && $ticket->due_at->isPast()
+            && ! in_array($ticket->status, ['solved', 'closed'], true);
         $visibleReplies = $ticket->replies->filter(function ($reply) use ($isUser) {
             return ! ($isUser && $reply->is_internal_note);
         });
@@ -114,6 +117,20 @@
                     <div class="meta-box meta-created">
                         <small>Created</small>
                         <strong>{{ $ticket->created_at->format('M d, Y') }}</strong>
+                    </div>
+
+                    <div class="meta-box meta-due {{ $isOverdue ? 'meta-overdue' : '' }}">
+                        <small>Due Date</small>
+
+                        <strong>
+                            {{ $ticket->due_at ? $ticket->due_at->format('M d, Y') : 'Not set' }}
+                        </strong>
+
+                        @if ($ticket->due_at)
+                            <span class="{{ $isOverdue ? 'meta-warning' : 'meta-muted-note' }}">
+                                {{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}
+                            </span>
+                        @endif
                     </div>
                 </div>
 
@@ -266,6 +283,22 @@
                     <span class="priority {{ $ticket->priority ?? 'unset' }}">
                         {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                     </span>
+                </div>
+
+                <div class="detail-row">
+                    <small>Due Date</small>
+
+                    @if ($ticket->due_at)
+                        <strong class="{{ $isOverdue ? 'due-overdue-text' : '' }}">
+                            {{ $ticket->due_at->format('M d, Y - h:i A') }}
+                        </strong>
+
+                        <span class="page-subtitle">
+                            {{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}
+                        </span>
+                    @else
+                        <strong>Not set</strong>
+                    @endif
                 </div>
 
                 @if (! $isUser)

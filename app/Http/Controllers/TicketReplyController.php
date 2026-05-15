@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use App\Models\TicketAttachment;
 use App\Notifications\TicketEventNotification;
@@ -32,6 +33,8 @@ class TicketReplyController extends Controller
             'message' => $data['message'],
             'is_internal_note' => $isInternalNote,
         ]);
+
+        $replyPreview = Str::limit(trim($reply->message), 120);
 
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
@@ -66,8 +69,8 @@ class TicketReplyController extends Controller
         if (! $isInternalNote) {
             if (in_array($role, ['admin', 'agent'], true) && (int) $ticket->user_id !== (int) $user->id) {
                 $ticket->user?->notify(new TicketEventNotification(
-                    'New reply on your ticket',
-                    "{$user->name} replied to ticket {$ticket->ticket_number}.",
+                    "Ticket {$ticket->ticket_number} updated",
+                    "{$user->name} replied to this ticket.\n\"{$replyPreview}\"",
                     $ticket,
                     'reply',
                     $user
@@ -76,14 +79,15 @@ class TicketReplyController extends Controller
 
             if ($role === 'user' && $ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
                 $ticket->agent->notify(new TicketEventNotification(
-                    'Customer replied',
-                    "{$user->name} replied to ticket {$ticket->ticket_number}.",
+                    "Ticket {$ticket->ticket_number} updated",
+                    "{$user->name} replied to this ticket.\n\"{$replyPreview}\"",
                     $ticket,
                     'reply',
                     $user
                 ));
             }
         }
+
         return redirect()
             ->route('tickets.show', $ticket)
             ->with('success', 'Reply added successfully.');
@@ -105,8 +109,8 @@ class TicketReplyController extends Controller
             }
 
             TicketAttachment::query()
-            ->whereKey($attachment->getKey())
-            ->delete();
+                ->whereKey($attachment->getKey())
+                ->delete();
         }
 
         $ticket->activityLogs()->create([

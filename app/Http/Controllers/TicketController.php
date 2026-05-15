@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Notifications\TicketEventNotification;
 
-
 class TicketController extends Controller
 {
     public function index(Request $request)
@@ -116,32 +115,34 @@ class TicketController extends Controller
             'old_value' => null,
             'new_value' => 'open',
         ]);
+
         $ticket->loadMissing('agent');
 
         $admins = User::query()
-        ->whereHas('role', fn ($query) => $query->where('name', 'admin'))
-        ->whereKeyNot($user->id)
-        ->get();
+            ->whereHas('role', fn ($query) => $query->where('name', 'admin'))
+            ->whereKeyNot($user->id)
+            ->get();
 
-    foreach ($admins as $admin) {
-        $admin->notify(new TicketEventNotification(
-            'New ticket created',
-            "{$user->name} created ticket {$ticket->ticket_number}.",
-            $ticket,
-            'created',
-            $user
-        ));
-    }
+        foreach ($admins as $admin) {
+            $admin->notify(new TicketEventNotification(
+                'New ticket created',
+                "{$user->name} created ticket {$ticket->ticket_number}.",
+                $ticket,
+                'created',
+                $user
+            ));
+        }
 
-    if ($ticket->agent_id && (int) $ticket->agent_id !== (int) $user->id) {
-        $ticket->agent?->notify(new TicketEventNotification(
-            'New ticket assigned',
-            "Ticket {$ticket->ticket_number} was assigned to you.",
-            $ticket,
-            'assigned',
-            $user
-        ));
-    }
+        if ($ticket->agent_id && (int) $ticket->agent_id !== (int) $user->id) {
+            $ticket->agent?->notify(new TicketEventNotification(
+                'New ticket assigned',
+                "Ticket {$ticket->ticket_number} was assigned to you.",
+                $ticket,
+                'assigned',
+                $user
+            ));
+        }
+
         return redirect()
             ->route('tickets.show', $ticket)
             ->with('success', 'Ticket created successfully.');
@@ -198,6 +199,7 @@ class TicketController extends Controller
         $oldStatus = $ticket->status;
         $oldPriority = $ticket->priority;
         $oldAgentId = $ticket->agent_id;
+        $oldDueAt = $ticket->due_at?->copy();
 
         $resolvedAt = $ticket->resolved_at;
         $closedAt = $ticket->closed_at;
@@ -231,6 +233,9 @@ class TicketController extends Controller
         $ticket->fill($updateData);
         $ticket->save();
         $ticket->refresh();
+        $ticket->loadMissing(['user', 'agent']);
+
+        $dueDateChanged = ($oldDueAt?->toDateTimeString()) !== ($ticket->due_at?->toDateTimeString());
 
         if ($oldStatus !== $ticket->status) {
             $ticket->activityLogs()->create([
@@ -239,6 +244,26 @@ class TicketController extends Controller
                 'old_value' => $oldStatus,
                 'new_value' => $ticket->status,
             ]);
+
+            if ((int) $ticket->user_id !== (int) $user->id) {
+                $ticket->user?->notify(new TicketEventNotification(
+                    'Ticket status updated',
+                    "Ticket {$ticket->ticket_number} status changed from {$oldStatus} to {$ticket->status}.",
+                    $ticket,
+                    'status',
+                    $user
+                ));
+            }
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Assigned ticket status updated',
+                    "Ticket {$ticket->ticket_number} status changed from {$oldStatus} to {$ticket->status}.",
+                    $ticket,
+                    'status',
+                    $user
+                ));
+            }
         }
 
         if ($oldPriority !== $ticket->priority) {
@@ -248,6 +273,48 @@ class TicketController extends Controller
                 'old_value' => $oldPriority ?? 'Not set',
                 'new_value' => $ticket->priority ?? 'Not set',
             ]);
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Ticket priority updated',
+                    "Ticket {$ticket->ticket_number} priority is now " . ($ticket->priority ?? 'not set') . '.',
+                    $ticket,
+                    'priority',
+                    $user
+                ));
+            }
+        }
+
+        if ($dueDateChanged) {
+            $oldDueText = $oldDueAt ? $oldDueAt->format('M d, Y - h:i A') : 'Not set';
+            $newDueText = $ticket->due_at ? $ticket->due_at->format('M d, Y - h:i A') : 'Not set';
+
+            $ticket->activityLogs()->create([
+                'user_id' => $user->id,
+                'action' => 'Due date changed',
+                'old_value' => $oldDueText,
+                'new_value' => $newDueText,
+            ]);
+
+            if ((int) $ticket->user_id !== (int) $user->id) {
+                $ticket->user?->notify(new TicketEventNotification(
+                    "Ticket {$ticket->ticket_number} due date updated",
+                    "The due date changed from {$oldDueText} to {$newDueText}.",
+                    $ticket,
+                    'due_date',
+                    $user
+                ));
+            }
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    "Ticket {$ticket->ticket_number} due date updated",
+                    "The due date changed from {$oldDueText} to {$newDueText}.",
+                    $ticket,
+                    'due_date',
+                    $user
+                ));
+            }
         }
 
         if ($role === 'admin' && (int) $oldAgentId !== (int) $ticket->agent_id) {
@@ -259,17 +326,30 @@ class TicketController extends Controller
                     ->value('name') ?? 'Unassigned';
             }
 
-            $ticket->loadMissing('agent');
-
             $ticket->activityLogs()->create([
                 'user_id' => $user->id,
                 'action' => 'Agent changed',
                 'old_value' => $oldAgentName,
                 'new_value' => $ticket->agent?->name ?? 'Unassigned',
             ]);
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Ticket assigned to you',
+                    "You were assigned to ticket {$ticket->ticket_number}.",
+                    $ticket,
+                    'assigned',
+                    $user
+                ));
+            }
         }
 
-        if ($oldStatus === $ticket->status && $oldPriority === $ticket->priority && (int) $oldAgentId === (int) $ticket->agent_id) {
+        if (
+            $oldStatus === $ticket->status
+            && $oldPriority === $ticket->priority
+            && (int) $oldAgentId === (int) $ticket->agent_id
+            && ! $dueDateChanged
+        ) {
             $ticket->activityLogs()->create([
                 'user_id' => $user->id,
                 'action' => 'Ticket updated',
@@ -282,6 +362,7 @@ class TicketController extends Controller
             ->route('tickets.show', $ticket)
             ->with('success', 'Ticket updated successfully.');
     }
+
     public function overdue(Request $request)
     {
         $user = $this->currentUser($request);
@@ -312,6 +393,7 @@ class TicketController extends Controller
 
         return view('tickets.overdue', compact('tickets'));
     }
+
     public function unassigned(Request $request)
     {
         $user = $this->currentUser($request);
@@ -372,14 +454,15 @@ class TicketController extends Controller
         ]);
 
         if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
-        $ticket->agent->notify(new TicketEventNotification(
-            'Ticket assigned to you',
-            "You were assigned to ticket {$ticket->ticket_number}.",
-            $ticket,
-            'assigned',
-            $user
-        ));
-    }
+            $ticket->agent->notify(new TicketEventNotification(
+                'Ticket assigned to you',
+                "You were assigned to ticket {$ticket->ticket_number}.",
+                $ticket,
+                'assigned',
+                $user
+            ));
+        }
+
         if ($oldPriority !== $ticket->priority) {
             $ticket->activityLogs()->create([
                 'user_id' => $user->id,
@@ -387,6 +470,16 @@ class TicketController extends Controller
                 'old_value' => $oldPriority ?? 'Not set',
                 'new_value' => $ticket->priority ?? 'Not set',
             ]);
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Ticket priority updated',
+                    "Ticket {$ticket->ticket_number} priority is now " . ($ticket->priority ?? 'not set') . '.',
+                    $ticket,
+                    'priority',
+                    $user
+                ));
+            }
         }
 
         return back()->with('success', 'Ticket assigned successfully.');
@@ -405,6 +498,7 @@ class TicketController extends Controller
 
         return view('tickets.trashed', compact('tickets'));
     }
+
     public function reopen(Request $request, Ticket $ticket)
     {
         $user = $this->currentUser($request);
@@ -432,8 +526,31 @@ class TicketController extends Controller
             'new_value' => 'open',
         ]);
 
+        $ticket->loadMissing(['user', 'agent']);
+
+        if ((int) $ticket->user_id !== (int) $user->id) {
+            $ticket->user?->notify(new TicketEventNotification(
+                'Ticket reopened',
+                "Ticket {$ticket->ticket_number} has been reopened.",
+                $ticket,
+                'reopened',
+                $user
+            ));
+        }
+
+        if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+            $ticket->agent->notify(new TicketEventNotification(
+                'Assigned ticket reopened',
+                "Ticket {$ticket->ticket_number} has been reopened.",
+                $ticket,
+                'reopened',
+                $user
+            ));
+        }
+
         return back()->with('success', 'Ticket reopened successfully.');
     }
+
     public function close(Request $request, Ticket $ticket)
     {
         $user = $this->currentUser($request);
@@ -464,6 +581,18 @@ class TicketController extends Controller
             'old_value' => $oldStatus,
             'new_value' => 'closed',
         ]);
+
+        $ticket->loadMissing(['user', 'agent']);
+
+        if ((int) $ticket->user_id !== (int) $user->id) {
+            $ticket->user?->notify(new TicketEventNotification(
+                'Ticket closed',
+                "Ticket {$ticket->ticket_number} has been closed.",
+                $ticket,
+                'closed',
+                $user
+            ));
+        }
 
         return back()->with('success', 'Ticket closed successfully.');
     }

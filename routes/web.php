@@ -5,6 +5,7 @@ use App\Http\Controllers\AiAssistantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KnowledgeBaseController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TicketAttachmentController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
         ->name('tickets.ai.applyPriority');
 
     Route::patch('/tickets/{ticket}/ai/apply-due-date', [AiAssistantController::class, 'applyDueDate'])
-    ->name('tickets.ai.applyDueDate');
+        ->name('tickets.ai.applyDueDate');
 
     // Admin-only ticket management pages/actions.
     Route::middleware('admin')->group(function () {
@@ -124,11 +124,24 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    | Static bulk routes must stay before /notifications/{notification} routes.
+    */
     Route::get('/notifications', [NotificationController::class, 'index'])
-    ->name('notifications.index');
+        ->name('notifications.index');
 
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
         ->name('notifications.readAll');
+
+    Route::delete('/notifications/delete-read', [NotificationController::class, 'deleteRead'])
+        ->name('notifications.deleteRead');
+
+    Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAll'])
+        ->name('notifications.deleteAll');
 
     Route::patch('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
         ->name('notifications.read');

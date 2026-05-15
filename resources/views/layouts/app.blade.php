@@ -12,7 +12,7 @@
 
     $unreadNotificationsCount = $currentUser?->unreadNotifications()->count() ?? 0;
     $latestNotifications = $currentUser
-        ? $currentUser->notifications()->latest()->take(5)->get()
+        ? $currentUser->unreadNotifications()->latest()->take(5)->get()
         : collect();
 
     $currentUserName = $currentUser?->name ?? 'Guest';
@@ -190,7 +190,7 @@
                                     </form>
                                 @empty
                                     <div class="notification-mini-empty">
-                                        No notifications yet.
+                                        No unread notifications.
                                     </div>
                                 @endforelse
                             </div>
