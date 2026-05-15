@@ -13,7 +13,7 @@
         $showAgentColumn = $isAdmin;
         $showPriorityColumn = $isAdmin || $isAgent;
 
-        $columnsCount = 4;
+        $columnsCount = 5;
 
         if ($showRequesterColumn) {
             $columnsCount++;
@@ -102,6 +102,7 @@
                         <th>Priority</th>
                     @endif
 
+                    <th>Due Date</th>
                     <th>Updated</th>
                 </tr>
             </thead>
@@ -151,11 +152,29 @@
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
 
                         @if ($showPriorityColumn)
-                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">
-                            {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
-                        </span>
-                    </td>
+                            <td>
+                                <span class="priority {{ $ticket->priority ?? 'unset' }}">
+                                    {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                                </span>
+                            </td>
                         @endif
+
+                        @php
+                            $isOverdue = $ticket->due_at
+                                && $ticket->due_at->isPast()
+                                && ! in_array($ticket->status, ['solved', 'closed'], true);
+                        @endphp
+
+                        <td>
+                            @if ($ticket->due_at)
+                                <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
+                                    <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
+                                    <small>{{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}</small>
+                                </div>
+                            @else
+                                <span class="page-subtitle">Not set</span>
+                            @endif
+                        </td>
 
                         <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>

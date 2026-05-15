@@ -52,6 +52,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tickets/{ticket}/ai/apply-priority', [AiAssistantController::class, 'applyPriority'])
         ->name('tickets.ai.applyPriority');
 
+    Route::patch('/tickets/{ticket}/ai/apply-due-date', [AiAssistantController::class, 'applyDueDate'])
+    ->name('tickets.ai.applyDueDate');
+
     // Admin-only ticket management pages/actions.
     Route::middleware('admin')->group(function () {
         Route::get('/tickets/overdue', [TicketController::class, 'overdue'])

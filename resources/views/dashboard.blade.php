@@ -105,6 +105,7 @@
                     <th>Department</th>
                     <th>Status</th>
                     <th>Priority</th>
+                    <th>Due Date</th>
                     <th>Updated</th>
                 </tr>
             </thead>
@@ -137,11 +138,29 @@
                         <td><span class="priority {{ $ticket->priority ?? 'unset' }}">
                             {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                         </span></td>
+
+                        @php
+                            $isOverdue = $ticket->due_at
+                                && $ticket->due_at->isPast()
+                                && ! in_array($ticket->status, ['solved', 'closed'], true);
+                        @endphp
+
+                        <td>
+                            @if ($ticket->due_at)
+                                <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
+                                    <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
+                                    <small>{{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}</small>
+                                </div>
+                            @else
+                                <span class="page-subtitle">Not set</span>
+                            @endif
+                        </td>
+
                         <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ $role === 'user' ? 5 : 6 }}">
+                        <td colspan="{{ $role === 'user' ? 6 : 7 }}">
                             <div class="empty">No tickets found.</div>
                         </td>
                     </tr>

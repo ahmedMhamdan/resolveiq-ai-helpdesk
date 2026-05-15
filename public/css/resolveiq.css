@@ -3222,3 +3222,321 @@ body:not(.dark) .profile-stat-member {
         grid-template-columns: 1fr;
     }
 }
+.ai-generated-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.ai-output-line {
+    margin: 0;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    background: var(--panel-soft);
+    line-height: 1.7;
+    font-size: .95rem;
+}
+
+.ai-output-line-strong {
+    color: var(--primary);
+    font-weight: 750;
+    background: var(--primary-soft);
+}
+
+.ai-fallback-notice {
+    margin: 12px 0 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(245, 158, 11, .35);
+    border-radius: 14px;
+    color: #b45309;
+    background: rgba(245, 158, 11, .12);
+    font-size: .9rem;
+    font-weight: 650;
+    line-height: 1.6;
+}
+
+[data-theme="dark"] .ai-fallback-notice {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, .12);
+}
+
+.ai-output-box.is-loading {
+    position: relative;
+    opacity: .75;
+}
+
+.ai-output-box.is-loading::after {
+    content: "Generating AI response...";
+    display: block;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: .9rem;
+}
+.ai-generate-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-width: 180px;
+}
+
+.ai-btn-spinner {
+    width: 0;
+    height: 0;
+    opacity: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .45);
+    border-top-color: #fff;
+    transition: width .2s ease, height .2s ease, opacity .2s ease;
+}
+
+.ai-generate-btn.is-loading .ai-btn-spinner {
+    width: 17px;
+    height: 17px;
+    opacity: 1;
+    animation: aiSpin .75s linear infinite;
+}
+
+.ai-btn-dots {
+    display: none;
+    gap: 3px;
+    align-items: center;
+}
+
+.ai-generate-btn.is-loading .ai-btn-dots {
+    display: inline-flex;
+}
+
+.ai-btn-dots span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .45;
+    animation: aiDotPulse 1s ease-in-out infinite;
+}
+
+.ai-btn-dots span:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.ai-btn-dots span:nth-child(3) {
+    animation-delay: .3s;
+}
+
+.ai-generate-btn.is-loading {
+    cursor: wait;
+    opacity: .85;
+    pointer-events: none;
+}
+
+@keyframes aiSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes aiDotPulse {
+    0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: .35;
+    }
+
+    40% {
+        transform: translateY(-3px);
+        opacity: 1;
+    }
+}
+.ai-output-box:not(.has-output) {
+    min-height: 210px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+}
+
+.ai-empty-state {
+    max-width: 320px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.ai-empty-orb {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    color: #fff;
+    font-size: 22px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: 0 18px 42px rgba(99, 102, 241, .28);
+}
+
+.ai-empty-state strong {
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.ai-empty-state span {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: .95rem;
+}
+.ai-action-grid-five {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 1400px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .ai-action-grid-five {
+        grid-template-columns: 1fr;
+    }
+}
+.ai-action-grid-five {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.ai-action-card {
+    min-height: 220px;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+@media (max-width: 1400px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .ai-action-grid-five {
+        grid-template-columns: 1fr;
+    }
+}
+.ai-action-grid-five {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.ai-action-grid-five .ai-action-card {
+    min-height: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 14px;
+    padding: 24px;
+}
+
+.ai-action-grid-five .ai-action-card > span {
+    margin: 0;
+    align-self: flex-start;
+}
+
+.ai-action-grid-five .ai-action-card strong {
+    margin: 0;
+    min-height: 52px;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.25;
+}
+
+.ai-action-grid-five .ai-action-card small {
+    margin: 0;
+    line-height: 1.6;
+}
+
+@media (max-width: 1400px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .ai-action-grid-five {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .ai-action-grid-five {
+        grid-template-columns: 1fr;
+    }
+}
+.due-date-info {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.due-date-info strong {
+    color: var(--text);
+    font-weight: 750;
+}
+
+.due-date-info small {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.due-date-info.overdue strong,
+.due-date-info.overdue small,
+.due-overdue-text {
+    color: var(--danger);
+}
+
+.meta-due {
+    border-left-color: var(--warning);
+}
+
+.meta-overdue {
+    border-left-color: var(--danger);
+    background: rgba(239, 68, 68, .08);
+}
+
+.meta-warning {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: var(--danger);
+    background: rgba(239, 68, 68, .12);
+    font-size: 12px;
+    font-weight: 750;
+}
+
+@media (min-width: 1200px) {
+    .ticket-meta-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}

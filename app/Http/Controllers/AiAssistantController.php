@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Services\TicketAiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class AiAssistantController extends Controller
@@ -36,11 +37,20 @@ class AiAssistantController extends Controller
         abort_unless($this->canUseTicketAi($user, $ticket), 403);
 
         $data = $request->validate([
-            'mode' => ['required', Rule::in(['summary', 'reply', 'priority', 'custom'])],
+            'mode' => ['required', Rule::in(['summary', 'reply', 'priority', 'due_date', 'custom'])],
             'custom_prompt' => ['nullable', 'string', 'max:1500'],
         ]);
 
         if ($data['mode'] === 'custom' && empty(trim($data['custom_prompt'] ?? ''))) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Please write a custom instruction first.',
+                    'errors' => [
+                        'custom_prompt' => ['Please write a custom instruction first.'],
+                    ],
+                ], 422);
+            }
+
             return back()
                 ->withErrors(['custom_prompt' => 'Please write a custom instruction first.'])
                 ->withInput();
@@ -54,20 +64,36 @@ class AiAssistantController extends Controller
         );
 
         $suggestedPriority = null;
+        $suggestedDueDate = null;
 
         if ($mode === 'priority') {
             $suggestedPriority = $this->extractSuggestedPriority($body);
         }
 
+        if ($mode === 'due_date') {
+            $suggestedDueDate = $this->extractSuggestedDueDate($body);
+        }
+
+        $ticketAi = [
+            'ticket_id' => $ticket->id,
+            'mode' => $mode,
+            'title' => $this->makeAiTitle($mode, $ticket),
+            'body' => $body,
+            'suggested_priority' => $suggestedPriority,
+            'suggested_due_date' => $suggestedDueDate,
+            'used_fallback' => $aiService->usedFallback(),
+        ];
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'AI suggestion generated successfully.',
+                'ticket_ai' => $ticketAi,
+            ]);
+        }
+
         return redirect()
             ->route('ai.index', ['ticket_id' => $ticket->id])
-            ->with('ticket_ai', [
-                'ticket_id' => $ticket->id,
-                'mode' => $mode,
-                'title' => $this->makeAiTitle($mode, $ticket),
-                'body' => $body,
-                'suggested_priority' => $suggestedPriority,
-            ])
+            ->with('ticket_ai', $ticketAi)
             ->with('success', 'AI suggestion generated successfully.');
     }
 
@@ -134,6 +160,37 @@ class AiAssistantController extends Controller
             ->with('success', 'AI suggested priority applied successfully.');
     }
 
+    public function applyDueDate(Request $request, Ticket $ticket)
+    {
+        $user = $request->user();
+
+        abort_unless($this->roleName($user) === 'admin', 403);
+
+        $data = $request->validate([
+            'due_at' => ['required', 'date', 'after_or_equal:today'],
+        ]);
+
+        $oldDueDate = $this->formatDateForLog($ticket->due_at);
+        $newDueDate = Carbon::parse($data['due_at'])->endOfDay();
+
+        $ticket->fill([
+            'due_at' => $newDueDate,
+        ]);
+
+        $ticket->save();
+
+        $ticket->activityLogs()->create([
+            'user_id' => $user->id,
+            'action' => 'AI due date applied',
+            'old_value' => $oldDueDate ?? 'Not set',
+            'new_value' => $newDueDate->format('Y-m-d'),
+        ]);
+
+        return redirect()
+            ->route('tickets.show', $ticket)
+            ->with('success', 'AI suggested due date applied successfully.');
+    }
+
     private function storeAiReply(Request $request, Ticket $ticket, string $message)
     {
         $user = $request->user();
@@ -188,6 +245,7 @@ class AiAssistantController extends Controller
             'summary' => "AI Summary for {$ticket->ticket_number}",
             'reply' => "Suggested Reply for {$ticket->ticket_number}",
             'priority' => "Suggested Priority for {$ticket->ticket_number}",
+            'due_date' => "Suggested Due Date for {$ticket->ticket_number}",
             'custom' => "Custom AI Response for {$ticket->ticket_number}",
             default => "AI Result for {$ticket->ticket_number}",
         };
@@ -205,4 +263,44 @@ class AiAssistantController extends Controller
 
         return null;
     }
+
+
+    private function extractSuggestedDueDate(string $body): ?string
+    {
+        $patterns = [
+            '/(?:Due Date|Suggested Due Date)\s*:\s*(\d{4}-\d{2}-\d{2})/i',
+            '/(?:تاريخ الاستحقاق|تاريخ الاستحقاق المقترح)\s*:\s*(\d{4}-\d{2}-\d{2})/u',
+            '/\b(\d{4}-\d{2}-\d{2})\b/',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $body, $matches)) {
+                try {
+                    $date = Carbon::parse($matches[1])->startOfDay();
+
+                    if ($date->gte(Carbon::today())) {
+                        return $date->format('Y-m-d');
+                    }
+                } catch (\Throwable $e) {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function formatDateForLog($value): ?string
+    {
+        if (! $value) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($value)->format('Y-m-d');
+        } catch (\Throwable $e) {
+            return (string) $value;
+        }
+    }
+
 }
