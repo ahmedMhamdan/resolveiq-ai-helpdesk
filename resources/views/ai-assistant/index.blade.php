@@ -40,6 +40,47 @@
         .ai-generate-btn .ai-btn-text {
             white-space: nowrap;
         }
+
+        .ai-kb-sources {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border: 1px solid rgba(56, 189, 248, .24);
+            border-radius: 16px;
+            background: rgba(56, 189, 248, .08);
+        }
+
+        .ai-kb-sources strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .ai-kb-sources strong svg {
+            width: 17px;
+            height: 17px;
+            color: #38bdf8;
+        }
+
+        .ai-kb-sources ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+        }
+
+        .ai-kb-sources li {
+            margin: 5px 0;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .ai-kb-sources small {
+            color: var(--muted);
+            opacity: .8;
+        }
+
     </style>
 
     @php
@@ -228,6 +269,29 @@
                                 </p>
                             @endforeach
                         </div>
+
+                        @if (! empty($ticketAi['knowledge_sources']))
+                            <div class="ai-kb-sources">
+                                <strong>
+                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M4 19.5V5.75C4 4.78 4.78 4 5.75 4H10C11.1 4 12 4.9 12 6V20C12 18.9 11.1 18 10 18H5.5C4.67 18 4 18.67 4 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M20 19.5V5.75C20 4.78 19.22 4 18.25 4H14C12.9 4 12 4.9 12 6V20C12 18.9 12.9 18 14 18H18.5C19.33 18 20 18.67 20 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Knowledge sources used
+                                </strong>
+
+                                <ul>
+                                    @foreach ($ticketAi['knowledge_sources'] as $source)
+                                        <li>
+                                            {{ is_array($source) ? ($source['title'] ?? 'Knowledge article') : $source }}
+                                            @if (is_array($source) && ! empty($source['score']))
+                                                <small>— relevance {{ $source['score'] }}</small>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     @else
                     <div class="ai-empty-state">
                         <div class="ai-empty-orb">
@@ -363,6 +427,8 @@
             const dueDateButton = applyDueDateForm?.querySelector('[data-due-date-button]');
             const canApplyPriority = @json($isAdmin);
             const canApplyDueDate = @json($isAdmin);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                document.querySelector('input[name="_token"]')?.value || '';
 
             function selectedOption() {
                 return ticketSelect?.options[ticketSelect.selectedIndex] || null;
@@ -399,6 +465,38 @@
                 }).join('');
             }
 
+
+            function renderKnowledgeSources(sources) {
+                if (!Array.isArray(sources) || !sources.length) {
+                    return '';
+                }
+
+                const items = sources.map(source => {
+                    const title = typeof source === 'string'
+                        ? source
+                        : (source?.title || 'Knowledge article');
+
+                    const score = typeof source === 'object' && source?.score
+                        ? ` <small>— relevance ${escapeHtml(source.score)}</small>`
+                        : '';
+
+                    return `<li>${escapeHtml(title)}${score}</li>`;
+                }).join('');
+
+                return `
+                    <div class="ai-kb-sources">
+                        <strong>
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M4 19.5V5.75C4 4.78 4.78 4 5.75 4H10C11.1 4 12 4.9 12 6V20C12 18.9 11.1 18 10 18H5.5C4.67 18 4 18.67 4 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20 19.5V5.75C20 4.78 19.22 4 18.25 4H14C12.9 4 12 4.9 12 6V20C12 18.9 12.9 18 14 18H18.5C19.33 18 20 18.67 20 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Knowledge sources used
+                        </strong>
+                        <ul>${items}</ul>
+                    </div>
+                `;
+            }
+
             function renderAiOutput(ticketAi) {
                 if (!outputBox || !outputContent || !ticketAi) {
                     return;
@@ -416,6 +514,7 @@
                     <div class="ai-generated-text">
                         ${renderAiText(ticketAi.body || '')}
                     </div>
+                    ${renderKnowledgeSources(ticketAi.knowledge_sources || [])}
                 `;
 
                 if (replyTicketInput) {
@@ -573,11 +672,21 @@
                         headers: {
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-TOKEN': csrfToken,
                         },
+                        credentials: 'same-origin',
                         body: buildAiRequestFormData(),
                     });
 
-                    const data = await response.json();
+                    const rawResponse = await response.text();
+                    let data = null;
+
+                    try {
+                        data = rawResponse ? JSON.parse(rawResponse) : {};
+                    } catch (parseError) {
+                        console.error('AI endpoint returned non-JSON response:', rawResponse);
+                        throw new Error('AI endpoint returned a non-JSON response. Check the Laravel terminal or Network tab for the real backend error.');
+                    }
 
                     if (!response.ok) {
                         const errors = data.errors ? Object.values(data.errors).flat().join('\n') : null;

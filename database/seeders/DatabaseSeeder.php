@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
+use App\Models\KnowledgeArticle;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketActivityLog;
@@ -10,6 +11,7 @@ use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -81,6 +83,42 @@ class DatabaseSeeder extends Seeder
 
         $departments = [$support, $billing, $security];
         $customers = [$customerOne, $customerTwo];
+
+
+        $knowledgeArticles = [
+            ['Password reset email not received', 'If a user does not receive the password reset email, ask them to check spam, confirm the registered email address, and wait a few minutes. If the issue continues, check the mail queue and resend the reset link.', 'published', $support, $admin],
+            ['Login returns 500 server error', 'Ask the user for the exact time of the error, browser type, and screenshot. Check application logs, session configuration, database connectivity, and recent deployments before replying.', 'published', $support, $agentOne],
+            ['Dashboard is loading slowly', 'Start by checking browser cache, network speed, and whether the issue happens on all pages or only the dashboard. Then review server response time and database queries.', 'published', $support, $agentOne],
+            ['Attachment upload failed', 'Confirm the file type and size. Ask the user to try a smaller file. Check upload validation rules, storage permissions, and server file size limits.', 'published', $support, $agentTwo],
+            ['Email notifications are delayed', 'Check whether the notification is delayed for one user or all users. Review queue workers, mail provider status, failed jobs, and notification settings.', 'published', $support, $agentOne],
+            ['Profile update does not save', 'Ask the user which field fails to update. Check validation errors, browser console errors, and whether the account has permission to update profile details.', 'published', $support, $agentTwo],
+            ['Report export returns empty file', 'Check the selected date range and filters first. Then verify export permissions, query results, and whether the export job completed successfully.', 'published', $support, $admin],
+            ['Cannot close a ticket', 'Verify the current ticket status and user role. Agents can close assigned tickets, while admins can close all tickets. Check authorization logic if the button is visible but fails.', 'published', $support, $admin],
+            ['Invoice amount is incorrect', 'Compare the invoice amount with the user plan, renewal date, discounts, taxes, and previous payments. If there is a mismatch, escalate to billing with invoice details.', 'published', $billing, $agentTwo],
+            ['Cannot download invoice PDF', 'Ask the user to try another browser and check if the invoice exists. Review PDF generation logs, file permissions, and invoice record status.', 'published', $billing, $agentTwo],
+            ['Payment method rejected', 'Ask the user to confirm card details, available balance, and bank restrictions. If the issue continues, check payment gateway response and advise trying another method.', 'published', $billing, $admin],
+            ['Refund request handling', 'Confirm order number, payment date, refund reason, and policy eligibility. Give the user a clear expected review time and escalate to billing if needed.', 'published', $billing, $agentTwo],
+            ['Subscription renewal did not apply', 'Check payment success, subscription status, renewal timestamp, and account plan. If payment succeeded but access was not updated, escalate as high priority.', 'published', $billing, $agentOne],
+            ['Account locked after failed logins', 'Verify the user identity before unlocking the account. Explain the lockout reason, reset failed attempts if appropriate, and recommend password reset.', 'published', $security, $agentOne],
+            ['Two-factor authentication reset', 'Verify identity carefully before disabling 2FA. Ask for account email and recent account activity. After verification, disable old 2FA and guide the user to configure it again.', 'published', $security, $agentOne],
+            ['Suspicious login notification', 'Ask the user if they recognize the location/device. If not, recommend password reset, revoke active sessions, enable 2FA, and review recent account activity.', 'published', $security, $agentTwo],
+            ['Security settings are not saving', 'Ask which setting is failing and whether an error appears. Check validation, authorization, browser console errors, and server logs.', 'published', $security, $admin],
+            ['Account access review request', 'Review recent logins, active sessions, and permission changes. Share only safe security information and recommend changing the password if suspicious activity is found.', 'published', $security, $agentTwo],
+            ['Internal escalation guide', 'Use internal notes when the message should not be visible to the customer. Include ticket number, issue summary, attempted steps, urgency, and expected next action.', 'draft', $support, $admin],
+            ['AI reply writing guidelines', 'AI replies should be polite, clear, and based on ticket details. Do not invent facts. If Knowledge Base content is relevant, use it as supporting context.', 'published', $support, $admin],
+        ];
+
+        foreach ($knowledgeArticles as [$title, $content, $status, $department, $author]) {
+            KnowledgeArticle::updateOrCreate(
+                ['title' => $title],
+                [
+                    'slug' => Str::slug($title),
+                    'content' => $content,
+                    'status' => $status,
+                    'user_id' => $author->id,
+                ]
+            );
+        }
 
         $ticketTemplates = [
             [
@@ -349,6 +387,59 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $extraIssues = [
+            ['Cannot verify email address', 'The verification link says it is expired.', $support],
+            ['Live chat widget is not loading', 'The support chat widget stays blank on my browser.', $support],
+            ['Search results are not accurate', 'The search page does not show the ticket I need.', $support],
+            ['Unable to change password', 'The change password form keeps returning an error.', $security],
+            ['Need to revoke all sessions', 'Please sign out all devices connected to my account.', $security],
+            ['Unknown device in account activity', 'There is a device listed that I do not recognize.', $security],
+            ['Failed card payment', 'My card payment failed but the bank says it was approved.', $billing],
+            ['Duplicate invoice generated', 'I can see two invoices for the same subscription period.', $billing],
+            ['Plan upgrade not reflected', 'I upgraded my plan but the dashboard still shows the old plan.', $billing],
+            ['Cannot open ticket details', 'The ticket details page keeps loading without opening.', $support],
+            ['Reply box not submitting', 'I wrote a reply but it does not appear after submitting.', $support],
+            ['File preview is broken', 'Uploaded attachments do not show a preview.', $support],
+            ['Need billing statement', 'I need a full billing statement for this month.', $billing],
+            ['Refund status is unclear', 'I do not know if my refund was approved or rejected.', $billing],
+            ['Account recovery request', 'I lost access to my email and need account recovery help.', $security],
+            ['2FA code is always invalid', 'The authenticator code fails every time I enter it.', $security],
+            ['Notification preferences not saving', 'My notification settings return to old values.', $support],
+            ['API token reset request', 'I need to reset the API token connected to my account.', $security],
+            ['Billing address update failed', 'I cannot save the new billing address.', $billing],
+            ['System timeout while saving', 'The system times out when I try to save changes.', $support],
+            ['Customer portal blank after login', 'After login the portal page is completely blank.', $support],
+            ['Tax value seems wrong', 'The invoice tax calculation seems incorrect.', $billing],
+            ['Suspicious password reset email', 'I received a password reset email that I did not request.', $security],
+            ['Need account data export', 'I want to export my account data for review.', $security],
+            ['Ticket reopened by mistake', 'A solved ticket became open again without my action.', $support],
+            ['Wrong priority on urgent issue', 'My urgent security issue was marked as low priority.', $security],
+            ['Payment receipt missing', 'I paid but cannot find the payment receipt.', $billing],
+            ['Cannot delete old attachment', 'I want to remove an old attachment but the delete action fails.', $support],
+            ['Agent reply did not answer issue', 'The reply does not solve the actual problem I reported.', $support],
+            ['Need manual invoice review', 'Please manually review this invoice because the amount looks duplicated.', $billing],
+            ['Login alert from another country', 'I received a login alert from a country I never visited.', $security],
+            ['Security question reset request', 'I need help resetting my security questions.', $security],
+        ];
+
+        $statuses = ['open', 'pending', 'solved', 'closed'];
+        $priorities = [null, 'low', 'medium', 'high', 'urgent'];
+        $agents = [null, $agentOne, $agentTwo];
+
+        foreach ($extraIssues as $index => [$title, $description, $department]) {
+            $ticketTemplates[] = [
+                'number' => 'RIQ-' . (1025 + $index),
+                'title' => $title,
+                'description' => $description,
+                'customer' => $customers[$index % count($customers)],
+                'agent' => $agents[$index % count($agents)],
+                'department' => $department,
+                'status' => $statuses[$index % count($statuses)],
+                'priority' => $priorities[$index % count($priorities)],
+                'due_at' => $index % 5 === 0 ? null : now()->addDays(($index % 14) - 7),
+            ];
+        }
+
         $createdTickets = [];
 
         foreach ($ticketTemplates as $ticketData) {
@@ -393,6 +484,39 @@ class DatabaseSeeder extends Seeder
                     'is_internal_note' => $isInternalNote,
                 ]
             );
+        }
+
+        foreach ($createdTickets as $ticket) {
+            $assignedUser = $ticket->agent_id ? User::query()->find($ticket->agent_id) : $admin;
+
+            TicketReply::updateOrCreate(
+                [
+                    'ticket_id' => $ticket->id,
+                    'user_id' => $ticket->user_id,
+                    'message' => 'I need an update on this issue when possible.',
+                ],
+                ['is_internal_note' => false]
+            );
+
+            if ($assignedUser) {
+                TicketReply::updateOrCreate(
+                    [
+                        'ticket_id' => $ticket->id,
+                        'user_id' => $assignedUser->id,
+                        'message' => 'We reviewed the ticket details and will follow the correct support steps.',
+                    ],
+                    ['is_internal_note' => false]
+                );
+
+                TicketReply::updateOrCreate(
+                    [
+                        'ticket_id' => $ticket->id,
+                        'user_id' => $assignedUser->id,
+                        'message' => 'Internal note: check related logs, account status, and matching knowledge base article before the next reply.',
+                    ],
+                    ['is_internal_note' => true]
+                );
+            }
         }
 
         foreach ($createdTickets as $ticket) {

@@ -6,7 +6,7 @@
 <div class="page-head">
     <div>
         <h1 class="page-title">New Article</h1>
-        <p class="page-subtitle">Create a support knowledge base article.</p>
+        <p class="page-subtitle">Create a reusable support article for agents and AI-assisted replies.</p>
     </div>
 
     <a href="{{ route('knowledge.index') }}" class="btn btn-secondary">
@@ -14,11 +14,25 @@
     </a>
 </div>
 
+<div class="table-card" style="margin-bottom: 20px;">
+    <div class="table-head">
+        <div>
+            <h2>Article writing guide</h2>
+            <p class="page-subtitle">Keep the article clear, practical, and easy to reuse inside tickets.</p>
+        </div>
+    </div>
+
+    <p class="text-muted" style="line-height: 1.8; margin-bottom: 0;">
+        Use a direct title, explain the problem, then write the solution steps. Published articles can be used later
+        as context for the AI Assistant, while draft articles stay hidden from AI usage until they are ready.
+    </p>
+</div>
+
 <div class="table-card ticket-create-card">
     <div class="table-head">
         <div>
             <h2>Create Article</h2>
-            <p class="page-subtitle">Write a clear article for agents.</p>
+            <p class="page-subtitle">Write a clear article for common support cases.</p>
         </div>
     </div>
 
@@ -62,7 +76,7 @@
                     id="content"
                     name="content"
                     rows="10"
-                    placeholder="Write the article content..."
+                    placeholder="Example:\nProblem: The user cannot access the account.\nSolution:\n1. Ask the user to confirm the email.\n2. Send a password reset link.\n3. Check if 2FA is enabled."
                     required
                 >{{ old('content') }}</textarea>
             </div>

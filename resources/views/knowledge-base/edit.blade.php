@@ -6,12 +6,28 @@
 <div class="page-head">
     <div>
         <h1 class="page-title">Edit Article</h1>
-        <p class="page-subtitle">Update support knowledge content.</p>
+        <p class="page-subtitle">Update support knowledge content used by agents and AI-assisted replies.</p>
     </div>
 
     <a href="{{ route('knowledge.index') }}" class="btn btn-secondary">
         Back
     </a>
+</div>
+
+<div class="table-card kb-form-note-card">
+    <div class="table-head">
+        <div>
+            <h2>Before updating</h2>
+            <p class="page-subtitle">Make sure the article is accurate before publishing it.</p>
+        </div>
+    </div>
+
+    <div class="kb-form-note-body">
+        <p class="text-muted">
+            Published articles may be used later as extra context for the AI Assistant. Keep the steps clear and avoid
+            outdated instructions. Use Draft if the article still needs review.
+        </p>
+    </div>
 </div>
 
 <div class="table-card ticket-create-card">

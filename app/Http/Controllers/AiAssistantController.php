@@ -7,6 +7,7 @@ use App\Services\TicketAiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class AiAssistantController extends Controller
 {
@@ -59,11 +60,27 @@ class AiAssistantController extends Controller
         $mode = $data['mode'];
         $customPrompt = trim($data['custom_prompt'] ?? '') ?: null;
 
-        $body = $aiService->generate(
-            $ticket,
-            $mode,
-            $customPrompt
-        );
+        try {
+            $body = $aiService->generate(
+                $ticket,
+                $mode,
+                $customPrompt
+            );
+
+            $knowledgeSources = $aiService->knowledgeSourcesFor($ticket);
+        } catch (Throwable $e) {
+            report($e);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => app()->hasDebugModeEnabled()
+                        ? 'AI generation failed: ' . $e->getMessage()
+                        : 'AI generation failed. Please try again.',
+                ], 500);
+            }
+
+            throw $e;
+        }
 
         $suggestedPriority = null;
         $suggestedDueDate = null;
@@ -84,6 +101,7 @@ class AiAssistantController extends Controller
             'suggested_priority' => $suggestedPriority,
             'suggested_due_date' => $suggestedDueDate,
             'used_fallback' => $aiService->usedFallback(),
+            'knowledge_sources' => $knowledgeSources,
         ];
 
         if ($request->expectsJson()) {
