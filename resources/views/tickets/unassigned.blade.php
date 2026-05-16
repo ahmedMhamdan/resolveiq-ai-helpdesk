@@ -53,6 +53,7 @@
                         <th class="users-center-col">Department</th>
                         <th class="users-center-col">Status</th>
                         <th class="users-center-col">Priority</th>
+                        <th class="users-center-col">Due Date</th>
                         <th class="users-center-col">Assign Agent</th>
                     </tr>
                 </thead>
@@ -92,31 +93,42 @@
                             </td>
 
                             <td class="users-center-col">
-                            <select
-                                name="priority"
-                                form="assign-ticket-{{ $ticket->id }}"
-                                class="role-select priority-assign-select"
-                            >
-                                <option value="" @selected($ticket->priority === null)>
-                                    Not set
-                                </option>
-                                <option value="low" @selected($ticket->priority === 'low')>
-                                    Low
-                                </option>
-                                <option value="medium" @selected($ticket->priority === 'medium')>
-                                    Medium
-                                </option>
-                                <option value="high" @selected($ticket->priority === 'high')>
-                                    High
-                                </option>
-                                <option value="urgent" @selected($ticket->priority === 'urgent')>
-                                    Urgent
-                                </option>
-                            </select>
-                        </td>
+                                <select
+                                    name="priority"
+                                    form="assign-ticket-{{ $ticket->id }}"
+                                    class="role-select priority-assign-select"
+                                >
+                                    <option value="" @selected($ticket->priority === null)>
+                                        Not set
+                                    </option>
+                                    <option value="low" @selected($ticket->priority === 'low')>
+                                        Low
+                                    </option>
+                                    <option value="medium" @selected($ticket->priority === 'medium')>
+                                        Medium
+                                    </option>
+                                    <option value="high" @selected($ticket->priority === 'high')>
+                                        High
+                                    </option>
+                                    <option value="urgent" @selected($ticket->priority === 'urgent')>
+                                        Urgent
+                                    </option>
+                                </select>
+                            </td>
+
+                            <td class="users-center-col">
+                                <input
+                                    type="date"
+                                    name="due_at"
+                                    form="assign-ticket-{{ $ticket->id }}"
+                                    value="{{ $ticket->due_at ? $ticket->due_at->format('Y-m-d') : '' }}"
+                                    class="unassigned-due-date-input"
+                                >
+                            </td>
 
                             <td class="users-center-col">
                                 <form
+                                    id="assign-ticket-{{ $ticket->id }}"
                                     method="POST"
                                     action="{{ route('tickets.assignAgent', $ticket) }}"
                                     class="row-actions users-role-actions"
@@ -142,7 +154,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="empty">
+                            <td colspan="7" class="empty">
                                 No unassigned tickets found.
                             </td>
                         </tr>

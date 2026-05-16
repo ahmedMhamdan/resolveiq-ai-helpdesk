@@ -5,6 +5,13 @@
     <title>ResolveIQ AI Helpdesk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <script>
+        (() => {
+            const savedTheme = localStorage.getItem('resolveiq-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+
     <link rel="stylesheet" href="{{ asset('css/resolveiq.css') }}">
 
     <style>
@@ -623,6 +630,163 @@
         .delay-3 { animation-delay: .36s; }
         .delay-4 { animation-delay: .48s; }
 
+
+        /* =========================================================
+           Landing light mode and theme toggle
+        ========================================================= */
+        .landing-theme-toggle {
+            width: 52px;
+            height: 52px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(148, 163, 184, .22);
+            border-radius: 18px;
+            color: #cbd5e1;
+            background: rgba(15, 23, 42, .72);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, .18);
+            transition:
+                transform .2s ease,
+                background-color .25s ease,
+                border-color .25s ease,
+                color .25s ease,
+                box-shadow .25s ease;
+        }
+
+        .landing-theme-toggle:hover {
+            transform: translateY(-2px);
+            color: #22d3ee;
+            border-color: rgba(34, 211, 238, .32);
+            background: rgba(15, 23, 42, .88);
+        }
+
+        .landing-theme-toggle svg {
+            width: 21px;
+            height: 21px;
+        }
+
+        .landing-theme-toggle .moon-icon {
+            display: none;
+        }
+
+        html[data-theme="light"] .landing-theme-toggle .sun-icon {
+            display: none;
+        }
+
+        html[data-theme="light"] .landing-theme-toggle .moon-icon {
+            display: block;
+        }
+
+        html[data-theme="light"] .landing-page {
+            color: #0f172a;
+            background:
+                radial-gradient(circle at 12% 18%, rgba(14, 165, 233, .16), transparent 30%),
+                radial-gradient(circle at 82% 12%, rgba(124, 58, 237, .14), transparent 32%),
+                radial-gradient(circle at 72% 86%, rgba(20, 184, 166, .10), transparent 28%),
+                linear-gradient(135deg, #f8fafc 0%, #eef6ff 48%, #f5f3ff 100%);
+        }
+
+        html[data-theme="light"] .landing-glow {
+            background: rgba(14, 165, 233, .14);
+        }
+
+        html[data-theme="light"] .landing-glow-secondary {
+            background: rgba(124, 58, 237, .14);
+        }
+
+        html[data-theme="light"] .landing-description,
+        html[data-theme="light"] .landing-preview-head span:not(.badge),
+        html[data-theme="light"] .landing-section-title span,
+        html[data-theme="light"] .landing-ticket-row span:not(.priority):not(.badge),
+        html[data-theme="light"] .landing-ai-card p,
+        html[data-theme="light"] .landing-orbit-card span,
+        html[data-theme="light"] .landing-feature-card p,
+        html[data-theme="light"] .landing-step-card p,
+        html[data-theme="light"] .landing-role-card p,
+        html[data-theme="light"] .landing-panel p,
+        html[data-theme="light"] .landing-ai-output p,
+        html[data-theme="light"] .landing-footer-cta p {
+            color: #475569;
+        }
+
+        html[data-theme="light"] .landing-ghost-link,
+        html[data-theme="light"] .landing-role-card ul {
+            color: #334155;
+        }
+
+        html[data-theme="light"] .landing-stat,
+        html[data-theme="light"] .landing-orbit-card,
+        html[data-theme="light"] .landing-preview-card,
+        html[data-theme="light"] .landing-ai-card,
+        html[data-theme="light"] .landing-feature-card,
+        html[data-theme="light"] .landing-step-card,
+        html[data-theme="light"] .landing-role-card,
+        html[data-theme="light"] .landing-panel,
+        html[data-theme="light"] .landing-footer-cta {
+            border-color: rgba(148, 163, 184, .24);
+            background: rgba(255, 255, 255, .76);
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .10);
+        }
+
+        html[data-theme="light"] .landing-ticket-row,
+        html[data-theme="light"] .landing-metric,
+        html[data-theme="light"] .landing-ai-output {
+            border-color: rgba(148, 163, 184, .22);
+            background: rgba(248, 250, 252, .86);
+        }
+
+        html[data-theme="light"] .landing-ticket-row::after {
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .75), transparent);
+        }
+
+        html[data-theme="light"] .landing-preview-head strong,
+        html[data-theme="light"] .landing-section-title strong,
+        html[data-theme="light"] .landing-ticket-row strong,
+        html[data-theme="light"] .landing-section-title h2,
+        html[data-theme="light"] .landing-feature-card h3,
+        html[data-theme="light"] .landing-step-card h3,
+        html[data-theme="light"] .landing-role-card h3,
+        html[data-theme="light"] .landing-panel h3,
+        html[data-theme="light"] .landing-ai-output strong,
+        html[data-theme="light"] .landing-footer-cta h2,
+        html[data-theme="light"] .landing-ai-card h3 {
+            color: #0f172a;
+        }
+
+        html[data-theme="light"] .landing-stat span {
+            color: #64748b;
+        }
+
+        html[data-theme="light"] .landing-mini-actions span {
+            color: #6d28d9;
+            background: rgba(124, 58, 237, .10);
+        }
+
+        html[data-theme="light"] .landing-theme-toggle {
+            color: #475569;
+            border-color: #dbe3ef;
+            background: rgba(255, 255, 255, .78);
+            box-shadow: 0 14px 34px rgba(15, 23, 42, .08);
+        }
+
+        html[data-theme="light"] .landing-theme-toggle:hover {
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, .28);
+            background: #ffffff;
+        }
+
+        html[data-theme="light"] .landing-page .btn-secondary {
+            color: #0f172a;
+            background: rgba(255, 255, 255, .86);
+            border-color: #dbe3ef;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+        }
+
+        html[data-theme="light"] .landing-page .brand-text span {
+            color: #0891b2;
+            text-shadow: 0 0 18px rgba(14, 165, 233, .18);
+        }
+
         @keyframes revealUp {
             to {
                 opacity: 1;
@@ -727,6 +891,17 @@
                 </a>
 
                 <div class="landing-nav-actions reveal-up delay-1">
+                    <button type="button" class="landing-theme-toggle" id="landingThemeToggle" aria-label="Toggle theme">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+                        </svg>
+
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+
                     <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
                     <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
                 </div>
@@ -998,5 +1173,23 @@
             </section>
         </div>
     </main>
+
+    <script>
+        (() => {
+            const root = document.documentElement;
+            const toggle = document.getElementById('landingThemeToggle');
+
+            function applyTheme(theme) {
+                root.setAttribute('data-theme', theme);
+                localStorage.setItem('resolveiq-theme', theme);
+            }
+
+            toggle?.addEventListener('click', () => {
+                const currentTheme = root.getAttribute('data-theme') || 'dark';
+                applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
+        })();
+    </script>
+
 </body>
 </html>

@@ -135,9 +135,11 @@
 
                         <td>{{ $ticket->department?->name ?? 'No department' }}</td>
                         <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                        <td><span class="priority {{ $ticket->priority ?? 'unset' }}">
-                            {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
-                        </span></td>
+                        <td>
+                            <span class="priority {{ $ticket->priority ?? 'unset' }}">
+                                {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                            </span>
+                        </td>
 
                         @php
                             $isOverdue = $ticket->due_at
@@ -170,16 +172,47 @@
     </section>
 
     <section class="card table-card dashboard-activity-card">
-        <div class="table-head">
+        <div class="table-head activity-head">
             <div>
                 <h2>Recent Activity</h2>
                 <p class="page-subtitle">{{ $activitySubtitle }}</p>
             </div>
+
+            <form method="GET" action="{{ route('dashboard') }}" class="activity-search-form">
+                <input
+                    type="text"
+                    name="activity_search"
+                    value="{{ $activitySearch ?? request('activity_search') }}"
+                    placeholder="Search logs..."
+                >
+
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Search
+                </button>
+
+                @if(request('activity_search'))
+                    <a href="{{ route('dashboard') }}" class="btn btn-sm btn-secondary">
+                        Reset
+                    </a>
+                @endif
+            </form>
         </div>
 
         <div class="activity-list">
             @forelse($latestActivities as $activity)
-                <div class="activity-item">
+                <div
+                    class="activity-item activity-openable"
+                    role="button"
+                    tabindex="0"
+                    data-action="{{ e($activity->action) }}"
+                    data-ticket="{{ e($activity->ticket?->ticket_number ?? 'Ticket removed') }}"
+                    data-title="{{ e($activity->ticket?->title ?? 'Deleted or unavailable ticket') }}"
+                    data-user="{{ e($activity->user?->name ?? 'System') }}"
+                    data-old="{{ e($activity->old_value ?? 'Not set') }}"
+                    data-new="{{ e($activity->new_value ?? 'Not set') }}"
+                    data-time="{{ e($activity->created_at?->format('M d, Y - h:i A') ?? '') }}"
+                    data-url="{{ $activity->ticket ? route('tickets.show', $activity->ticket) : '' }}"
+                >
                     <div class="activity-dot"></div>
 
                     <div class="activity-content">
@@ -200,7 +233,7 @@
                         @if($activity->old_value || $activity->new_value)
                             <small>
                                 @if($activity->old_value)
-                                    From: {{ $activity->old_value }}
+                                    From: {{ \Illuminate\Support\Str::limit($activity->old_value, 90) }}
                                 @endif
 
                                 @if($activity->old_value && $activity->new_value)
@@ -208,16 +241,22 @@
                                 @endif
 
                                 @if($activity->new_value)
-                                    To: {{ $activity->new_value }}
+                                    To: {{ \Illuminate\Support\Str::limit($activity->new_value, 90) }}
                                 @endif
                             </small>
                         @endif
                     </div>
 
+                    <button type="button" class="activity-view-btn">
+                        View details
+                    </button>
+
                     <small>{{ $activity->created_at?->diffForHumans() }}</small>
                 </div>
             @empty
-                <div class="empty">No recent activity yet.</div>
+                <div class="empty">
+                    {{ request('activity_search') ? 'No activity logs matched your search.' : 'No recent activity yet.' }}
+                </div>
             @endforelse
         </div>
 
@@ -227,4 +266,147 @@
             </div>
         @endif
     </section>
+
+    <div class="activity-modal-backdrop" id="activityModalBackdrop" hidden>
+        <div class="activity-modal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
+            <div class="activity-modal-head">
+                <div>
+                    <span class="activity-modal-kicker">Activity Details</span>
+                    <h3 id="activityModalTitle">Activity</h3>
+                </div>
+
+                <button type="button" class="activity-modal-close" id="activityModalClose">
+                    ×
+                </button>
+            </div>
+
+            <div class="activity-modal-body">
+                <div class="activity-detail-grid">
+                    <div>
+                        <small>Ticket</small>
+                        <strong id="activityModalTicket">-</strong>
+                        <span id="activityModalTicketTitle">-</span>
+                    </div>
+
+                    <div>
+                        <small>Changed by</small>
+                        <strong id="activityModalUser">-</strong>
+                    </div>
+
+                    <div>
+                        <small>Time</small>
+                        <strong id="activityModalTime">-</strong>
+                    </div>
+                </div>
+
+                <div class="activity-change-box">
+                    <small>Previous value</small>
+                    <pre id="activityModalOld">-</pre>
+                </div>
+
+                <div class="activity-change-box">
+                    <small>New value</small>
+                    <pre id="activityModalNew">-</pre>
+                </div>
+            </div>
+
+            <div class="activity-modal-actions">
+                <a href="#" class="btn btn-primary" id="activityModalTicketLink">
+                    Open Ticket
+                </a>
+
+                <button type="button" class="btn btn-secondary" id="activityModalCancel">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const modalBackdrop = document.getElementById('activityModalBackdrop');
+            if (modalBackdrop && modalBackdrop.parentElement !== document.body) {
+                document.body.appendChild(modalBackdrop);
+            }
+            const modalClose = document.getElementById('activityModalClose');
+            const modalCancel = document.getElementById('activityModalCancel');
+            const ticketLink = document.getElementById('activityModalTicketLink');
+
+            const title = document.getElementById('activityModalTitle');
+            const ticket = document.getElementById('activityModalTicket');
+            const ticketTitle = document.getElementById('activityModalTicketTitle');
+            const user = document.getElementById('activityModalUser');
+            const time = document.getElementById('activityModalTime');
+            const oldValue = document.getElementById('activityModalOld');
+            const newValue = document.getElementById('activityModalNew');
+
+            function openActivityModal(item) {
+                if (!item) {
+                    return;
+                }
+
+                title.textContent = item.dataset.action || 'Activity';
+                ticket.textContent = item.dataset.ticket || '-';
+                ticketTitle.textContent = item.dataset.title || '-';
+                user.textContent = item.dataset.user || 'System';
+                time.textContent = item.dataset.time || '-';
+                oldValue.textContent = item.dataset.old || 'Not set';
+                newValue.textContent = item.dataset.new || 'Not set';
+
+                if (item.dataset.url) {
+                    ticketLink.href = item.dataset.url;
+                    ticketLink.style.display = 'inline-flex';
+                } else {
+                    ticketLink.href = '#';
+                    ticketLink.style.display = 'none';
+                }
+
+                modalBackdrop.hidden = false;
+                document.body.classList.add('modal-open');
+            }
+
+            function closeActivityModal() {
+                modalBackdrop.hidden = true;
+                document.body.classList.remove('modal-open');
+            }
+
+            document.querySelectorAll('.activity-openable').forEach(item => {
+                item.addEventListener('click', event => {
+                    if (event.target.closest('a, button')) {
+                        return;
+                    }
+
+                    openActivityModal(item);
+                });
+
+                item.addEventListener('keydown', event => {
+                    if (event.key === 'Enter') {
+                        openActivityModal(item);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.activity-view-btn').forEach(button => {
+                button.addEventListener('click', event => {
+                    event.stopPropagation();
+                    openActivityModal(button.closest('.activity-openable'));
+                });
+            });
+
+            modalClose?.addEventListener('click', closeActivityModal);
+            modalCancel?.addEventListener('click', closeActivityModal);
+
+            modalBackdrop?.addEventListener('click', event => {
+                if (event.target === modalBackdrop) {
+                    closeActivityModal();
+                }
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && modalBackdrop && !modalBackdrop.hidden) {
+                    closeActivityModal();
+                }
+            });
+        })();
+    </script>
 @endsection

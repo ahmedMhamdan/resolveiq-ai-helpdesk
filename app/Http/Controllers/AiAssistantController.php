@@ -57,10 +57,12 @@ class AiAssistantController extends Controller
         }
 
         $mode = $data['mode'];
+        $customPrompt = trim($data['custom_prompt'] ?? '') ?: null;
+
         $body = $aiService->generate(
             $ticket,
             $mode,
-            $data['custom_prompt'] ?? null
+            $customPrompt
         );
 
         $suggestedPriority = null;

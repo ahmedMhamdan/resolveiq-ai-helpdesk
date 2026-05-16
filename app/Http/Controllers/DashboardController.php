@@ -12,6 +12,7 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $role = strtolower($user->role?->name ?? 'user');
+        $activitySearch = $request->query('activity_search');
 
         $ticketQuery = Ticket::query();
 
@@ -63,18 +64,34 @@ class DashboardController extends Controller
             });
         }
 
+        $activityQuery->when($activitySearch, function ($query, string $activitySearch) {
+            $query->where(function ($query) use ($activitySearch) {
+                $query->where('action', 'like', "%{$activitySearch}%")
+                    ->orWhere('old_value', 'like', "%{$activitySearch}%")
+                    ->orWhere('new_value', 'like', "%{$activitySearch}%")
+                    ->orWhereHas('ticket', function ($ticketQuery) use ($activitySearch) {
+                        $ticketQuery->where('ticket_number', 'like', "%{$activitySearch}%")
+                            ->orWhere('title', 'like', "%{$activitySearch}%");
+                    })
+                    ->orWhereHas('user', function ($userQuery) use ($activitySearch) {
+                        $userQuery->where('name', 'like', "%{$activitySearch}%");
+                    });
+            });
+        });
+
         $latestActivities = $activityQuery
-        ->orderByDesc('created_at')
-        ->orderByDesc('id')
-        ->paginate(15, ['*'], 'activity_page')
-        ->withQueryString();
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate(15, ['*'], 'activity_page')
+            ->withQueryString();
 
         return view('dashboard', compact(
             'stats',
             'latestTickets',
             'latestActivities',
             'user',
-            'role'
+            'role',
+            'activitySearch'
         ));
     }
 }

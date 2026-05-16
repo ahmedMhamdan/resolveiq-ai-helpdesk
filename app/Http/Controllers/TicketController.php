@@ -429,6 +429,7 @@ class TicketController extends Controller
         $data = $request->validate([
             'agent_id' => ['required', 'exists:users,id'],
             'priority' => ['nullable', 'in:low,medium,high,urgent'],
+            'due_at' => ['nullable', 'date'],
         ]);
 
         if (! $this->isAgentUser((int) $data['agent_id'])) {
@@ -439,12 +440,14 @@ class TicketController extends Controller
 
         $oldAgentName = $ticket->agent?->name ?? 'Unassigned';
         $oldPriority = $ticket->priority;
+        $oldDueAt = $ticket->due_at?->copy();
 
         $ticket->agent_id = $data['agent_id'];
         $ticket->priority = $data['priority'] ?? null;
+        $ticket->due_at = $data['due_at'] ?? null;
         $ticket->save();
 
-        $ticket->loadMissing('agent');
+        $ticket->loadMissing(['user', 'agent']);
 
         $ticket->activityLogs()->create([
             'user_id' => $user->id,
@@ -477,6 +480,38 @@ class TicketController extends Controller
                     "Ticket {$ticket->ticket_number} priority is now " . ($ticket->priority ?? 'not set') . '.',
                     $ticket,
                     'priority',
+                    $user
+                ));
+            }
+        }
+
+        if (($oldDueAt?->toDateTimeString()) !== ($ticket->due_at?->toDateTimeString())) {
+            $oldDueText = $oldDueAt ? $oldDueAt->format('M d, Y - h:i A') : 'Not set';
+            $newDueText = $ticket->due_at ? $ticket->due_at->format('M d, Y - h:i A') : 'Not set';
+
+            $ticket->activityLogs()->create([
+                'user_id' => $user->id,
+                'action' => 'Due date changed',
+                'old_value' => $oldDueText,
+                'new_value' => $newDueText,
+            ]);
+
+            if ((int) $ticket->user_id !== (int) $user->id) {
+                $ticket->user?->notify(new TicketEventNotification(
+                    "Ticket {$ticket->ticket_number} due date updated",
+                    "The due date changed from {$oldDueText} to {$newDueText}.",
+                    $ticket,
+                    'due_date',
+                    $user
+                ));
+            }
+
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    "Ticket {$ticket->ticket_number} due date updated",
+                    "The due date changed from {$oldDueText} to {$newDueText}.",
+                    $ticket,
+                    'due_date',
                     $user
                 ));
             }
