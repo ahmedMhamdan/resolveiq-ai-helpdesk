@@ -118,12 +118,30 @@
 
                         @if ($showRequesterColumn)
                             <td>
+                                @php
+                                    $requester = $ticket->user;
+                                    $requesterAvatarUrl = null;
+
+                                    if ($requester?->avatar_path) {
+                                        $requesterAvatarUrl = method_exists($requester, 'avatarUrl')
+                                            ? $requester->avatarUrl()
+                                            : (str_starts_with($requester->avatar_path, 'images/')
+                                                ? asset($requester->avatar_path)
+                                                : asset('storage/' . $requester->avatar_path));
+                                    }
+                                @endphp
+
                                 <div class="person">
                                     <div class="mini-avatar">
-                                        {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                        @if ($requesterAvatarUrl)
+                                            <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester->name }} avatar">
+                                        @else
+                                            {{ strtoupper(substr($requester?->name ?? 'U', 0, 1)) }}
+                                        @endif
                                     </div>
+
                                     <div>
-                                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong><br>
+                                        <strong>{{ $requester?->name ?? 'Unknown' }}</strong><br>
                                         <small>Requester</small>
                                     </div>
                                 </div>
@@ -133,12 +151,30 @@
                         @if ($showAgentColumn)
                             <td>
                                 @if($ticket->agent)
+                                    @php
+                                        $agent = $ticket->agent;
+                                        $agentAvatarUrl = null;
+
+                                        if ($agent?->avatar_path) {
+                                            $agentAvatarUrl = method_exists($agent, 'avatarUrl')
+                                                ? $agent->avatarUrl()
+                                                : (str_starts_with($agent->avatar_path, 'images/')
+                                                    ? asset($agent->avatar_path)
+                                                    : asset('storage/' . $agent->avatar_path));
+                                        }
+                                    @endphp
+
                                     <div class="person">
                                         <div class="mini-avatar">
-                                            {{ strtoupper(substr($ticket->agent?->name ?? 'A', 0, 1)) }}
+                                            @if ($agentAvatarUrl)
+                                                <img src="{{ $agentAvatarUrl }}" alt="{{ $agent->name }} avatar">
+                                            @else
+                                                {{ strtoupper(substr($agent?->name ?? 'A', 0, 1)) }}
+                                            @endif
                                         </div>
+
                                         <div>
-                                            <strong>{{ $ticket->agent->name }}</strong><br>
+                                            <strong>{{ $agent->name }}</strong><br>
                                             <small>Agent</small>
                                         </div>
                                     </div>

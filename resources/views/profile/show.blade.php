@@ -14,11 +14,29 @@
     </a>
 </div>
 
+@php
+    $profileAvatarUrl = '';
+
+    if ($user->avatar_path) {
+        $profileAvatarUrl = method_exists($user, 'avatarUrl')
+            ? $user->avatarUrl()
+            : (str_starts_with($user->avatar_path, 'images/')
+                ? asset($user->avatar_path)
+                : asset('storage/' . $user->avatar_path));
+    }
+
+    $profileInitial = strtoupper(substr($user->name ?? 'U', 0, 1));
+@endphp
+
 <div class="profile-layout">
     <div class="card profile-main-card">
         <div class="profile-header">
-            <div class="profile-avatar">
-                {{ strtoupper(substr($user->name, 0, 1)) }}
+            <div class="profile-avatar {{ $profileAvatarUrl ? 'has-image' : '' }}">
+                @if ($profileAvatarUrl)
+                    <img src="{{ $profileAvatarUrl }}" alt="{{ $user->name }} avatar" class="profile-avatar-img">
+                @else
+                    {{ $profileInitial }}
+                @endif
             </div>
 
             <div>
@@ -32,21 +50,21 @@
         </div>
 
         <div class="profile-stats">
-        <div class="profile-stat-box profile-stat-assigned">
-            <span>Assigned Tickets</span>
-            <strong>{{ $assignedTicketsCount }}</strong>
-        </div>
+            <div class="profile-stat-box profile-stat-assigned">
+                <span>Assigned Tickets</span>
+                <strong>{{ $assignedTicketsCount }}</strong>
+            </div>
 
-        <div class="profile-stat-box profile-stat-replies">
-            <span>Replies</span>
-            <strong>{{ $repliesCount }}</strong>
-        </div>
+            <div class="profile-stat-box profile-stat-replies">
+                <span>Replies</span>
+                <strong>{{ $repliesCount }}</strong>
+            </div>
 
-        <div class="profile-stat-box profile-stat-member">
-            <span>Member Since</span>
-            <strong>{{ $user->created_at->format('M Y') }}</strong>
+            <div class="profile-stat-box profile-stat-member">
+                <span>Member Since</span>
+                <strong>{{ $user->created_at->format('M Y') }}</strong>
+            </div>
         </div>
-    </div>
     </div>
 
     <div class="card profile-info-card">

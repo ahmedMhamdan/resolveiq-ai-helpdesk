@@ -6,7 +6,7 @@
 <div class="page-head">
     <div>
         <h1 class="page-title">Edit Profile</h1>
-        <p class="page-subtitle">Update your account information.</p>
+        <p class="page-subtitle">Update your account information and profile picture.</p>
     </div>
 
     <a href="{{ route('profile.show') }}" class="btn btn-secondary">
@@ -14,11 +14,11 @@
     </a>
 </div>
 
-<div class="table-card ticket-create-card">
+<div class="table-card ticket-create-card profile-edit-card">
     <div class="table-head">
         <div>
             <h2>Account Information</h2>
-            <p class="page-subtitle">Change your profile name and email address.</p>
+            <p class="page-subtitle">Change your profile name, email address, and avatar.</p>
         </div>
     </div>
 
@@ -32,9 +32,26 @@
         </div>
     @endif
 
-    <form action="{{ route('profile.update') }}" method="POST" class="ticket-form">
+    <form action="{{ route('profile.update') }}" method="POST" class="ticket-form" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <div class="profile-edit-avatar-row">
+            <div class="profile-edit-avatar">
+                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }} avatar">
+            </div>
+
+            <div class="profile-edit-avatar-info">
+                <label for="avatar">Profile picture</label>
+                <input
+                    type="file"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/png,image/jpeg,image/jpg,image/webp"
+                >
+                <p class="profile-file-hint">Accepted formats: JPG, PNG, WEBP. Max size: 2MB.</p>
+            </div>
+        </div>
 
         <div class="form-grid">
             <div class="form-group">

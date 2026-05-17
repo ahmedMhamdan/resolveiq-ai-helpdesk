@@ -28,6 +28,20 @@
         ->take(2)
         ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
         ->implode('') ?: 'U';
+
+    $currentUserAvatarUrl = null;
+
+    if ($currentUser?->avatar_path) {
+        $avatarPath = ltrim($currentUser->avatar_path, '/');
+
+        if (str_starts_with($avatarPath, 'http://') || str_starts_with($avatarPath, 'https://')) {
+            $currentUserAvatarUrl = $avatarPath;
+        } elseif (str_starts_with($avatarPath, 'images/') || str_starts_with($avatarPath, 'storage/')) {
+            $currentUserAvatarUrl = asset($avatarPath);
+        } else {
+            $currentUserAvatarUrl = asset('storage/' . $avatarPath);
+        }
+    }
     @endphp
 
     <div class="app">
@@ -216,7 +230,19 @@
                     </button>
 
                     <a href="{{ route('profile.show') }}" class="user-box">
-                        <div class="avatar">{{ $currentUserInitials }}</div>
+                        <div class="avatar">
+                            @if ($currentUserAvatarUrl)
+                                <img
+                                    src="{{ $currentUserAvatarUrl }}"
+                                    alt="{{ $currentUserName }} avatar"
+                                    class="topbar-avatar-img"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+                                >
+                                <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
+                            @else
+                                <span class="avatar-initials">{{ $currentUserInitials }}</span>
+                            @endif
+                        </div>
                         <div class="user-meta">
                             <strong>{{ $currentUserName }}</strong>
                             <span>{{ $currentUserRole }}</span>

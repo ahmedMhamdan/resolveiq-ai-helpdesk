@@ -16,6 +16,38 @@
         $visibleReplies = $ticket->replies->filter(function ($reply) use ($isUser) {
             return ! ($isUser && $reply->is_internal_note);
         });
+
+        $avatarUrl = function ($user) {
+            if (! $user || ! $user->avatar_path) {
+                return null;
+            }
+
+            if (method_exists($user, 'avatarUrl')) {
+                return $user->avatarUrl();
+            }
+
+            if (str_starts_with($user->avatar_path, 'images/')) {
+                return asset($user->avatar_path);
+            }
+
+            return asset('storage/' . $user->avatar_path);
+        };
+
+        $initials = function ($name) {
+            $name = trim($name ?? 'U');
+
+            if ($name === '') {
+                return 'U';
+            }
+
+            $parts = preg_split('/\s+/', $name);
+
+            if (count($parts) >= 2) {
+                return strtoupper(substr($parts[0], 0, 1) . substr($parts[count($parts) - 1], 0, 1));
+            }
+
+            return strtoupper(substr($name, 0, 2));
+        };
     @endphp
 
     <div class="page-head">
@@ -141,71 +173,93 @@
 
             <div class="thread">
                 @forelse ($visibleReplies as $reply)
-                    <div class="reply {{ $reply->is_internal_note ? 'internal' : '' }}">
-                        <div class="reply-meta">
-                            <div>
-                                <span class="reply-author">
-                                    {{ $reply->user?->name ?? 'Unknown user' }}
-                                </span>
+                    @php
+                        $replyUser = $reply->user;
+                        $replyAvatarUrl = $avatarUrl($replyUser);
+                        $replyUserName = $replyUser?->name ?? 'Unknown user';
+                    @endphp
 
-                                @if ($reply->is_internal_note && ($isAdmin || $isAgent))
-                                    <span class="internal-label">Internal note</span>
+                    <div class="reply {{ $reply->is_internal_note ? 'internal' : '' }}">
+                        <div class="reply-with-avatar">
+                            <div class="reply-avatar" title="{{ $replyUserName }}">
+                                @if ($replyAvatarUrl)
+                                    <img
+                                        src="{{ $replyAvatarUrl }}"
+                                        alt="{{ $replyUserName }}"
+                                        class="reply-avatar-img"
+                                    >
+                                @else
+                                    <span>{{ $initials($replyUserName) }}</span>
                                 @endif
                             </div>
 
-                            <span>{{ $reply->created_at->diffForHumans() }}</span>
-                        </div>
+                            <div class="reply-content">
+                                <div class="reply-meta">
+                                    <div>
+                                        <span class="reply-author">
+                                            {{ $replyUserName }}
+                                        </span>
 
-                        <div class="reply-body">
-                            {{ $reply->message }}
-                        </div>
-
-                        @if ($reply->attachments->count())
-                            <div class="reply-attachments">
-                                @foreach ($reply->attachments as $attachment)
-                                    <div class="attachment-chip">
-                                        <a
-                                            href="{{ asset('storage/' . $attachment->file_path) }}"
-                                            target="_blank"
-                                            class="attachment-link"
-                                        >
-                                            {{ $attachment->file_name }}
-                                        </a>
-
-                                        @if ($isAdmin)
-                                            <form
-                                                action="{{ route('tickets.attachments.destroy', [$ticket, $attachment]) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Delete this attachment?')"
-                                            >
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" class="attachment-delete-btn">
-                                                    ×
-                                                </button>
-                                            </form>
+                                        @if ($reply->is_internal_note && ($isAdmin || $isAgent))
+                                            <span class="internal-label">Internal note</span>
                                         @endif
                                     </div>
-                                @endforeach
+
+                                    <span>{{ $reply->created_at->diffForHumans() }}</span>
+                                </div>
+
+                                <div class="reply-body">
+                                    {{ $reply->message }}
+                                </div>
+
+                                @if ($reply->attachments->count())
+                                    <div class="reply-attachments">
+                                        @foreach ($reply->attachments as $attachment)
+                                            <div class="attachment-chip">
+                                                <a
+                                                    href="{{ asset('storage/' . $attachment->file_path) }}"
+                                                    target="_blank"
+                                                    class="attachment-link"
+                                                >
+                                                    {{ $attachment->file_name }}
+                                                </a>
+
+                                                @if ($isAdmin)
+                                                    <form
+                                                        action="{{ route('tickets.attachments.destroy', [$ticket, $attachment]) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Delete this attachment?')"
+                                                    >
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit" class="attachment-delete-btn">
+                                                            ×
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+
+                                @if ($isAdmin)
+                                    <form
+                                        action="{{ route('tickets.replies.destroy', [$ticket, $reply]) }}"
+                                        method="POST"
+                                        class="reply-delete-form"
+                                        onsubmit="return confirm('Delete this reply?')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="reply-delete-btn">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
-                        @endif
-
-                        @if ($isAdmin)
-                            <form
-                                action="{{ route('tickets.replies.destroy', [$ticket, $reply]) }}"
-                                method="POST"
-                                class="reply-delete-form"
-                                onsubmit="return confirm('Delete this reply?')"
-                            >
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit" class="reply-delete-btn">
-                                    Delete
-                                </button>
-                            </form>
-                        @endif
+                        </div>
                     </div>
                 @empty
                     <div class="empty-replies">

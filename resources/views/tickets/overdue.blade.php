@@ -10,6 +10,9 @@
                 Review tickets that passed their due date and still need action.
             </p>
         </div>
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary">
+        Back to Tickets
+    </a>
     </div>
 
     <div class="table-card overdue-table-card">
@@ -60,38 +63,72 @@
                             </td>
 
                             <td>
+                                @php
+                                    $requester = $ticket->user;
+                                    $requesterAvatarUrl = null;
+
+                                    if ($requester?->avatar_path) {
+                                        $requesterAvatarUrl = method_exists($requester, 'avatarUrl')
+                                            ? $requester->avatarUrl()
+                                            : (str_starts_with($requester->avatar_path, 'images/')
+                                                ? asset($requester->avatar_path)
+                                                : asset('storage/' . $requester->avatar_path));
+                                    }
+                                @endphp
+
                                 <div class="person">
                                     <span class="mini-avatar">
-                                        {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                        @if ($requesterAvatarUrl)
+                                            <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? 'Requester' }} avatar">
+                                        @else
+                                            {{ strtoupper(substr($requester?->name ?? 'U', 0, 1)) }}
+                                        @endif
                                     </span>
 
                                     <div>
-                                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                                        <strong>{{ $requester?->name ?? 'Unknown' }}</strong>
                                         <br>
-                                        <small>{{ $ticket->user?->email ?? 'No email' }}</small>
+                                        <small>{{ $requester?->email ?? 'No email' }}</small>
                                     </div>
                                 </div>
                             </td>
 
                             <td class="users-center-col">
-                            @if ($ticket->agent)
-                                <div class="person overdue-agent-person">
-                                    <span class="mini-avatar">
-                                        {{ strtoupper(substr($ticket->agent->name, 0, 1)) }}
-                                    </span>
+                                @if ($ticket->agent)
+                                    @php
+                                        $agent = $ticket->agent;
+                                        $agentAvatarUrl = null;
 
-                                    <div>
-                                        <strong>{{ $ticket->agent->name }}</strong>
-                                        <br>
-                                        <small>{{ $ticket->agent->email }}</small>
+                                        if ($agent?->avatar_path) {
+                                            $agentAvatarUrl = method_exists($agent, 'avatarUrl')
+                                                ? $agent->avatarUrl()
+                                                : (str_starts_with($agent->avatar_path, 'images/')
+                                                    ? asset($agent->avatar_path)
+                                                    : asset('storage/' . $agent->avatar_path));
+                                        }
+                                    @endphp
+
+                                    <div class="person overdue-agent-person">
+                                        <span class="mini-avatar">
+                                            @if ($agentAvatarUrl)
+                                                <img src="{{ $agentAvatarUrl }}" alt="{{ $agent->name }} avatar">
+                                            @else
+                                                {{ strtoupper(substr($agent->name, 0, 1)) }}
+                                            @endif
+                                        </span>
+
+                                        <div>
+                                            <strong>{{ $agent->name }}</strong>
+                                            <br>
+                                            <small>{{ $agent->email }}</small>
+                                        </div>
                                     </div>
-                                </div>
-                            @else
-                                <span class="role-badge role-user">
-                                    Unassigned
-                                </span>
-                            @endif
-                        </td>
+                                @else
+                                    <span class="role-badge role-user">
+                                        Unassigned
+                                    </span>
+                                @endif
+                            </td>
 
                             <td class="users-center-col">
                                 {{ $ticket->department?->name ?? 'No department' }}

@@ -71,7 +71,14 @@
                             <td>
                                 <div class="person">
                                     <span class="mini-avatar">
-                                        {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                        @if ($ticket->user?->avatar_path)
+                                            <img
+                                                src="{{ method_exists($ticket->user, 'avatarUrl') ? $ticket->user->avatarUrl() : (str_starts_with($ticket->user->avatar_path, 'images/') ? asset($ticket->user->avatar_path) : asset('storage/' . $ticket->user->avatar_path)) }}"
+                                                alt="{{ $ticket->user->name }} avatar"
+                                            >
+                                        @else
+                                            {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                        @endif
                                     </span>
 
                                     <div>

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'role_id'])]
+#[Fillable(['name', 'email', 'password', 'role_id', 'avatar_path'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -45,6 +45,19 @@ class User extends Authenticatable
     public function ticketActivityLogs()
     {
         return $this->hasMany(TicketActivityLog::class);
+    }
+
+    public function avatarUrl(): string
+    {
+        if (! $this->avatar_path) {
+            return '';
+        }
+
+        if (str_starts_with($this->avatar_path, 'images/')) {
+            return asset($this->avatar_path);
+        }
+
+        return asset('storage/' . $this->avatar_path);
     }
 
     protected function casts(): array

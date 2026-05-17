@@ -30,8 +30,8 @@
         </div>
     </div>
 
-    <div class="table-wrap">
-        <table>
+    <div class="table-wrap agents-table-wrap">
+        <table class="agents-table">
             <thead>
                 <tr>
                     <th>Agent</th>
@@ -45,21 +45,39 @@
 
             <tbody>
                 @forelse ($agents as $agent)
+                    @php
+                        $agentAvatar = '';
+
+                        if ($agent->avatar_path) {
+                            $agentAvatar = method_exists($agent, 'avatarUrl')
+                                ? $agent->avatarUrl()
+                                : (str_starts_with($agent->avatar_path, 'images/')
+                                    ? asset($agent->avatar_path)
+                                    : asset('storage/' . $agent->avatar_path));
+                        }
+                    @endphp
+
                     <tr>
                         <td>
-                            <div class="person">
-                                <span class="mini-avatar">
-                                    {{ strtoupper(substr($agent->name, 0, 1)) }}
+                            <div class="person agent-person">
+                                <span class="mini-avatar agent-avatar">
+                                    @if ($agentAvatar)
+                                        <img src="{{ $agentAvatar }}" alt="{{ $agent->name }} avatar">
+                                    @else
+                                        {{ strtoupper(substr($agent->name, 0, 1)) }}
+                                    @endif
                                 </span>
 
-                                <div>
+                                <div class="person-meta">
                                     <strong>{{ $agent->name }}</strong>
                                     <small>Support Agent</small>
                                 </div>
                             </div>
                         </td>
 
-                        <td>{{ $agent->email }}</td>
+                        <td>
+                            <span class="agent-email">{{ $agent->email }}</span>
+                        </td>
 
                         <td class="tickets-col">
                             <span class="badge open ticket-count-badge">
@@ -94,7 +112,12 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">No agents found.</td>
+                        <td colspan="6">
+                            <div class="empty-state compact-empty-state">
+                                <strong>No agents found.</strong>
+                                <span>Create your first support agent to start assigning tickets.</span>
+                            </div>
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

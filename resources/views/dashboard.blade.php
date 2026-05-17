@@ -34,6 +34,30 @@
         $activitySubtitle = $role === 'admin'
             ? 'Latest ticket updates and workspace actions.'
             : 'Latest updates related to your tickets.';
+
+        $avatarUrlFor = function ($person) {
+            if (! $person || ! $person->avatar_path) {
+                return '';
+            }
+
+            if (method_exists($person, 'avatarUrl')) {
+                return $person->avatarUrl();
+            }
+
+            return str_starts_with($person->avatar_path, 'images/')
+                ? asset($person->avatar_path)
+                : asset('storage/' . $person->avatar_path);
+        };
+
+        $initialsFor = function ($name) {
+            $parts = preg_split('/\s+/', trim($name ?: 'U'));
+
+            if (count($parts) >= 2) {
+                return strtoupper(substr($parts[0], 0, 1) . substr($parts[1], 0, 1));
+            }
+
+            return strtoupper(substr($parts[0] ?? 'U', 0, 1));
+        };
     @endphp
 
     <div class="page-head">
@@ -121,12 +145,26 @@
 
                         @if ($role !== 'user')
                             <td>
+                                @php
+                                    $requester = $ticket->user;
+                                    $requesterAvatarUrl = $avatarUrlFor($requester);
+                                @endphp
+
                                 <div class="person">
-                                    <div class="mini-avatar">
-                                        {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                    <div class="mini-avatar {{ $requesterAvatarUrl ? 'has-image' : '' }}">
+                                        @if ($requesterAvatarUrl)
+                                            <img
+                                                src="{{ $requesterAvatarUrl }}"
+                                                alt="{{ $requester?->name ?? 'Requester' }} avatar"
+                                                class="mini-avatar-img"
+                                            >
+                                        @else
+                                            {{ $initialsFor($requester?->name ?? 'Unknown') }}
+                                        @endif
                                     </div>
+
                                     <div>
-                                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong><br>
+                                        <strong>{{ $requester?->name ?? 'Unknown' }}</strong><br>
                                         <small>Requester</small>
                                     </div>
                                 </div>

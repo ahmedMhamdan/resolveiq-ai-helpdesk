@@ -5,12 +5,18 @@
 @section('content')
     <div class="page-head">
         <div>
-            <h1>Users Management</h1>
+            <h1>Users & Roles Management</h1>
             <p class="page-subtitle">
-                Promote normal users to agents or return agents back to users.
+                Manage platform accounts, review user activity, and promote users to agents when needed.
             </p>
         </div>
     </div>
+
+    @if (session('success'))
+        <div class="alert alert-success" style="margin: 0 0 20px;">
+            {{ session('success') }}
+        </div>
+    @endif
 
     @if (session('error'))
         <div class="alert alert-danger" style="margin: 0 0 20px;">
@@ -19,8 +25,13 @@
     @endif
 
     <div class="table-card">
-        <div class="table-head">
-            <h2>Accounts</h2>
+        <div class="table-head users-table-head">
+            <div>
+                <h2>Accounts</h2>
+                <p class="page-subtitle">
+                    Promote normal users to agents or return agents back to users.
+                </p>
+            </div>
 
             <form method="GET" action="{{ route('users.index') }}" class="filters">
                 <input
@@ -40,8 +51,8 @@
             </form>
         </div>
 
-        <div class="table-wrap">
-            <table>
+        <div class="table-wrap users-table-wrap">
+            <table class="users-management-table">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -57,18 +68,31 @@
                         @php
                             $roleName = strtolower($user->role?->name ?? 'user');
                             $isCurrentUser = auth()->id() === $user->id;
+
+                            $avatarUrl = null;
+
+                            if ($user->avatar_path) {
+                                $avatarUrl = method_exists($user, 'avatarUrl')
+                                    ? $user->avatarUrl()
+                                    : (str_starts_with($user->avatar_path, 'images/')
+                                        ? asset($user->avatar_path)
+                                        : asset('storage/' . $user->avatar_path));
+                            }
                         @endphp
 
                         <tr>
                             <td>
-                                <div class="person">
-                                    <span class="mini-avatar">
-                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                <div class="user-person">
+                                    <span class="mini-avatar user-list-avatar">
+                                        @if ($avatarUrl)
+                                            <img src="{{ $avatarUrl }}" alt="{{ $user->name }} avatar">
+                                        @else
+                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                        @endif
                                     </span>
 
-                                    <div>
+                                    <div class="user-person-meta">
                                         <strong>{{ $user->name }}</strong>
-                                        <br>
                                         <small>{{ $user->email }}</small>
                                     </div>
                                 </div>
@@ -105,7 +129,7 @@
                                     <form
                                         method="POST"
                                         action="{{ route('users.updateRole', $user) }}"
-                                        class="row-actions users-role-actions"
+                                        class="users-role-form"
                                     >
                                         @csrf
                                         @method('PATCH')
@@ -121,7 +145,7 @@
                                         </select>
 
                                         <button type="submit" class="btn btn-sm">
-                                            Save
+                                            Update
                                         </button>
                                     </form>
                                 @endif
@@ -129,8 +153,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="empty">
-                                No users found.
+                            <td colspan="5">
+                                <div class="compact-empty-state">
+                                    <strong>No users found.</strong>
+                                    <span>Try changing your search keywords.</span>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
