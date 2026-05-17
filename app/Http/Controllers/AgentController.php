@@ -8,6 +8,7 @@ use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -37,18 +38,24 @@ class AgentController extends Controller
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:150', Rule::unique(User::class, 'email')],
             'password' => ['required', 'string', 'min:6'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $agentRole = Role::query()
             ->where('name', 'agent')
             ->firstOrFail();
 
-        User::query()->create([
+        $agent = User::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role_id' => $agentRole->id,
         ]);
+
+        if ($request->hasFile('avatar')) {
+            $agent->avatar_path = $this->uploadAvatar($request, $agent, 'agent');
+            $agent->save();
+        }
 
         return redirect()
             ->route('agents.index')
@@ -74,7 +81,8 @@ class AgentController extends Controller
                 'max:150',
                 Rule::unique(User::class, 'email')->ignore($agent->id),
             ],
-            'password' => ['nullable', 'string', 'min:6'],
+            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $agent->fill([
@@ -84,6 +92,11 @@ class AgentController extends Controller
 
         if (! empty($data['password'])) {
             $agent->password = Hash::make($data['password']);
+        }
+
+        if ($request->hasFile('avatar')) {
+            $this->deleteUploadedAvatar($agent);
+            $agent->avatar_path = $this->uploadAvatar($request, $agent, 'agent');
         }
 
         $agent->save();
@@ -111,6 +124,8 @@ class AgentController extends Controller
                 ->with('error', 'Cannot delete an agent assigned to tickets or replies.');
         }
 
+        $this->deleteUploadedAvatar($agent);
+
         User::query()
             ->whereKey($agent->id)
             ->delete();
@@ -118,6 +133,29 @@ class AgentController extends Controller
         return redirect()
             ->route('agents.index')
             ->with('success', 'Agent deleted successfully.');
+    }
+
+    private function uploadAvatar(Request $request, User $agent, string $prefix): string
+    {
+        $directory = public_path('images/avatars/uploads');
+
+        File::ensureDirectoryExists($directory);
+
+        $avatar = $request->file('avatar');
+        $fileName = $prefix . '-' . $agent->id . '-' . time() . '.' . $avatar->getClientOriginalExtension();
+
+        $avatar->move($directory, $fileName);
+
+        return 'images/avatars/uploads/' . $fileName;
+    }
+
+    private function deleteUploadedAvatar(User $agent): void
+    {
+        if (! $agent->avatar_path || ! str_starts_with($agent->avatar_path, 'images/avatars/uploads/')) {
+            return;
+        }
+
+        File::delete(public_path($agent->avatar_path));
     }
 
     private function abortIfNotAgent(User $user): void

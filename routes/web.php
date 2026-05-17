@@ -79,6 +79,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [UserRoleController::class, 'index'])
             ->name('users.index');
 
+        Route::get('/users/{user}', [UserRoleController::class, 'show'])
+            ->name('users.show');
+
+        Route::get('/users/{user}/edit', [UserRoleController::class, 'edit'])
+            ->name('users.edit');
+
+        Route::put('/users/{user}', [UserRoleController::class, 'update'])
+            ->name('users.update');
+
         Route::patch('/users/{user}/role', [UserRoleController::class, 'updateRole'])
             ->name('users.updateRole');
     });

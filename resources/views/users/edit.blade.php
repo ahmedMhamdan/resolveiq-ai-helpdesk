@@ -1,15 +1,20 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Agent')
+@section('title', 'Edit User')
 
 @section('content')
+@php
+    $roleName = strtolower($user->role?->name ?? 'user');
+    $avatarUrl = $user->avatar_path ? $user->avatarUrl() : null;
+@endphp
+
 <div class="page-head">
     <div>
-        <h1 class="page-title">Edit Agent</h1>
-        <p class="page-subtitle">Update support agent information.</p>
+        <h1 class="page-title">Edit User</h1>
+        <p class="page-subtitle">Update account information and reset password when needed.</p>
     </div>
 
-    <a href="{{ route('agents.index') }}" class="btn btn-secondary">
+    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary">
         Back
     </a>
 </div>
@@ -17,7 +22,7 @@
 <div class="table-card ticket-create-card">
     <div class="table-head">
         <div>
-            <h2>{{ $agent->name }}</h2>
+            <h2>{{ $user->name }}</h2>
             <p class="page-subtitle">Leave password fields empty to keep the current password.</p>
         </div>
     </div>
@@ -32,22 +37,21 @@
         </div>
     @endif
 
-    <form action="{{ route('agents.update', $agent) }}" method="POST" class="ticket-form" enctype="multipart/form-data">
+    <form action="{{ route('users.update', $user) }}" method="POST" class="ticket-form" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="avatar">Agent Avatar</label>
+                <label for="avatar">User Avatar</label>
 
                 <div class="agent-avatar-uploader">
-                    <div class="edit-avatar-preview">
-                        @if ($agent->avatar_path)
-                            <img id="avatarPreview" src="{{ asset($agent->avatar_path) }}" alt="{{ $agent->name }}">
+                    <div class="edit-avatar-preview" id="avatarPreview">
+                        @if ($avatarUrl)
+                            <img src="{{ $avatarUrl }}" alt="{{ $user->name }} avatar" id="avatarPreviewImage">
                         @else
-                            <img id="avatarPreview" src="" alt="" hidden>
-                            <div id="avatarFallback" class="avatar-fallback">
-                                {{ strtoupper(substr($agent->name, 0, 1)) }}
+                            <div class="avatar-fallback" id="avatarFallback">
+                                {{ strtoupper(substr($user->name, 0, 1)) }}
                             </div>
                         @endif
                     </div>
@@ -65,22 +69,19 @@
                             Choose Image
                         </label>
 
-                        <span id="avatarFileName" class="avatar-file-name">
-                            No image selected
-                        </span>
-
+                        <span class="avatar-file-name" id="avatarFileName">No image selected</span>
                         <small class="form-hint">Upload JPG, PNG, or WebP. Max size 2MB.</small>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="name">Agent Name</label>
+                <label for="name">User Name</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
-                    value="{{ old('name', $agent->name) }}"
+                    value="{{ old('name', $user->name) }}"
                     required
                 >
             </div>
@@ -91,7 +92,7 @@
                     type="email"
                     id="email"
                     name="email"
-                    value="{{ old('email', $agent->email) }}"
+                    value="{{ old('email', $user->email) }}"
                     required
                 >
             </div>
@@ -118,47 +119,58 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ route('agents.index') }}" class="btn btn-danger-soft">
+            <a href="{{ route('users.show', $user) }}" class="btn btn-danger-soft">
                 Cancel
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update Agent
+                Update User
             </button>
         </div>
     </form>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const avatarInput = document.getElementById('avatar');
-        const avatarPreview = document.getElementById('avatarPreview');
-        const avatarFallback = document.getElementById('avatarFallback');
-        const avatarFileName = document.getElementById('avatarFileName');
+document.addEventListener('DOMContentLoaded', function () {
+    const avatarInput = document.getElementById('avatar');
+    const fileName = document.getElementById('avatarFileName');
+    const previewBox = document.getElementById('avatarPreview');
 
-        if (!avatarInput) {
+    if (!avatarInput || !fileName || !previewBox) return;
+
+    avatarInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            fileName.textContent = 'No image selected';
             return;
         }
 
-        avatarInput.addEventListener('change', function () {
-            const file = this.files && this.files[0];
+        fileName.textContent = file.name;
 
-            if (!file) {
-                avatarFileName.textContent = 'No image selected';
-                return;
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            let existingImage = document.getElementById('avatarPreviewImage');
+            const fallback = document.getElementById('avatarFallback');
+
+            if (fallback) {
+                fallback.remove();
             }
 
-            avatarFileName.textContent = file.name;
-
-            if (file.type.startsWith('image/')) {
-                avatarPreview.src = URL.createObjectURL(file);
-                avatarPreview.hidden = false;
-
-                if (avatarFallback) {
-                    avatarFallback.hidden = true;
-                }
+            if (!existingImage) {
+                existingImage = document.createElement('img');
+                existingImage.id = 'avatarPreviewImage';
+                existingImage.alt = 'Avatar Preview';
+                previewBox.innerHTML = '';
+                previewBox.appendChild(existingImage);
             }
-        });
+
+            existingImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
     });
+});
 </script>
 @endsection

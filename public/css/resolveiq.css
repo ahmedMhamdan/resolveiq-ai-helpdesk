@@ -4970,6 +4970,7 @@ body.modal-open {
     display: flex;
     align-items: center;
     gap: 14px;
+    min-width: 0;
 }
 
 .agents-table .agent-avatar {
@@ -4980,6 +4981,8 @@ body.modal-open {
     place-items: center;
     overflow: hidden;
     border-radius: 50%;
+    color: #fff;
+    font-weight: 800;
     background: linear-gradient(135deg, rgba(56, 189, 248, .18), rgba(139, 92, 246, .18));
     border: 1px solid rgba(148, 163, 184, .22);
     box-shadow: 0 12px 28px rgba(56, 189, 248, .13);
@@ -5009,3 +5012,444 @@ body.modal-open {
 .agents-table td {
     vertical-align: middle;
 }
+
+/* =========================
+   Agent edit avatar uploader
+========================= */
+
+.agent-avatar-uploader {
+    width: 100%;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding: 24px 28px;
+    border: 1px solid rgba(148, 163, 184, .18);
+    border-radius: 26px;
+    background:
+        linear-gradient(135deg, rgba(14, 165, 233, .10), rgba(139, 92, 246, .07)),
+        var(--panel-soft);
+}
+
+.agent-avatar-uploader .edit-avatar-preview {
+    width: 132px;
+    height: 132px;
+    flex: 0 0 132px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding: 0;
+    border-radius: 30px;
+    border: 1px solid rgba(148, 163, 184, .28);
+    background: rgba(15, 23, 42, .42);
+    box-shadow: 0 20px 42px rgba(15, 23, 42, .20);
+}
+
+.agent-avatar-uploader .edit-avatar-preview img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    padding: 0;
+    border-radius: inherit;
+}
+
+.agent-avatar-uploader .avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 42px;
+    font-weight: 850;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.agent-avatar-uploader .avatar-upload-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.agent-avatar-uploader .avatar-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.form-group .agent-avatar-uploader .avatar-upload-btn {
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 26px;
+    border-radius: 17px;
+    color: #fff !important;
+    background: linear-gradient(135deg, #0ea5e9, #7c3aed);
+    box-shadow: 0 16px 34px rgba(14, 165, 233, .24);
+    font-size: 15px;
+    font-weight: 850;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition:
+        transform var(--motion-fast) var(--ease-out),
+        box-shadow var(--motion-normal) var(--ease-out),
+        opacity var(--motion-fast) var(--ease-out);
+}
+
+.form-group .agent-avatar-uploader .avatar-upload-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 20px 42px rgba(124, 58, 237, .30);
+    opacity: .98;
+}
+
+.agent-avatar-uploader .avatar-file-name {
+    max-width: 420px;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agent-avatar-uploader .form-hint {
+    flex-basis: 100%;
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+html[data-theme="light"] .agent-avatar-uploader,
+body:not(.dark) .agent-avatar-uploader {
+    background: linear-gradient(135deg, #f8fbff, #f3f6ff);
+    border-color: #dbe3ef;
+}
+
+html[data-theme="light"] .agent-avatar-uploader .edit-avatar-preview,
+body:not(.dark) .agent-avatar-uploader .edit-avatar-preview {
+    background: #ffffff;
+    box-shadow: 0 20px 42px rgba(15, 23, 42, .12);
+}
+
+html[data-theme="dark"] .agent-avatar-uploader,
+body.dark .agent-avatar-uploader {
+    background:
+        linear-gradient(135deg, rgba(6, 182, 212, .10), rgba(139, 92, 246, .10)),
+        rgba(15, 23, 42, .56);
+}
+
+html[data-theme="dark"] .agent-avatar-uploader .edit-avatar-preview,
+body.dark .agent-avatar-uploader .edit-avatar-preview {
+    background: rgba(2, 6, 23, .44);
+    box-shadow: 0 20px 42px rgba(0, 0, 0, .24);
+}
+
+@media (max-width: 700px) {
+    .agent-avatar-uploader {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 22px;
+    }
+
+    .agent-avatar-uploader .edit-avatar-preview {
+        width: 112px;
+        height: 112px;
+        flex-basis: 112px;
+        border-radius: 26px;
+    }
+
+    .agent-avatar-uploader .avatar-upload-content {
+        width: 100%;
+    }
+
+    .form-group .agent-avatar-uploader .avatar-upload-btn {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   25. Users management avatars final fix
+   Keeps uploaded user/agent images centered and consistent.
+========================================================= */
+
+.users-management-table .user-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.users-management-table .user-list-avatar,
+.users-management-table .mini-avatar.user-list-avatar {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 850;
+    background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, .28), transparent 45%),
+        linear-gradient(135deg, var(--primary), var(--accent));
+    border: 1px solid rgba(148, 163, 184, .26);
+    box-shadow: 0 12px 28px rgba(79, 70, 229, .22);
+}
+
+.users-management-table .user-list-avatar img,
+.users-management-table .mini-avatar.user-list-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: inherit;
+}
+
+.users-management-table .user-person-meta {
+    min-width: 0;
+}
+
+.users-management-table .user-person-meta strong {
+    display: block;
+    line-height: 1.25;
+}
+
+.users-management-table .user-person-meta small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.25;
+}
+
+html[data-theme="light"] .users-management-table .user-list-avatar,
+body:not(.dark) .users-management-table .user-list-avatar {
+    border-color: #dbe3ef;
+    box-shadow: 0 12px 26px rgba(15, 23, 42, .10);
+}
+
+@media (max-width: 700px) {
+    .users-management-table .user-list-avatar,
+    .users-management-table .mini-avatar.user-list-avatar {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+    }
+}
+
+/* =========================================================
+   26. Avatar border/ring soft polish
+   Reduces strong borders and removes blue glow behind uploaded images.
+========================================================= */
+
+/* Global soft border for all avatar containers */
+.avatar,
+.mini-avatar,
+.user-avatar,
+.profile-avatar,
+.topbar-user-avatar,
+.reply-avatar,
+.agent-avatar,
+.user-list-avatar,
+.profile-edit-avatar,
+.edit-avatar-preview,
+.agents-table .agent-avatar,
+.users-management-table .user-list-avatar,
+.users-management-table .mini-avatar.user-list-avatar,
+.agent-avatar-uploader .edit-avatar-preview {
+    border: 1px solid rgba(148, 163, 184, .12) !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, .10) !important;
+}
+
+/* When the avatar contains a real uploaded image, avoid showing the blue/purple fallback background as a ring */
+.avatar:has(img),
+.mini-avatar:has(img),
+.user-avatar:has(img),
+.profile-avatar:has(img),
+.topbar-user-avatar:has(img),
+.reply-avatar:has(img),
+.agent-avatar:has(img),
+.user-list-avatar:has(img),
+.profile-edit-avatar:has(img),
+.edit-avatar-preview:has(img),
+.agents-table .agent-avatar:has(img),
+.users-management-table .user-list-avatar:has(img),
+.users-management-table .mini-avatar.user-list-avatar:has(img),
+.agent-avatar-uploader .edit-avatar-preview:has(img) {
+    background: transparent !important;
+}
+
+/* Keep uploaded avatar images clean and centered */
+.avatar img,
+.mini-avatar img,
+.user-avatar img,
+.profile-avatar img,
+.topbar-user-avatar img,
+.reply-avatar img,
+.agent-avatar img,
+.user-list-avatar img,
+.profile-edit-avatar img,
+.edit-avatar-preview img,
+.profile-avatar-img,
+.topbar-avatar-img,
+.reply-avatar-img {
+    object-fit: cover;
+    object-position: center;
+    padding: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+/* Slightly softer in dark mode */
+html[data-theme="dark"] .avatar,
+html[data-theme="dark"] .mini-avatar,
+html[data-theme="dark"] .user-avatar,
+html[data-theme="dark"] .profile-avatar,
+html[data-theme="dark"] .topbar-user-avatar,
+html[data-theme="dark"] .reply-avatar,
+html[data-theme="dark"] .agent-avatar,
+html[data-theme="dark"] .user-list-avatar,
+html[data-theme="dark"] .profile-edit-avatar,
+html[data-theme="dark"] .edit-avatar-preview,
+body.dark .avatar,
+body.dark .mini-avatar,
+body.dark .user-avatar,
+body.dark .profile-avatar,
+body.dark .topbar-user-avatar,
+body.dark .reply-avatar,
+body.dark .agent-avatar,
+body.dark .user-list-avatar,
+body.dark .profile-edit-avatar,
+body.dark .edit-avatar-preview {
+    border-color: rgba(148, 163, 184, .14) !important;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .16) !important;
+}
+
+/* =========================================================
+   27. Avatar full-fill final override
+   Makes uploaded images fill avatar containers across all pages.
+========================================================= */
+
+.avatar,
+.mini-avatar,
+.user-avatar,
+.profile-avatar,
+.topbar-user-avatar,
+.reply-avatar,
+.agent-avatar,
+.user-list-avatar,
+.profile-edit-avatar,
+.edit-avatar-preview,
+.agents-table .agent-avatar,
+.users-management-table .user-list-avatar,
+.users-management-table .mini-avatar.user-list-avatar,
+.agent-avatar-uploader .edit-avatar-preview {
+    position: relative;
+    overflow: hidden !important;
+    background: transparent !important;
+    border-color: rgba(148, 163, 184, .10) !important;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, .10) !important;
+}
+
+.avatar img,
+.mini-avatar img,
+.user-avatar img,
+.profile-avatar img,
+.topbar-user-avatar img,
+.reply-avatar img,
+.agent-avatar img,
+.user-list-avatar img,
+.profile-edit-avatar img,
+.edit-avatar-preview img,
+.profile-avatar-img,
+.topbar-avatar-img,
+.reply-avatar-img,
+.agents-table .agent-avatar img,
+.users-management-table .user-list-avatar img,
+.users-management-table .mini-avatar.user-list-avatar img,
+.agent-avatar-uploader .edit-avatar-preview img {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    outline: 0 !important;
+    border-radius: inherit !important;
+    transform: scale(1.14);
+    transform-origin: center center;
+}
+
+/* Small table avatars need a little more zoom because the container is tiny. */
+.users-management-table .user-list-avatar img,
+.users-management-table .mini-avatar.user-list-avatar img,
+.agents-table .agent-avatar img,
+.person .mini-avatar img,
+.ticket-person .mini-avatar img {
+    transform: scale(1.20);
+}
+
+/* Keep profile/edit previews cleaner and slightly less aggressive. */
+.profile-avatar img,
+.profile-avatar-img,
+.profile-edit-avatar img,
+.agent-avatar-uploader .edit-avatar-preview img,
+.edit-avatar-preview img {
+    transform: scale(1.08);
+}
+
+/* Fallback initials still keep the gradient background. */
+.avatar:not(:has(img)),
+.mini-avatar:not(:has(img)),
+.user-avatar:not(:has(img)),
+.profile-avatar:not(:has(img)),
+.topbar-user-avatar:not(:has(img)),
+.reply-avatar:not(:has(img)),
+.agent-avatar:not(:has(img)),
+.user-list-avatar:not(:has(img)),
+.profile-edit-avatar:not(:has(img)),
+.edit-avatar-preview:not(:has(img)) {
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+html[data-theme="dark"] .avatar,
+html[data-theme="dark"] .mini-avatar,
+html[data-theme="dark"] .user-avatar,
+html[data-theme="dark"] .profile-avatar,
+html[data-theme="dark"] .topbar-user-avatar,
+html[data-theme="dark"] .reply-avatar,
+html[data-theme="dark"] .agent-avatar,
+html[data-theme="dark"] .user-list-avatar,
+html[data-theme="dark"] .profile-edit-avatar,
+html[data-theme="dark"] .edit-avatar-preview,
+body.dark .avatar,
+body.dark .mini-avatar,
+body.dark .user-avatar,
+body.dark .profile-avatar,
+body.dark .topbar-user-avatar,
+body.dark .reply-avatar,
+body.dark .agent-avatar,
+body.dark .user-list-avatar,
+body.dark .profile-edit-avatar,
+body.dark .edit-avatar-preview {
+    border-color: rgba(148, 163, 184, .10) !important;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .16) !important;
+}
+

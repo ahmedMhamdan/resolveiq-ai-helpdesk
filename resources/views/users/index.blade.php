@@ -5,9 +5,9 @@
 @section('content')
     <div class="page-head">
         <div>
-            <h1>Users & Roles Management</h1>
+            <h1>Users Management</h1>
             <p class="page-subtitle">
-                Manage platform accounts, review user activity, and promote users to agents when needed.
+                Manage customer accounts, review user activity, and promote users to agents when needed.
             </p>
         </div>
     </div>
@@ -29,7 +29,7 @@
             <div>
                 <h2>Accounts</h2>
                 <p class="page-subtitle">
-                    Promote normal users to agents or return agents back to users.
+                    Promote normal users to agents. Agents are managed from the Agents page.
                 </p>
             </div>
 
@@ -58,8 +58,8 @@
                         <th>User</th>
                         <th class="users-center-col">Role</th>
                         <th class="users-center-col">Created Tickets</th>
-                        <th class="users-center-col">Assigned Tickets</th>
                         <th class="users-center-col">Change Role</th>
+                        <th class="users-center-col">Actions</th>
                     </tr>
                 </thead>
 
@@ -110,11 +110,6 @@
                                 </span>
                             </td>
 
-                            <td class="users-center-col">
-                                <span class="ticket-count-badge">
-                                    {{ $user->assigned_tickets_count }}
-                                </span>
-                            </td>
 
                             <td class="users-center-col">
                                 @if ($roleName === 'admin')
@@ -150,13 +145,27 @@
                                     </form>
                                 @endif
                             </td>
+
+                            <td class="users-center-col">
+                                <div class="users-role-actions">
+                                    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary btn-sm">
+                                        View
+                                    </a>
+
+                                    @if ($roleName !== 'admin')
+                                        <a href="{{ route('users.edit', $user) }}" class="btn btn-edit-soft btn-sm">
+                                            Edit
+                                        </a>
+                                    @endif
+                                </div>
+                            </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5">
                                 <div class="compact-empty-state">
                                     <strong>No users found.</strong>
-                                    <span>Try changing your search keywords.</span>
+                                    <span>Agents are hidden from this page and managed from the Agents page.</span>
                                 </div>
                             </td>
                         </tr>
