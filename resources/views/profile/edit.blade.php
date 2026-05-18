@@ -32,28 +32,58 @@
         </div>
     @endif
 
+    @php
+        $profileAvatarUrl = $user->avatar_path ? $user->avatarUrl() : '';
+        $profileInitial = strtoupper(substr($user->name ?? 'U', 0, 1));
+    @endphp
+
     <form action="{{ route('profile.update') }}" method="POST" class="ticket-form" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
-        <div class="profile-edit-avatar-row">
-            <div class="profile-edit-avatar">
-                <img src="{{ $user->avatarUrl() }}" alt="{{ $user->name }} avatar">
-            </div>
-
-            <div class="profile-edit-avatar-info">
-                <label for="avatar">Profile picture</label>
-                <input
-                    type="file"
-                    id="avatar"
-                    name="avatar"
-                    accept="image/png,image/jpeg,image/jpg,image/webp"
-                >
-                <p class="profile-file-hint">Accepted formats: JPG, PNG, WEBP. Max size: 2MB.</p>
-            </div>
-        </div>
-
         <div class="form-grid">
+            <div class="form-group full">
+                <label for="avatar">Profile picture</label>
+
+                <div class="agent-avatar-uploader profile-avatar-uploader">
+                    <div class="edit-avatar-preview" id="avatarPreview">
+                        @if ($profileAvatarUrl)
+                            <img
+                                src="{{ $profileAvatarUrl }}"
+                                alt="{{ $user->name }} avatar"
+                                id="avatarPreviewImage"
+                            >
+                        @else
+                            <div class="avatar-fallback" id="avatarFallback">
+                                {{ $profileInitial }}
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="avatar-upload-content">
+                        <input
+                            type="file"
+                            id="avatar"
+                            name="avatar"
+                            class="avatar-file-input"
+                            accept="image/png,image/jpeg,image/jpg,image/webp"
+                        >
+
+                        <label for="avatar" class="avatar-upload-btn">
+                            Choose Image
+                        </label>
+
+                        <span class="avatar-file-name" id="avatarFileName">No image selected</span>
+
+                        <small class="form-hint">Upload JPG, PNG, or WebP. Max size 2MB.</small>
+                    </div>
+                </div>
+
+                @error('avatar')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
             <div class="form-group">
                 <label for="name">Name</label>
                 <input
@@ -88,4 +118,48 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const avatarInput = document.getElementById('avatar');
+    const fileName = document.getElementById('avatarFileName');
+    const previewBox = document.getElementById('avatarPreview');
+
+    if (!avatarInput || !fileName || !previewBox) return;
+
+    avatarInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+
+        if (!file) {
+            fileName.textContent = 'No image selected';
+            return;
+        }
+
+        fileName.textContent = file.name;
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            let existingImage = document.getElementById('avatarPreviewImage');
+            const fallback = document.getElementById('avatarFallback');
+
+            if (fallback) {
+                fallback.remove();
+            }
+
+            if (!existingImage) {
+                existingImage = document.createElement('img');
+                existingImage.id = 'avatarPreviewImage';
+                existingImage.alt = 'Avatar Preview';
+                previewBox.innerHTML = '';
+                previewBox.appendChild(existingImage);
+            }
+
+            existingImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    });
+});
+</script>
 @endsection
