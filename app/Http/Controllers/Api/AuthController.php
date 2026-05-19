@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -38,12 +39,15 @@ class AuthController extends Controller
             'role_id' => $userRole->id,
         ]);
 
+        event(new Registered($user));
+
         $token = $user->createToken($data['device_name'] ?? 'api-token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Account created successfully.',
+            'message' => 'Account created successfully. Please verify your email address.',
             'token_type' => 'Bearer',
             'token' => $token,
+            'email_verified' => $user->hasVerifiedEmail(),
             'user' => $this->formatUser($user),
         ], 201);
     }
@@ -111,6 +115,7 @@ class AuthController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'role' => $user->role?->name ?? 'user',
+            'email_verified' => $user->hasVerifiedEmail(),
             'avatar_url' => $user->avatarUrl(),
         ];
     }
