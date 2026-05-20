@@ -51,7 +51,7 @@
     @endif
     </div>
 
-    <section class="card table-card">
+    <section class="card table-card tickets-index-card">
         <div class="table-head">
             <form class="filters" method="GET" action="{{ route('tickets.index') }}">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search tickets...">
@@ -82,7 +82,7 @@
             </form>
         </div>
 
-        <table>
+        <table class="tickets-table">
             <thead>
                 <tr>
                     <th>Ticket</th>
@@ -109,7 +109,7 @@
             <tbody>
                 @forelse($tickets as $ticket)
                     <tr>
-                        <td>
+                        <td data-label="Ticket">
                             <a class="ticket-link" href="{{ route('tickets.show', $ticket) }}">
                                 <strong>#{{ $ticket->ticket_number }}</strong>
                                 <span>{{ $ticket->title }}</span>
@@ -117,7 +117,7 @@
                         </td>
 
                         @if ($showRequesterColumn)
-                            <td>
+                            <td data-label="Requester">
                                 @php
                                     $requester = $ticket->user;
                                     $requesterAvatarUrl = null;
@@ -149,7 +149,7 @@
                         @endif
 
                         @if ($showAgentColumn)
-                            <td>
+                            <td data-label="Agent">
                                 @if($ticket->agent)
                                     @php
                                         $agent = $ticket->agent;
@@ -184,11 +184,11 @@
                             </td>
                         @endif
 
-                        <td>{{ $ticket->department?->name ?? 'No department' }}</td>
-                        <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
+                        <td data-label="Department">{{ $ticket->department?->name ?? 'No department' }}</td>
+                        <td data-label="Status"><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
 
                         @if ($showPriorityColumn)
-                            <td>
+                            <td data-label="Priority">
                                 <span class="priority {{ $ticket->priority ?? 'unset' }}">
                                     {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                                 </span>
@@ -201,7 +201,7 @@
                                 && ! in_array($ticket->status, ['solved', 'closed'], true);
                         @endphp
 
-                        <td>
+                        <td data-label="Due Date">
                             @if ($ticket->due_at)
                                 <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
                                     <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
@@ -212,11 +212,11 @@
                             @endif
                         </td>
 
-                        <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
+                        <td data-label="Updated">{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ $columnsCount }}">
+                        <td colspan="{{ $columnsCount }}" data-label="Empty">
                             <div class="empty">No tickets found.</div>
                         </td>
                     </tr>

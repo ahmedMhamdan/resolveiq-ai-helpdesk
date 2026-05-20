@@ -12,6 +12,7 @@ use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\UserRoleController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -28,14 +29,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::get('/email/verify', function () {
+    Route::get('/email/verify', function (Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()
+                ->intended(route('dashboard'))
+                ->with('success', 'Your email address is already verified.');
+        }
+
         return view('auth.verify-email');
     })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+
+        return redirect()
+            ->intended(route('dashboard'))
+            ->with('success', 'Email verified successfully.');
+    })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()
-                ->route('dashboard')
+                ->intended(route('dashboard'))
                 ->with('success', 'Your email address is already verified.');
         }
 
@@ -123,6 +138,15 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/users', [UserRoleController::class, 'index'])
             ->name('users.index');
+
+        Route::get('/users/{user}', [UserRoleController::class, 'show'])
+            ->name('users.show');
+
+        Route::get('/users/{user}/edit', [UserRoleController::class, 'edit'])
+            ->name('users.edit');
+
+        Route::put('/users/{user}', [UserRoleController::class, 'update'])
+            ->name('users.update');
 
         Route::patch('/users/{user}/role', [UserRoleController::class, 'updateRole'])
             ->name('users.updateRole');

@@ -5,7 +5,21 @@
 @section('content')
 @php
     $roleName = strtolower($user->role?->name ?? 'user');
-    $avatarUrl = $user->avatar_path ? $user->avatarUrl() : null;
+
+    $avatarUrl = null;
+
+    if ($user->avatar_path) {
+        $avatarUrl = method_exists($user, 'avatarUrl')
+            ? $user->avatarUrl()
+            : (str_starts_with($user->avatar_path, 'images/')
+                ? asset($user->avatar_path)
+                : asset('storage/' . $user->avatar_path));
+    }
+
+    $createdTickets = $createdTickets ?? collect();
+    $assignedTickets = $assignedTickets ?? collect();
+    $recentReplies = $recentReplies ?? collect();
+    $activityLogs = $activityLogs ?? collect();
 @endphp
 
 <div class="page-head">
@@ -16,7 +30,7 @@
 
     <div class="page-actions">
         @if ($roleName !== 'admin')
-            <a href="{{ route('users.edit', $user) }}" class="btn btn-primary">
+            <a href="{{ url('/users/' . $user->id . '/edit') }}" class="btn btn-primary">
                 Edit User
             </a>
         @endif
@@ -46,7 +60,7 @@
                 @if ($avatarUrl)
                     <img src="{{ $avatarUrl }}" alt="{{ $user->name }} avatar">
                 @else
-                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                    <span class="avatar-initials">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                 @endif
             </div>
 
@@ -62,17 +76,17 @@
         <div class="profile-stats">
             <div class="profile-stat-box profile-stat-assigned">
                 <span>Created Tickets</span>
-                <strong>{{ $user->tickets_count }}</strong>
+                <strong>{{ $user->tickets_count ?? 0 }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-replies">
                 <span>Assigned Tickets</span>
-                <strong>{{ $user->assigned_tickets_count }}</strong>
+                <strong>{{ $user->assigned_tickets_count ?? 0 }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-member">
                 <span>Replies</span>
-                <strong>{{ $user->ticket_replies_count }}</strong>
+                <strong>{{ $user->ticket_replies_count ?? 0 }}</strong>
             </div>
         </div>
     </div>
@@ -102,7 +116,7 @@
     </div>
 </div>
 
-<div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 18px;">
+<div class="users-detail-grid">
     <div class="table-card">
         <div class="table-head">
             <div>
@@ -182,7 +196,7 @@
     </div>
 </div>
 
-<div class="grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+<div class="users-detail-grid">
     <div class="table-card">
         <div class="table-head">
             <div>
@@ -192,7 +206,7 @@
         </div>
 
         @forelse ($recentReplies as $reply)
-            <div class="activity-item" style="grid-template-columns: 14px minmax(0, 1fr) auto;">
+            <div class="activity-item">
                 <span class="activity-dot"></span>
                 <div class="activity-content">
                     <strong>{{ $reply->ticket?->ticket_number ?? 'Ticket' }}</strong>
@@ -214,7 +228,7 @@
         </div>
 
         @forelse ($activityLogs as $log)
-            <div class="activity-item" style="grid-template-columns: 14px minmax(0, 1fr) auto;">
+            <div class="activity-item">
                 <span class="activity-dot"></span>
                 <div class="activity-content">
                     <strong>{{ $log->action }}</strong>

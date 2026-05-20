@@ -876,6 +876,323 @@
                 padding: 28px;
             }
         }
+
+        /* =========================================================
+           Final landing polish: professional copy + mobile behavior
+        ========================================================= */
+        .landing-kicker {
+            display: none !important;
+        }
+
+        .landing-title {
+            margin-top: 0;
+        }
+
+        .landing-preview-card,
+        .landing-ai-card,
+        .landing-orbit-card {
+            animation: landingPreviewTogether 8s ease-in-out infinite !important;
+            animation-delay: 0s !important;
+        }
+
+        .landing-preview-card:hover,
+        .landing-ai-card:hover,
+        .landing-orbit-card:hover {
+            transform: translateY(-5px);
+        }
+
+        @keyframes landingPreviewTogether {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .landing-page {
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .landing-shell {
+                width: min(100% - 28px, 1320px);
+            }
+
+            .landing-nav {
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: wrap;
+                padding: 24px 0 10px;
+            }
+
+            .landing-nav .brand {
+                flex: 1 1 auto;
+            }
+
+            .landing-nav-actions {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .landing-theme-toggle {
+                width: 48px;
+                height: 48px;
+                border-radius: 16px;
+            }
+
+            .landing-nav-actions .btn {
+                min-height: 48px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .landing-hero {
+                min-height: auto;
+                gap: 30px;
+                padding: 42px 0 64px;
+            }
+
+            .landing-title {
+                max-width: 100%;
+                font-size: clamp(34px, 10vw, 52px);
+                line-height: 1.08;
+                letter-spacing: -.045em;
+            }
+
+            .landing-description {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            .landing-actions {
+                gap: 12px;
+                margin-top: 28px;
+            }
+
+            .landing-actions .btn {
+                flex: 1 1 145px;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .landing-ghost-link {
+                width: 100%;
+                justify-content: center;
+                padding-top: 4px;
+            }
+
+            .landing-stats {
+                gap: 12px;
+                margin-top: 34px;
+            }
+
+            .landing-stat {
+                padding: 16px;
+                border-radius: 20px;
+            }
+
+            .landing-stat strong {
+                font-size: 1.15rem;
+            }
+
+            .landing-preview-wrap {
+                display: grid;
+                gap: 14px;
+                min-height: auto;
+            }
+
+            .landing-preview-card,
+            .landing-ai-card,
+            .landing-orbit-card {
+                position: relative;
+                inset: auto;
+                width: 100%;
+                margin: 0;
+                animation: landingPreviewTogether 8s ease-in-out infinite !important;
+            }
+
+            .landing-preview-card {
+                padding: 20px;
+                border-radius: 26px;
+            }
+
+            .landing-preview-head {
+                gap: 12px;
+                padding-bottom: 16px;
+            }
+
+            .landing-ticket-row {
+                gap: 12px;
+                padding: 16px;
+                border-radius: 18px;
+            }
+
+            .landing-ticket-row strong {
+                font-size: .95rem;
+            }
+
+            .landing-ticket-row span:not(.priority):not(.badge) {
+                font-size: .88rem;
+            }
+
+            .landing-ai-card {
+                padding: 20px;
+            }
+
+            .landing-ai-card p,
+            .landing-orbit-card span {
+                line-height: 1.65;
+            }
+
+            .landing-mini-actions span {
+                font-size: .72rem;
+            }
+
+            .landing-section {
+                padding: 64px 0;
+            }
+
+            .landing-section-title h2 {
+                font-size: clamp(30px, 9vw, 44px);
+                line-height: 1.1;
+            }
+
+            .landing-feature-card,
+            .landing-step-card,
+            .landing-role-card {
+                min-height: auto;
+                padding: 22px;
+            }
+
+            .landing-footer-cta {
+                margin: 62px 0 42px;
+                padding: 26px;
+                border-radius: 28px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .landing-shell {
+                width: min(100% - 24px, 1320px);
+            }
+
+            .landing-nav-actions .btn {
+                flex: 1 1 calc(50% - 8px);
+                padding-inline: 12px;
+            }
+
+            .landing-theme-toggle {
+                flex: 0 0 48px;
+            }
+
+            .landing-title {
+                font-size: clamp(32px, 10.5vw, 46px);
+            }
+
+            .landing-preview-head {
+                flex-direction: column;
+            }
+
+            .landing-ticket-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+
+
+        /* =========================================================
+           Landing tablet/mobile preview stability fix
+           Stacks the preview cards before they start cropping.
+        ========================================================= */
+        @media (max-width: 1100px) {
+            .landing-page {
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .landing-hero {
+                min-height: auto !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                align-items: start !important;
+                gap: 38px !important;
+                padding: 38px 0 76px !important;
+            }
+
+            .landing-preview-wrap {
+                position: relative !important;
+                min-height: auto !important;
+                display: grid !important;
+                grid-template-columns: minmax(0, 1fr) !important;
+                gap: 16px !important;
+                overflow: visible !important;
+            }
+
+            .landing-preview-card,
+            .landing-ai-card,
+            .landing-orbit-card {
+                position: relative !important;
+                inset: auto !important;
+                top: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                left: auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                transform: none;
+                animation: landingPreviewTogether 8s ease-in-out infinite !important;
+                animation-delay: 0s !important;
+            }
+
+            .landing-preview-card { order: 1; }
+            .landing-ai-card { order: 2; }
+            .landing-orbit-card { order: 3; }
+
+            .landing-preview-card:hover,
+            .landing-ai-card:hover,
+            .landing-orbit-card:hover {
+                transform: translateY(-4px) !important;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .landing-shell {
+                width: min(100% - 24px, 1320px) !important;
+            }
+
+            .landing-nav {
+                padding-top: 22px !important;
+            }
+
+            .landing-nav-actions {
+                width: 100% !important;
+                display: grid !important;
+                grid-template-columns: 52px 1fr 1fr !important;
+                gap: 10px !important;
+            }
+
+            .landing-theme-toggle,
+            .landing-nav-actions .btn {
+                width: 100% !important;
+                min-height: 50px !important;
+            }
+
+            .landing-title {
+                font-size: clamp(31px, 10vw, 44px) !important;
+            }
+
+            .landing-ticket-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -909,38 +1226,36 @@
 
             <section class="landing-hero">
                 <div class="landing-hero-content">
-                    <span class="landing-kicker reveal-up">AI-powered Helpdesk Platform</span>
-
                     <h1 class="landing-title reveal-up delay-1">
-                        Manage support tickets smarter with <span>ResolveIQ</span>
+                        Centralize support operations with <span>ResolveIQ</span>
                     </h1>
 
                     <p class="landing-description reveal-up delay-2">
-                        ResolveIQ is a role-based helpdesk system for receiving tickets, assigning agents,
-                        tracking activity, setting priorities and due dates, and generating AI-assisted
-                        summaries, replies, priority suggestions, and SLA-style due dates.
+                        ResolveIQ helps support teams manage service requests through structured ticketing,
+                        clear role permissions, agent assignment, activity tracking, SLA visibility,
+                        and practical AI assistance for drafting and triage.
                     </p>
 
                     <div class="landing-actions reveal-up delay-3">
                         <a href="{{ route('register') }}" class="btn btn-primary">Create Account</a>
                         <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
-                        <a href="#features" class="landing-ghost-link">Explore features <span>→</span></a>
+                        <a href="#features" class="landing-ghost-link">Explore platform <span>→</span></a>
                     </div>
 
                     <div class="landing-stats reveal-up delay-4">
                         <div class="landing-stat">
-                            <strong>3 roles</strong>
-                            <span>Admin, agent, and customer workflows.</span>
+                            <strong>Role-based access</strong>
+                            <span>Separate workspaces for admins, agents, and customers.</span>
                         </div>
 
                         <div class="landing-stat">
-                            <strong>5 AI actions</strong>
-                            <span>Summary, reply, priority, due date, and custom instructions.</span>
+                            <strong>AI-assisted triage</strong>
+                            <span>Summaries, reply drafts, priorities, due dates, and custom guidance.</span>
                         </div>
 
                         <div class="landing-stat">
-                            <strong>SLA ready</strong>
-                            <span>Due dates and overdue tickets stay visible.</span>
+                            <strong>SLA visibility</strong>
+                            <span>Due dates and overdue queues stay easy to monitor.</span>
                         </div>
                     </div>
                 </div>
@@ -949,32 +1264,32 @@
                     <div class="landing-preview-card">
                         <div class="landing-preview-head">
                             <div>
-                                <strong>Live Ticket Preview</strong>
-                                <span>Support workflow overview</span>
+                                <strong>Ticket queue preview</strong>
+                                <span>Operational overview</span>
                             </div>
                             <span class="badge open">Open</span>
                         </div>
 
                         <div class="landing-ticket-row">
                             <div>
-                                <strong>Unable to login</strong>
-                                <span>Waiting for agent response</span>
+                                <strong>Account access issue</strong>
+                                <span>Awaiting agent response</span>
                             </div>
                             <span class="priority urgent">Urgent</span>
                         </div>
 
                         <div class="landing-ticket-row">
                             <div>
-                                <strong>Invoice amount issue</strong>
-                                <span>Needs admin review</span>
+                                <strong>Billing discrepancy</strong>
+                                <span>Pending admin review</span>
                             </div>
                             <span class="priority medium">Medium</span>
                         </div>
 
                         <div class="landing-ticket-row">
                             <div>
-                                <strong>Email notification delay</strong>
-                                <span>Resolved successfully</span>
+                                <strong>Notification delivery delay</strong>
+                                <span>Resolution confirmed</span>
                             </div>
                             <span class="badge solved">Solved</span>
                         </div>
@@ -982,10 +1297,10 @@
 
                     <div class="landing-ai-card">
                         <div class="landing-ai-icon">AI</div>
-                        <h3>Assistant workspace</h3>
+                        <h3>Support assistant</h3>
                         <p>
-                            Generate clear summaries, customer replies, internal notes, priority suggestions,
-                            and due date recommendations from real ticket context.
+                            Prepare concise summaries, response drafts, internal notes, priority recommendations,
+                            and due date suggestions using the selected ticket context.
                         </p>
                         <div class="landing-mini-actions">
                             <span>Summary</span>
@@ -996,41 +1311,41 @@
                     </div>
 
                     <div class="landing-orbit-card">
-                        <strong>24/7</strong>
-                        <span>Cleaner support flow with activity logs and AI assistance.</span>
+                        <strong>Always visible</strong>
+                        <span>Activity history, ownership, and ticket status stay clear across the workflow.</span>
                     </div>
                 </div>
             </section>
 
             <section class="landing-section" id="features">
                 <div class="landing-section-title reveal-up">
-                    <span>Core Features</span>
-                    <h2>Everything needed for a realistic support workflow.</h2>
+                    <span>Platform Capabilities</span>
+                    <h2>A structured workflow for modern support teams.</h2>
                 </div>
 
                 <div class="landing-grid">
                     <div class="landing-feature-card reveal-up delay-1">
                         <div class="landing-feature-icon">T</div>
-                        <h3>Ticket Management</h3>
-                        <p>Create, assign, update, close, reopen, delete, restore, and track support tickets from one clean interface.</p>
+                        <h3>Ticket operations</h3>
+                        <p>Create, assign, update, close, reopen, restore, and monitor tickets from one organized workspace.</p>
                     </div>
 
                     <div class="landing-feature-card reveal-up delay-2">
                         <div class="landing-feature-icon">AI</div>
-                        <h3>AI Assistant</h3>
-                        <p>Generate ticket summaries, suggested replies, priority recommendations, due dates, and custom support guidance.</p>
+                        <h3>AI support assistance</h3>
+                        <p>Use AI to draft summaries, replies, internal notes, priorities, due dates, and custom guidance.</p>
                     </div>
 
                     <div class="landing-feature-card reveal-up delay-3">
                         <div class="landing-feature-icon">S</div>
-                        <h3>SLA & Due Dates</h3>
-                        <p>Set due dates, identify overdue tickets, and make urgent work visible before it is missed.</p>
+                        <h3>SLA monitoring</h3>
+                        <p>Track due dates, highlight overdue work, and keep urgent requests visible to the right team members.</p>
                     </div>
 
                     <div class="landing-feature-card reveal-up delay-4">
                         <div class="landing-feature-icon">R</div>
-                        <h3>Role-Based Access</h3>
-                        <p>Admins manage all tickets, agents work only on assigned tickets, and customers see their own requests only.</p>
+                        <h3>Role-based control</h3>
+                        <p>Admins manage the workspace, agents handle assigned tickets, and customers access only their own requests.</p>
                     </div>
                 </div>
             </section>
@@ -1122,7 +1437,7 @@
             <section class="landing-section">
                 <div class="landing-section-title reveal-up">
                     <span>Access Model</span>
-                    <h2>Clear permissions for each user type.</h2>
+                    <h2>Clear responsibilities for every user type.</h2>
                 </div>
 
                 <div class="landing-roles">

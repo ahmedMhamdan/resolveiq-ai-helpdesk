@@ -5,7 +5,16 @@
 @section('content')
 @php
     $roleName = strtolower($user->role?->name ?? 'user');
-    $avatarUrl = $user->avatar_path ? $user->avatarUrl() : null;
+
+    $avatarUrl = null;
+
+    if ($user->avatar_path) {
+        $avatarUrl = method_exists($user, 'avatarUrl')
+            ? $user->avatarUrl()
+            : (str_starts_with($user->avatar_path, 'images/')
+                ? asset($user->avatar_path)
+                : asset('storage/' . $user->avatar_path));
+    }
 @endphp
 
 <div class="page-head">
@@ -14,7 +23,7 @@
         <p class="page-subtitle">Update account information and reset password when needed.</p>
     </div>
 
-    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary">
+    <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary">
         Back
     </a>
 </div>
@@ -37,7 +46,7 @@
         </div>
     @endif
 
-    <form action="{{ route('users.update', $user) }}" method="POST" class="ticket-form" enctype="multipart/form-data">
+    <form action="{{ url('/users/' . $user->id) }}" method="POST" class="ticket-form" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -119,7 +128,7 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ route('users.show', $user) }}" class="btn btn-danger-soft">
+            <a href="{{ url('/users/' . $user->id) }}" class="btn btn-danger-soft">
                 Cancel
             </a>
 

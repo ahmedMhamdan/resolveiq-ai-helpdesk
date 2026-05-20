@@ -4875,20 +4875,26 @@ body.modal-open {
 }
 
 /* =========================================================
-   24. Sidebar final polish
-   Old text logo + hidden sidebar scroll + visible help card.
+   24. Sidebar polish
 ========================================================= */
 .sidebar {
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, .35) transparent;
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(148, 163, 184, .35);
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .sidebar .brand {
@@ -4923,8 +4929,6 @@ body.modal-open {
 }
 
 .sidebar-card p {
-  margin: 0;
-  color: var(--muted);
   line-height: 1.55;
   font-size: 13px;
 }
@@ -4956,12 +4960,8 @@ body.modal-open {
     margin-top: 18px;
     padding: 14px 16px;
   }
-
-  .sidebar-card p {
-    font-size: 12.5px;
-    line-height: 1.45;
-  }
 }
+
 /* =========================
    Agents avatars polish
 ========================= */
@@ -5178,84 +5178,8 @@ body.dark .agent-avatar-uploader .edit-avatar-preview {
 }
 
 /* =========================================================
-   25. Users management avatars final fix
-   Keeps uploaded user/agent images centered and consistent.
+   25. Avatar image consistency
 ========================================================= */
-
-.users-management-table .user-person {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-}
-
-.users-management-table .user-list-avatar,
-.users-management-table .mini-avatar.user-list-avatar {
-    width: 50px;
-    height: 50px;
-    flex: 0 0 50px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    border-radius: 50%;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 850;
-    background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, .28), transparent 45%),
-        linear-gradient(135deg, var(--primary), var(--accent));
-    border: 1px solid rgba(148, 163, 184, .26);
-    box-shadow: 0 12px 28px rgba(79, 70, 229, .22);
-}
-
-.users-management-table .user-list-avatar img,
-.users-management-table .mini-avatar.user-list-avatar img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    object-position: center center;
-    border-radius: inherit;
-}
-
-.users-management-table .user-person-meta {
-    min-width: 0;
-}
-
-.users-management-table .user-person-meta strong {
-    display: block;
-    line-height: 1.25;
-}
-
-.users-management-table .user-person-meta small {
-    display: block;
-    margin-top: 5px;
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.25;
-}
-
-html[data-theme="light"] .users-management-table .user-list-avatar,
-body:not(.dark) .users-management-table .user-list-avatar {
-    border-color: #dbe3ef;
-    box-shadow: 0 12px 26px rgba(15, 23, 42, .10);
-}
-
-@media (max-width: 700px) {
-    .users-management-table .user-list-avatar,
-    .users-management-table .mini-avatar.user-list-avatar {
-        width: 46px;
-        height: 46px;
-        flex-basis: 46px;
-    }
-}
-
-/* =========================================================
-   26. Avatar border/ring soft polish
-   Reduces strong borders and removes blue glow behind uploaded images.
-========================================================= */
-
-/* Global soft border for all avatar containers */
 .avatar,
 .mini-avatar,
 .user-avatar,
@@ -5265,103 +5189,11 @@ body:not(.dark) .users-management-table .user-list-avatar {
 .agent-avatar,
 .user-list-avatar,
 .profile-edit-avatar,
-.edit-avatar-preview,
-.agents-table .agent-avatar,
-.users-management-table .user-list-avatar,
-.users-management-table .mini-avatar.user-list-avatar,
-.agent-avatar-uploader .edit-avatar-preview {
-    border: 1px solid rgba(148, 163, 184, .12) !important;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, .10) !important;
-}
-
-/* When the avatar contains a real uploaded image, avoid showing the blue/purple fallback background as a ring */
-.avatar:has(img),
-.mini-avatar:has(img),
-.user-avatar:has(img),
-.profile-avatar:has(img),
-.topbar-user-avatar:has(img),
-.reply-avatar:has(img),
-.agent-avatar:has(img),
-.user-list-avatar:has(img),
-.profile-edit-avatar:has(img),
-.edit-avatar-preview:has(img),
-.agents-table .agent-avatar:has(img),
-.users-management-table .user-list-avatar:has(img),
-.users-management-table .mini-avatar.user-list-avatar:has(img),
-.agent-avatar-uploader .edit-avatar-preview:has(img) {
-    background: transparent !important;
-}
-
-/* Keep uploaded avatar images clean and centered */
-.avatar img,
-.mini-avatar img,
-.user-avatar img,
-.profile-avatar img,
-.topbar-user-avatar img,
-.reply-avatar img,
-.agent-avatar img,
-.user-list-avatar img,
-.profile-edit-avatar img,
-.edit-avatar-preview img,
-.profile-avatar-img,
-.topbar-avatar-img,
-.reply-avatar-img {
-    object-fit: cover;
-    object-position: center;
-    padding: 0 !important;
-    border: 0 !important;
-    outline: 0 !important;
-}
-
-/* Slightly softer in dark mode */
-html[data-theme="dark"] .avatar,
-html[data-theme="dark"] .mini-avatar,
-html[data-theme="dark"] .user-avatar,
-html[data-theme="dark"] .profile-avatar,
-html[data-theme="dark"] .topbar-user-avatar,
-html[data-theme="dark"] .reply-avatar,
-html[data-theme="dark"] .agent-avatar,
-html[data-theme="dark"] .user-list-avatar,
-html[data-theme="dark"] .profile-edit-avatar,
-html[data-theme="dark"] .edit-avatar-preview,
-body.dark .avatar,
-body.dark .mini-avatar,
-body.dark .user-avatar,
-body.dark .profile-avatar,
-body.dark .topbar-user-avatar,
-body.dark .reply-avatar,
-body.dark .agent-avatar,
-body.dark .user-list-avatar,
-body.dark .profile-edit-avatar,
-body.dark .edit-avatar-preview {
-    border-color: rgba(148, 163, 184, .14) !important;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .16) !important;
-}
-
-/* =========================================================
-   27. Avatar full-fill final override
-   Makes uploaded images fill avatar containers across all pages.
-========================================================= */
-
-.avatar,
-.mini-avatar,
-.user-avatar,
-.profile-avatar,
-.topbar-user-avatar,
-.reply-avatar,
-.agent-avatar,
-.user-list-avatar,
-.profile-edit-avatar,
-.edit-avatar-preview,
-.agents-table .agent-avatar,
-.users-management-table .user-list-avatar,
-.users-management-table .mini-avatar.user-list-avatar,
-.agent-avatar-uploader .edit-avatar-preview {
-    position: relative;
-    overflow: hidden !important;
-    background: transparent !important;
-    border-color: rgba(148, 163, 184, .10) !important;
-    box-shadow: 0 6px 14px rgba(15, 23, 42, .10) !important;
+.edit-avatar-preview {
+  position: relative;
+  overflow: hidden !important;
+  border: 1px solid rgba(148, 163, 184, .12) !important;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, .10) !important;
 }
 
 .avatar img,
@@ -5376,46 +5208,17 @@ body.dark .edit-avatar-preview {
 .edit-avatar-preview img,
 .profile-avatar-img,
 .topbar-avatar-img,
-.reply-avatar-img,
-.agents-table .agent-avatar img,
-.users-management-table .user-list-avatar img,
-.users-management-table .mini-avatar.user-list-avatar img,
-.agent-avatar-uploader .edit-avatar-preview img {
-    width: 100% !important;
-    height: 100% !important;
-    min-width: 100% !important;
-    min-height: 100% !important;
-    display: block !important;
-    object-fit: cover !important;
-    object-position: center center !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: 0 !important;
-    outline: 0 !important;
-    border-radius: inherit !important;
-    transform: scale(1.14);
-    transform-origin: center center;
+.reply-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: inherit !important;
 }
 
-/* Small table avatars need a little more zoom because the container is tiny. */
-.users-management-table .user-list-avatar img,
-.users-management-table .mini-avatar.user-list-avatar img,
-.agents-table .agent-avatar img,
-.person .mini-avatar img,
-.ticket-person .mini-avatar img {
-    transform: scale(1.20);
-}
-
-/* Keep profile/edit previews cleaner and slightly less aggressive. */
-.profile-avatar img,
-.profile-avatar-img,
-.profile-edit-avatar img,
-.agent-avatar-uploader .edit-avatar-preview img,
-.edit-avatar-preview img {
-    transform: scale(1.08);
-}
-
-/* Fallback initials still keep the gradient background. */
 .avatar:not(:has(img)),
 .mini-avatar:not(:has(img)),
 .user-avatar:not(:has(img)),
@@ -5426,33 +5229,15 @@ body.dark .edit-avatar-preview {
 .user-list-avatar:not(:has(img)),
 .profile-edit-avatar:not(:has(img)),
 .edit-avatar-preview:not(:has(img)) {
-    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
 }
 
-html[data-theme="dark"] .avatar,
-html[data-theme="dark"] .mini-avatar,
-html[data-theme="dark"] .user-avatar,
-html[data-theme="dark"] .profile-avatar,
-html[data-theme="dark"] .topbar-user-avatar,
-html[data-theme="dark"] .reply-avatar,
-html[data-theme="dark"] .agent-avatar,
-html[data-theme="dark"] .user-list-avatar,
-html[data-theme="dark"] .profile-edit-avatar,
-html[data-theme="dark"] .edit-avatar-preview,
-body.dark .avatar,
-body.dark .mini-avatar,
-body.dark .user-avatar,
-body.dark .profile-avatar,
-body.dark .topbar-user-avatar,
-body.dark .reply-avatar,
-body.dark .agent-avatar,
-body.dark .user-list-avatar,
-body.dark .profile-edit-avatar,
-body.dark .edit-avatar-preview {
-    border-color: rgba(148, 163, 184, .10) !important;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, .16) !important;
+.person .mini-avatar img,
+.ticket-person .mini-avatar img,
+.users-management-table .user-list-avatar img,
+.agents-table .agent-avatar img {
+  transform: scale(1.10);
 }
-
 
 /* =========================================================
    28. Profile edit avatar uploader polish
@@ -5536,4 +5321,944 @@ body.dark .profile-avatar-uploader {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* =========================================================
+   29. Final mobile drawer, compact header, and tickets cards
+========================================================= */
+.mobile-sidebar-toggle,
+.sidebar-close,
+.sidebar-backdrop,
+.mobile-quick-actions,
+.mobile-sidebar-account {
+  display: none;
+}
+
+.sidebar-header {
+  display: block;
+}
+
+@media (max-width: 860px) {
+  html,
+  body {
+    overflow-x: hidden !important;
+  }
+
+  body.sidebar-open {
+    overflow: hidden !important;
+  }
+
+  .app {
+    display: block !important;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .main {
+    width: 100%;
+    min-width: 0;
+    padding: 14px 14px 26px !important;
+    overflow: visible;
+  }
+
+  .sidebar {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    z-index: 220 !important;
+    width: min(320px, calc(100vw - 32px)) !important;
+    height: 100dvh !important;
+    padding: 18px 16px !important;
+    border-right: 1px solid var(--border) !important;
+    background: rgba(255, 255, 255, .96) !important;
+    backdrop-filter: blur(20px);
+    transform: translateX(-105%);
+    transition: transform 260ms var(--ease-out), box-shadow 260ms var(--ease-out);
+    overflow-y: auto !important;
+  }
+
+  html[data-theme="dark"] .sidebar,
+  body.dark .sidebar {
+    background: rgba(2, 6, 23, .96) !important;
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 24px 0 70px rgba(0, 0, 0, .34);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 210;
+    display: block;
+    background: rgba(2, 6, 23, .55);
+    backdrop-filter: blur(3px);
+  }
+
+  .sidebar-backdrop[hidden] {
+    display: none;
+  }
+
+  .sidebar-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .sidebar .brand {
+    margin: 0 !important;
+    gap: 10px !important;
+  }
+
+  .sidebar .brand-mark {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 14px;
+  }
+
+  .sidebar .brand-text {
+    display: block !important;
+    font-size: 21px !important;
+  }
+
+  .sidebar-close {
+    width: 42px;
+    height: 42px;
+    display: inline-grid !important;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    color: var(--text);
+    background: var(--panel-soft);
+    font-size: 25px;
+  }
+
+  .sidebar .nav-section {
+    display: block !important;
+    margin: 20px 0 8px !important;
+    font-size: 11px;
+  }
+
+  .sidebar .nav {
+    flex-direction: column !important;
+    gap: 7px !important;
+    width: 100%;
+    overflow: visible !important;
+  }
+
+  .sidebar .nav a,
+  .sidebar .nav .disabled,
+  .sidebar .nav-link,
+  .sidebar .sidebar-link {
+    width: 100% !important;
+    min-height: 48px !important;
+    justify-content: flex-start !important;
+    gap: 11px !important;
+    padding: 12px 13px !important;
+    font-size: .94rem !important;
+    white-space: normal !important;
+    transform: none !important;
+  }
+
+  .sidebar .nav a > span:not(.nav-icon),
+  .sidebar .nav .disabled > span:not(.nav-icon),
+  .sidebar .nav-link > span:not(.nav-icon),
+  .sidebar .sidebar-link > span:not(.nav-icon) {
+    display: inline !important;
+  }
+
+  .sidebar .nav-icon {
+    flex: 0 0 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+
+  .sidebar-card,
+  .mobile-sidebar-account {
+    display: block !important;
+  }
+
+  .topbar {
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    grid-template-rows: 44px !important;
+    align-items: center;
+    gap: 8px !important;
+    margin: 0 0 10px !important;
+  }
+
+  .mobile-sidebar-toggle {
+    grid-column: 1;
+    width: 44px;
+    height: 44px;
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    color: var(--text);
+    background: var(--panel);
+  }
+
+  .mobile-sidebar-toggle span {
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .search-wrap {
+    grid-column: 2 !important;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .search {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    padding: 0 12px 0 40px;
+    border-radius: 15px;
+    font-size: .8rem;
+  }
+
+  .search-icon {
+    left: 14px;
+  }
+
+  .shortcut,
+  .top-actions .theme-switch,
+  .top-actions .user-box,
+  .top-actions .logout-form,
+  .top-actions .new-ticket-btn {
+    display: none !important;
+  }
+
+  .top-actions {
+    display: contents !important;
+  }
+
+  .top-actions .notifications-dropdown {
+    grid-column: 3;
+    width: 44px;
+    height: 44px;
+  }
+
+  .top-notification-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 15px !important;
+    box-shadow: none !important;
+  }
+
+  .notifications-menu {
+    position: fixed !important;
+    top: 68px !important;
+    right: 14px !important;
+    left: 14px !important;
+    width: auto !important;
+  }
+
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: minmax(90px, .9fr) minmax(0, 1.15fr) minmax(70px, .75fr);
+    gap: 8px;
+    margin: 0 0 20px;
+  }
+
+  .mobile-action-pill {
+    min-width: 0;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    background: var(--panel);
+    font-size: .78rem;
+    font-weight: 850;
+    white-space: nowrap;
+  }
+
+  .mobile-action-primary {
+    color: #fff !important;
+    border-color: rgba(56, 189, 248, .28);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+  }
+
+  .mobile-profile-pill {
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+
+  .mobile-profile-pill > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mobile-profile-avatar {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    font-size: .72rem;
+    font-weight: 900;
+  }
+
+  .mobile-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mobile-logout-inline-form {
+    margin: 0 !important;
+  }
+
+  .mobile-logout-pill {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .page-title,
+  h1 {
+    font-size: 27px !important;
+  }
+
+  .page-subtitle {
+    font-size: .92rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .tickets-top-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    justify-content: stretch;
+    margin-bottom: 18px;
+  }
+
+  .tickets-top-actions .btn {
+    min-height: 40px;
+    width: 100%;
+    padding: 0 10px;
+    border-radius: 13px;
+    font-size: .78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .tickets-index-card .table-head {
+    padding: 16px;
+  }
+
+  .tickets-index-card .filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .tickets-index-card .filters input {
+    grid-column: 1 / -1;
+  }
+
+  .tickets-index-card .filters input,
+  .tickets-index-card .filters select,
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+  }
+
+  .tickets-table {
+    min-width: 0 !important;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .tickets-table thead {
+    display: none;
+  }
+
+  .tickets-table tbody,
+  .tickets-table tr,
+  .tickets-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .tickets-table tbody {
+    padding: 0 14px 14px;
+  }
+
+  .tickets-table tr {
+    margin-top: 14px;
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--panel-soft);
+  }
+
+  .tickets-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 0;
+    border: 0;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .tickets-table td + td {
+    border-top: 1px solid rgba(148, 163, 184, .14);
+  }
+
+  .tickets-table td::before {
+    content: attr(data-label);
+    flex: 0 0 82px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .05em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .tickets-table td[data-label="Ticket"] {
+    display: block;
+    padding-top: 0;
+    text-align: left;
+  }
+
+  .tickets-table td[data-label="Ticket"]::before,
+  .tickets-table td[colspan]::before {
+    display: none;
+  }
+
+  .tickets-table .ticket-link {
+    display: flex;
+    width: 100%;
+    gap: 7px;
+  }
+
+  .tickets-table .ticket-link span {
+    line-height: 1.45;
+  }
+
+  .tickets-table .person {
+    justify-content: flex-end;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .tickets-table .person > div:last-child {
+    min-width: 0;
+  }
+
+  .tickets-table .badge,
+  .tickets-table .priority,
+  .tickets-table .due-date-info,
+  .tickets-table .page-subtitle {
+    margin-left: auto;
+  }
+
+  .tickets-table .due-date-info {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .tickets-index-card .pagination {
+    padding: 12px 14px 16px;
+  }
+
+  .tickets-index-card .riq-pagination {
+    padding-inline: 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .main {
+    padding: 12px 12px 24px !important;
+  }
+
+  .topbar {
+    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
+    grid-template-rows: 42px !important;
+    gap: 7px !important;
+  }
+
+  .mobile-sidebar-toggle,
+  .top-notification-btn,
+  .top-actions .notifications-dropdown {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .search {
+    height: 42px;
+    min-height: 42px;
+    padding-left: 38px;
+    font-size: .76rem;
+  }
+
+  .mobile-quick-actions {
+    grid-template-columns: minmax(82px, .9fr) minmax(0, 1.1fr) minmax(64px, .72fr);
+    gap: 7px;
+  }
+
+  .mobile-action-pill {
+    height: 36px;
+    padding: 0 9px;
+    font-size: .73rem;
+  }
+
+  .tickets-table tbody {
+    padding-inline: 12px;
+  }
+
+  .tickets-table tr {
+    padding: 14px;
+  }
+
+  .tickets-table td {
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .tickets-table td::before {
+    flex-basis: 76px;
+  }
+}
+
+/* =========================================================
+   Users pages route-safe polish
+========================================================= */
+.users-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.users-management-table .users-role-actions {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .users-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .users-mobile-table {
+        min-width: 0 !important;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .users-mobile-table thead {
+        display: none;
+    }
+
+    .users-mobile-table tbody,
+    .users-mobile-table tr,
+    .users-mobile-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .users-mobile-table tbody {
+        padding: 0 14px 14px;
+    }
+
+    .users-mobile-table tr {
+        margin-top: 14px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: var(--panel-soft);
+    }
+
+    .users-mobile-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 11px 0;
+        border: 0;
+        text-align: right;
+    }
+
+    .users-mobile-table td + td {
+        border-top: 1px solid rgba(148, 163, 184, .14);
+    }
+
+    .users-mobile-table td::before {
+        content: attr(data-label);
+        flex: 0 0 105px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 850;
+        letter-spacing: .05em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .users-mobile-table td[data-label="User"] {
+        display: block;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    .users-mobile-table td[data-label="User"]::before {
+        display: none;
+    }
+
+    .users-mobile-table .users-role-form,
+    .users-mobile-table .users-role-actions {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .users-mobile-table .role-select {
+        min-width: 118px;
+    }
+
+    .users-mobile-table td[colspan] {
+        display: block;
+        text-align: center;
+    }
+
+    .users-mobile-table td[colspan]::before {
+        display: none;
+    }
+}
+
+/* =========================================================
+   35. AI Assistant mobile workspace polish
+   Compact action cards and cleaner output spacing.
+========================================================= */
+.ai-generate-row { justify-content: flex-end; }
+
+.ai-generate-btn {
+  width: auto !important;
+  min-width: 136px !important;
+  height: 46px;
+  gap: 8px;
+  padding: 0 20px !important;
+  border-radius: 15px;
+  transition: min-width var(--motion-normal) var(--ease-out), transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-normal) var(--ease-out), opacity var(--motion-fast) var(--ease-out);
+}
+
+.ai-generate-btn:hover { transform: translateY(-2px); }
+.ai-generate-btn.is-loading { min-width: 188px !important; transform: translateY(-1px); box-shadow: 0 20px 48px rgba(99, 102, 241, .38); }
+.ai-generate-btn .ai-btn-spinner { flex: 0 0 auto; }
+.ai-generate-btn .ai-btn-text { white-space: nowrap; }
+
+@media (max-width: 860px) {
+  .ai-page-head { margin-bottom: 14px !important; }
+
+  .ai-page-head .page-subtitle { font-size: .92rem; line-height: 1.55; }
+
+  .ai-page-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .ai-workspace-card,
+  .ai-output-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 22px !important;
+  }
+
+  .ai-output-card {
+    position: static !important;
+    min-height: auto !important;
+    padding: 22px !important;
+  }
+
+  .ai-section-head,
+  .ai-form-area { padding: 18px !important; }
+
+  .ai-section-head h2,
+  .ai-output-card h2 { font-size: 1.15rem !important; }
+
+  .ai-section-head p { font-size: .9rem; line-height: 1.55; }
+
+  .ai-form-area .form-group label { font-size: .82rem; }
+
+  .ai-form-area select,
+  .ai-form-area textarea {
+    border-radius: 15px !important;
+    font-size: .9rem !important;
+  }
+
+  .ai-form-area textarea {
+    min-height: 108px !important;
+    resize: vertical;
+  }
+
+  .ai-action-grid-five {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 16px 0 !important;
+  }
+
+  .ai-action-grid-five .ai-action-card {
+    min-height: 118px !important;
+    height: auto !important;
+    gap: 8px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .ai-action-grid-five .ai-action-card[data-mode="custom"] {
+    grid-column: 1 / -1 !important;
+    min-height: 104px !important;
+  }
+
+  .ai-action-grid-five .ai-action-card > span {
+    margin: 0 !important;
+    padding: 5px 8px !important;
+    font-size: .66rem !important;
+  }
+
+  .ai-action-grid-five .ai-action-card strong {
+    min-height: 0 !important;
+    margin: 0 !important;
+    font-size: .9rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .ai-action-grid-five .ai-action-card small {
+    margin: 0 !important;
+    color: var(--muted) !important;
+    font-size: .76rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .ai-generate-row { margin-top: 16px !important; }
+  .ai-generate-btn { width: 100% !important; min-width: 0 !important; }
+  .ai-generate-btn.is-loading { min-width: 0 !important; }
+
+  .ai-output-icon {
+    width: 48px !important;
+    height: 48px !important;
+    margin-bottom: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .ai-output-box {
+    min-height: 0 !important;
+    padding: 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .ai-output-box:not(.has-output) { min-height: 172px !important; }
+
+  .ai-empty-orb {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 17px !important;
+  }
+
+  .ai-empty-state { gap: 10px !important; }
+  .ai-empty-state span { font-size: .88rem !important; line-height: 1.55 !important; }
+
+  .ai-generated-text { gap: 10px !important; }
+
+  .ai-output-line,
+  .ai-output-line-strong {
+    padding: 12px 13px !important;
+    border-radius: 14px !important;
+    font-size: .88rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .ai-use-reply-form {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .ai-use-reply-form .btn { width: 100% !important; }
+}
+
+@media (max-width: 370px) {
+  .ai-action-grid-five { grid-template-columns: 1fr !important; }
+  .ai-action-grid-five .ai-action-card[data-mode="custom"] { grid-column: auto !important; }
+}
+/* END AI_ASSISTANT_MOBILE_POLISH */
+
+/* =========================================================
+   Settings simple restore polish
+   Removes the oversized settings hero look and keeps settings clean.
+========================================================= */
+.settings-page-head {
+  align-items: flex-start;
+}
+
+.settings-page-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.settings-clean-layout {
+  align-items: stretch;
+}
+
+.settings-summary-card {
+  grid-column: 1 / -1;
+}
+
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.settings-info-grid .settings-option {
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .settings-page-actions {
+    justify-content: flex-start;
+  }
+
+  .settings-page-actions .btn {
+    width: fit-content !important;
+  }
+
+  .settings-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .settings-page-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 9px;
+  }
+
+  .settings-page-actions .btn {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .settings-card {
+    padding: 18px;
+  }
+
+  .settings-card-head {
+    align-items: flex-start;
+  }
+
+  .settings-option {
+    padding: 14px;
+  }
+}
+
+/* =========================================================
+   36. Final mobile header order
+   Search stays on top row; quick actions stay below it.
+========================================================= */
+@media (max-width: 860px) {
+  .topbar {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+    grid-template-rows: 44px auto !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 18px !important;
+  }
+
+  .mobile-sidebar-toggle {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .search-wrap {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+
+  .top-actions {
+    display: contents !important;
+  }
+
+  .top-actions .notifications-dropdown {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+  }
+
+  .mobile-quick-actions {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: grid !important;
+    grid-template-columns: minmax(96px, .9fr) minmax(0, 1.15fr) minmax(74px, .75fr) !important;
+    gap: 8px !important;
+    margin: 8px 0 4px !important;
+  }
+
+  .mobile-action-pill {
+    height: 38px !important;
+    border-radius: 14px !important;
+  }
+
+  .search {
+    padding-right: 16px !important;
+    direction: ltr;
+    text-align: left;
+  }
+
+  .search[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+    margin-left: 8px;
+  }
+}
+
+@media (max-width: 430px) {
+  .topbar {
+    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
+    grid-template-rows: 42px auto !important;
+    gap: 7px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .mobile-quick-actions {
+    grid-template-columns: minmax(84px, .9fr) minmax(0, 1.1fr) minmax(66px, .72fr) !important;
+    gap: 7px !important;
+    margin-top: 7px !important;
+  }
 }

@@ -107,7 +107,7 @@
         </div>
     </section>
 
-    <section class="card table-card">
+    <section class="card table-card dashboard-tickets-card">
         <div class="table-head">
             <div>
                 <h2>{{ $ticketsTitle }}</h2>
@@ -117,7 +117,7 @@
             <a class="btn" href="{{ route('tickets.index') }}">View All</a>
         </div>
 
-        <table>
+        <table class="dashboard-latest-table">
             <thead>
                 <tr>
                     <th>Ticket</th>
@@ -136,7 +136,7 @@
             <tbody>
                 @forelse($latestTickets as $ticket)
                     <tr>
-                        <td>
+                        <td data-label="Ticket">
                             <a class="ticket-link" href="{{ route('tickets.show', $ticket) }}">
                                 <strong>#{{ $ticket->ticket_number }}</strong>
                                 <span>{{ $ticket->title }}</span>
@@ -144,7 +144,7 @@
                         </td>
 
                         @if ($role !== 'user')
-                            <td>
+                            <td data-label="Requester">
                                 @php
                                     $requester = $ticket->user;
                                     $requesterAvatarUrl = $avatarUrlFor($requester);
@@ -171,9 +171,9 @@
                             </td>
                         @endif
 
-                        <td>{{ $ticket->department?->name ?? 'No department' }}</td>
-                        <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                        <td>
+                        <td data-label="Department">{{ $ticket->department?->name ?? 'No department' }}</td>
+                        <td data-label="Status"><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
+                        <td data-label="Priority">
                             <span class="priority {{ $ticket->priority ?? 'unset' }}">
                                 {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
                             </span>
@@ -185,7 +185,7 @@
                                 && ! in_array($ticket->status, ['solved', 'closed'], true);
                         @endphp
 
-                        <td>
+                        <td data-label="Due Date">
                             @if ($ticket->due_at)
                                 <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
                                     <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
@@ -196,7 +196,7 @@
                             @endif
                         </td>
 
-                        <td>{{ $ticket->updated_at?->diffForHumans() }}</td>
+                        <td data-label="Updated">{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
                     <tr>
@@ -209,14 +209,14 @@
         </table>
     </section>
 
-    <section class="card table-card dashboard-activity-card">
+    <section id="recent-activity" class="card table-card dashboard-activity-card">
         <div class="table-head activity-head">
             <div>
                 <h2>Recent Activity</h2>
                 <p class="page-subtitle">{{ $activitySubtitle }}</p>
             </div>
 
-            <form method="GET" action="{{ route('dashboard') }}" class="activity-search-form">
+            <form method="GET" action="{{ route('dashboard') }}#recent-activity" class="activity-search-form">
                 <input
                     type="text"
                     name="activity_search"
@@ -229,7 +229,7 @@
                 </button>
 
                 @if(request('activity_search'))
-                    <a href="{{ route('dashboard') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('dashboard') }}#recent-activity" class="btn btn-sm btn-secondary">
                         Reset
                     </a>
                 @endif
@@ -299,6 +299,12 @@
         </div>
 
         @if (method_exists($latestActivities, 'hasPages') && $latestActivities->hasPages())
+            @php
+                if (method_exists($latestActivities, 'fragment')) {
+                    $latestActivities->fragment('recent-activity');
+                }
+            @endphp
+
             <div class="pagination-wrap">
                 {{ $latestActivities->links('vendor.pagination.resolveiq') }}
             </div>

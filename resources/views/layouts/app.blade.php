@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/resolveiq.css') }}">
 </head>
 <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
     @php
     $currentUser = auth()->user();
 
@@ -45,11 +47,17 @@
     @endphp
 
     <div class="app">
-        <aside class="sidebar">
-            <a href="{{ route('dashboard') }}" class="brand">
-                <div class="brand-mark">R</div>
-                <div class="brand-text">Resolve<span>IQ</span></div>
-            </a>
+        <aside class="sidebar" id="appSidebar" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a href="{{ route('dashboard') }}" class="brand">
+                    <div class="brand-mark">R</div>
+                    <div class="brand-text">Resolve<span>IQ</span></div>
+                </a>
+
+                <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+                    &times;
+                </button>
+            </div>
 
             <div class="nav-section">Overview</div>
             <nav class="nav">
@@ -113,11 +121,54 @@
                     <p>Resolve tickets faster with summaries, suggested replies, and support insights.</p>
                 </div>
             @endif
+
+
+            <div class="mobile-sidebar-account">
+                <a href="{{ route('profile.show') }}" class="mobile-sidebar-profile">
+                    <div class="avatar">
+                        @if ($currentUserAvatarUrl)
+                            <img
+                                src="{{ $currentUserAvatarUrl }}"
+                                alt="{{ $currentUserName }} avatar"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+                            >
+                            <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
+                        @else
+                            <span class="avatar-initials">{{ $currentUserInitials }}</span>
+                        @endif
+                    </div>
+
+                    <div>
+                        <strong>{{ $currentUserName }}</strong>
+                        <span>{{ $currentUserRole }}</span>
+                    </div>
+                </a>
+
+                <form action="{{ url('/logout') }}" method="POST" class="mobile-sidebar-logout-form">
+                    @csrf
+                    <button type="submit" class="mobile-sidebar-logout-btn">
+                        Logout
+                    </button>
+                </form>
+            </div>
         </aside>
 
         <main class="main">
             <div class="topbar">
-                <div class="search-wrap">
+                <button
+                    type="button"
+                    class="mobile-sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Open menu"
+                    aria-controls="appSidebar"
+                    aria-expanded="false"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <form class="search-wrap topbar-search-form" method="GET" action="{{ route('tickets.index') }}" role="search">
                     <span class="search-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="7"></circle>
@@ -127,10 +178,44 @@
 
                     <input
                         class="search"
-                        type="text"
-                        placeholder="{{ $isAdmin ? 'Search tickets, users, or departments...' : 'Search your tickets...' }}"
+                        type="search"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="{{ $isAdmin ? 'Search all tickets...' : ($isAgent ? 'Search assigned tickets...' : 'Search your tickets...') }}"
+                        autocomplete="off"
                     >
-                </div>
+                </form>
+
+            <div class="mobile-quick-actions" aria-label="Mobile quick actions">
+                @if ($isAdmin || $isUser)
+                    <a href="{{ route('tickets.create') }}" class="mobile-action-pill mobile-action-primary">
+                        + Ticket
+                    </a>
+                @endif
+
+                <a href="{{ route('profile.show') }}" class="mobile-action-pill mobile-profile-pill">
+                    <span class="mobile-profile-avatar">
+                        @if ($currentUserAvatarUrl)
+                            <img
+                                src="{{ $currentUserAvatarUrl }}"
+                                alt="{{ $currentUserName }} avatar"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+                            >
+                            <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
+                        @else
+                            <span class="avatar-initials">{{ $currentUserInitials }}</span>
+                        @endif
+                    </span>
+                    <span>Profile</span>
+                </a>
+
+                <form action="{{ url('/logout') }}" method="POST" class="mobile-logout-inline-form">
+                    @csrf
+                    <button type="submit" class="mobile-action-pill mobile-logout-pill">
+                        Logout
+                    </button>
+                </form>
+            </div>
 
                 <div class="top-actions">
                     @if ($isAdmin || $isUser)
@@ -258,6 +343,8 @@
                 </div>
             </div>
 
+
+
             @if (session('success'))
                 <div class="flash-message">
                     {{ session('success') }}
@@ -287,6 +374,49 @@
             }
 
             applyTheme(savedTheme);
+
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+            const sidebar = document.getElementById('appSidebar');
+
+            function openSidebar() {
+                document.body.classList.add('sidebar-open');
+                sidebarBackdrop?.removeAttribute('hidden');
+                sidebarToggle?.setAttribute('aria-expanded', 'true');
+            }
+
+            function closeSidebar() {
+                document.body.classList.remove('sidebar-open');
+                sidebarBackdrop?.setAttribute('hidden', '');
+                sidebarToggle?.setAttribute('aria-expanded', 'false');
+            }
+
+            sidebarToggle?.addEventListener('click', event => {
+                event.stopPropagation();
+                if (document.body.classList.contains('sidebar-open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            sidebarClose?.addEventListener('click', closeSidebar);
+            sidebarBackdrop?.addEventListener('click', closeSidebar);
+
+            sidebar?.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.matchMedia('(max-width: 860px)').matches) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape') {
+                    closeSidebar();
+                }
+            });
 
             toggle?.addEventListener('click', () => {
                 const currentTheme = root.getAttribute('data-theme') || 'light';

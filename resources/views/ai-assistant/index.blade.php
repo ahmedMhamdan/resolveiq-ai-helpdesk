@@ -3,85 +3,6 @@
 @section('title', 'AI Assistant')
 
 @section('content')
-    <style>
-        /* Compact Generate button: expands only while loading */
-        .ai-generate-row {
-            justify-content: flex-end;
-        }
-
-        .ai-generate-btn {
-            min-width: 136px !important;
-            width: auto !important;
-            height: 46px;
-            padding: 0 20px !important;
-            border-radius: 15px;
-            gap: 8px;
-            transition:
-                min-width var(--motion-normal) var(--ease-out),
-                transform var(--motion-fast) var(--ease-out),
-                box-shadow var(--motion-normal) var(--ease-out),
-                opacity var(--motion-fast) var(--ease-out);
-        }
-
-        .ai-generate-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .ai-generate-btn.is-loading {
-            min-width: 188px !important;
-            transform: translateY(-1px);
-            box-shadow: 0 20px 48px rgba(99, 102, 241, .38);
-        }
-
-        .ai-generate-btn .ai-btn-spinner {
-            flex: 0 0 auto;
-        }
-
-        .ai-generate-btn .ai-btn-text {
-            white-space: nowrap;
-        }
-
-        .ai-kb-sources {
-            margin-top: 16px;
-            padding: 14px 16px;
-            border: 1px solid rgba(56, 189, 248, .24);
-            border-radius: 16px;
-            background: rgba(56, 189, 248, .08);
-        }
-
-        .ai-kb-sources strong {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            color: var(--text);
-            font-size: 14px;
-        }
-
-        .ai-kb-sources strong svg {
-            width: 17px;
-            height: 17px;
-            color: #38bdf8;
-        }
-
-        .ai-kb-sources ul {
-            margin: 0;
-            padding-left: 18px;
-            color: var(--muted);
-        }
-
-        .ai-kb-sources li {
-            margin: 5px 0;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-
-        .ai-kb-sources small {
-            color: var(--muted);
-            opacity: .8;
-        }
-
-    </style>
 
     @php
         $ticketAi = session('ticket_ai');
@@ -104,7 +25,7 @@
         <div>
             <h1 class="page-title">AI Assistant</h1>
             <p class="page-subtitle">
-                Generate ticket summaries, suggested replies, priority recommendations, due date suggestions, or custom AI output.
+                Use ticket context to summarize issues, draft replies, recommend priority, suggest due dates, or generate a custom response.
             </p>
         </div>
     </div>
@@ -124,7 +45,7 @@
             <div class="ai-section-head">
                 <div>
                     <h2>Assistant Workspace</h2>
-                    <p>Select a ticket, choose an AI action, and add instructions only when needed.</p>
+                    <p>Select a ticket, choose an action, then generate a focused support response.</p>
                 </div>
             </div>
 
@@ -210,15 +131,15 @@
 
                 <div class="form-group full">
                     <label for="custom_prompt">
-                        Additional instructions
-                        <span style="color: var(--muted);">(optional for all actions, required for Custom)</span>
+                        Instructions
+                        <span style="color: var(--muted);">(optional, required for Custom)</span>
                     </label>
 
                     <textarea
                         id="custom_prompt"
                         name="custom_prompt"
                         rows="6"
-                        placeholder="Optional: make it shorter, use a friendly tone, focus on security steps, or ask a custom question about this ticket..."
+                        placeholder="Optional: adjust tone, language, length, or ask a specific question about this ticket..."
                     >{{ old('custom_prompt') }}</textarea>
                 </div>
 

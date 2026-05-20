@@ -1,47 +1,106 @@
 # ResolveIQ — AI-Powered Helpdesk Ticket System
 
-ResolveIQ is a modern Laravel helpdesk ticket system built as a full-stack portfolio project.  
-It helps users submit support tickets, agents manage replies and priorities, and admins monitor support activity through a clean dashboard interface.
+ResolveIQ is a modern Laravel helpdesk ticket system built as a full-stack portfolio project.
 
-The project is currently in its early development phase, with the core database structure, model relationships, seed data, dashboard page, tickets list, and ticket details page already implemented.
-
----
-
-## Features Implemented
-
-- Laravel project setup
-- Clean database design for a helpdesk system
-- Roles structure: Admin, Agent, User
-- Departments
-- Tickets with status and priority
-- Ticket replies
-- Ticket attachments database structure
-- Ticket activity logs
-- Dashboard statistics
-- Tickets list page
-- Ticket details / conversation page
-- Search and filtering for tickets
-- Seed data for testing
-- Responsive dashboard layout
-- Light modern SaaS UI foundation
+It allows users to create support tickets, agents to manage assigned tickets and replies, and admins to manage the whole support workflow through a clean dashboard. The project also includes AI-assisted ticket handling, API authentication using Laravel Sanctum, email verification, role-based access control, and profile management.
 
 ---
 
-## Planned Features
+## Features
 
-- Authentication using Laravel Breeze
+### Authentication & Accounts
+
+- User registration and login
+- Laravel Fortify-based web authentication
+- API authentication using Laravel Sanctum tokens
+- Email verification for new accounts
+- Password update support
+- Profile page and profile edit
+- User avatar upload
 - Role-based access control
-- Create / edit / delete tickets
-- Ticket reply form
-- Internal notes for agents
-- File upload for ticket attachments
-- Admin management for departments and users
-- Soft delete and archive system
-- Dark mode dashboard
-- AI ticket conversation summary
+
+### Roles
+
+The system supports three main roles:
+
+- Admin
+- Agent
+- User
+
+### Admin Features
+
+- Manage users and roles
+- Manage agents
+- Manage departments
+- View all tickets
+- Assign tickets to agents
+- Set ticket priority
+- Set due dates
+- View overdue tickets
+- View unassigned tickets
+- Restore and permanently delete soft-deleted tickets
+- Manage knowledge base articles
+- Access AI assistant tools
+
+### Agent Features
+
+- View assigned tickets only
+- Reply to assigned tickets
+- Add internal notes
+- Close and reopen assigned tickets
+- Use AI assistant for ticket replies and analysis
+
+### User Features
+
+- Create support tickets
+- View own tickets only
+- Reply to own tickets
+- Update profile information
+- Upload profile avatar
+- Receive email verification
+
+### Ticket System
+
+- Ticket creation
+- Ticket details page
+- Ticket replies
+- Internal notes for agents/admins
+- Ticket status workflow
+- Ticket priority workflow
+- Due date support
+- First response tracking
+- Activity logs
+- Soft delete, restore, and force delete
+- Search and filtering
+
+### AI Features
+
 - AI suggested replies
-- Realtime ticket updates
-- Deployment
+- AI internal notes
+- AI ticket summaries
+- AI priority suggestions
+- AI due date suggestions
+- Custom AI instructions
+- OpenRouter support with mock fallback
+
+### API Features
+
+ResolveIQ includes a real API layer using Laravel Sanctum.
+
+Implemented API endpoints include:
+
+- Register
+- Login
+- Logout
+- Current authenticated user
+- Profile view/update
+- Departments list
+- Tickets list
+- Ticket creation
+- Ticket details
+- Ticket replies
+- Email verification
+- Resend verification email
 
 ---
 
@@ -50,16 +109,20 @@ The project is currently in its early development phase, with the core database 
 - Laravel
 - PHP
 - MySQL
+- Laravel Fortify
+- Laravel Sanctum
 - Blade
 - HTML
 - CSS
+- JavaScript
+- OpenRouter API
 - Git / GitHub
 
 ---
 
 ## Database Structure
 
-The main database tables are:
+Main tables:
 
 - `roles`
 - `users`
@@ -68,6 +131,9 @@ The main database tables are:
 - `ticket_replies`
 - `ticket_attachments`
 - `ticket_activity_logs`
+- `knowledge_base_articles`
+- `notifications`
+- `personal_access_tokens`
 
 ### Main Relationships
 
@@ -82,6 +148,7 @@ The main database tables are:
 - A ticket has many replies
 - A ticket has many attachments
 - A ticket has many activity logs
+- A user has many API tokens through Sanctum
 
 ---
 
@@ -100,6 +167,7 @@ Tickets support the following priorities:
 - Medium
 - High
 - Urgent
+- Not set
 
 ---
 
@@ -108,4 +176,334 @@ Tickets support the following priorities:
 Clone the repository:
 
 ```bash
-git clone https://github.com/ahmedMhamdan/resolveiq-ai-helpdesk
+git clone https://github.com/ahmedMhamdan/resolveiq-ai-helpdesk.git
+cd resolveiq-ai-helpdesk
+```
+
+Install PHP dependencies:
+
+```bash
+composer install
+```
+
+Install frontend dependencies:
+
+```bash
+npm install
+```
+
+Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+Configure your database in `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=resolveiq
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Run migrations and seeders:
+
+```bash
+php artisan migrate --seed
+```
+
+Create the storage link:
+
+```bash
+php artisan storage:link
+```
+
+Run the development server:
+
+```bash
+php artisan serve
+```
+
+Run Vite:
+
+```bash
+npm run dev
+```
+
+---
+
+## Environment Variables
+
+The project uses these important environment variables:
+
+```env
+APP_NAME="ResolveIQ"
+APP_URL=http://127.0.0.1:8000
+
+FILESYSTEM_DISK=public
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME="${APP_NAME}"
+
+AI_PROVIDER=mock
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=openrouter/free
+
+SANCTUM_STATEFUL_DOMAINS=localhost,localhost:8000,127.0.0.1,127.0.0.1:8000
+```
+
+Important: never commit your real `.env` file or secret keys to GitHub.
+
+---
+
+## Email Verification
+
+ResolveIQ supports real email verification.
+
+For local testing with Gmail SMTP, use a Gmail App Password, not your normal Gmail password.
+
+Example:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your_email@gmail.com
+MAIL_FROM_NAME="ResolveIQ"
+```
+
+After changing mail settings, clear config cache:
+
+```bash
+php artisan optimize:clear
+php artisan config:clear
+```
+
+---
+
+## API Authentication
+
+ResolveIQ uses Laravel Sanctum for API authentication.
+
+API clients must send the token using:
+
+```txt
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+---
+
+## API Endpoints
+
+Base URL:
+
+```txt
+http://127.0.0.1:8000/api/v1
+```
+
+### Auth
+
+```txt
+POST /register
+POST /login
+POST /logout
+GET  /me
+```
+
+### Email Verification
+
+```txt
+GET  /email/verify/{id}/{hash}
+POST /email/verification-notification
+```
+
+### Profile
+
+```txt
+GET  /profile
+POST /profile
+```
+
+### Departments
+
+```txt
+GET /departments
+```
+
+### Tickets
+
+```txt
+GET  /tickets
+POST /tickets
+GET  /tickets/{ticket}
+```
+
+### Ticket Replies
+
+```txt
+GET  /tickets/{ticket}/replies
+POST /tickets/{ticket}/replies
+```
+
+---
+
+## Example API Register Request
+
+```http
+POST /api/v1/register
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123",
+  "password_confirmation": "password123",
+  "device_name": "Postman"
+}
+```
+
+---
+
+## Example API Login Request
+
+```http
+POST /api/v1/login
+Accept: application/json
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "device_name": "Postman"
+}
+```
+
+---
+
+## Example Create Ticket Request
+
+```http
+POST /api/v1/tickets
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN_HERE
+```
+
+```json
+{
+  "title": "Cannot access my dashboard",
+  "description": "The dashboard keeps loading after login.",
+  "department_id": 1
+}
+```
+
+---
+
+## Test Accounts
+
+After running seeders, you can use these demo accounts:
+
+```txt
+Admin:
+admin@resolveiq.test
+password
+
+Agent:
+agent@resolveiq.test
+password
+
+User:
+user@resolveiq.test
+password
+```
+
+---
+
+## Deployment Notes
+
+Before deployment, make sure to:
+
+- Set production environment variables
+- Set `APP_ENV=production`
+- Set `APP_DEBUG=false`
+- Set the correct `APP_URL`
+- Configure production database credentials
+- Configure SMTP mail settings
+- Configure OpenRouter API settings if AI is enabled
+- Run migrations on the production database
+- Run `php artisan storage:link`
+- Cache config, routes, and views
+- Never upload `.env` to GitHub
+
+Recommended production commands:
+
+```bash
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan storage:link
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+---
+
+## Responsive Design
+
+The dashboard layout is designed to support desktop and smaller screens. Final responsive polishing should focus on:
+
+- Sidebar behavior on mobile
+- Tables on small screens
+- Tickets list and ticket details pages
+- Users and agents management tables
+- AI Assistant layout
+- Auth pages
+- Profile and email verification pages
+
+---
+
+## Project Status
+
+Current progress: around 90%.
+
+Completed:
+
+- Core helpdesk system
+- Role-based access control
+- Admin, agent, and user workflows
+- AI assistant workflow
+- API authentication
+- API tickets and replies
+- API profile update
+- Email verification
+- User and agent avatar handling
+- Notifications and activity logs
+
+---
+
+## Author
+
+Developed by Ahmed Mhamdan as a Laravel + Cybersecurity portfolio project.

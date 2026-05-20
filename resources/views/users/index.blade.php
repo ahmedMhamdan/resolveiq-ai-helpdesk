@@ -52,7 +52,7 @@
         </div>
 
         <div class="table-wrap users-table-wrap">
-            <table class="users-management-table">
+            <table class="users-management-table users-mobile-table">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -81,13 +81,13 @@
                         @endphp
 
                         <tr>
-                            <td>
+                            <td data-label="User">
                                 <div class="user-person">
                                     <span class="mini-avatar user-list-avatar">
                                         @if ($avatarUrl)
                                             <img src="{{ $avatarUrl }}" alt="{{ $user->name }} avatar">
                                         @else
-                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            <span class="avatar-initials">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                                         @endif
                                     </span>
 
@@ -98,20 +98,19 @@
                                 </div>
                             </td>
 
-                            <td class="users-center-col">
+                            <td class="users-center-col" data-label="Role">
                                 <span class="role-badge role-{{ $roleName }}">
                                     {{ ucfirst($roleName) }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col">
+                            <td class="users-center-col" data-label="Created Tickets">
                                 <span class="ticket-count-badge">
-                                    {{ $user->tickets_count }}
+                                    {{ $user->tickets_count ?? 0 }}
                                 </span>
                             </td>
 
-
-                            <td class="users-center-col">
+                            <td class="users-center-col" data-label="Change Role">
                                 @if ($roleName === 'admin')
                                     <span class="role-badge role-admin">
                                         Protected Admin
@@ -133,7 +132,6 @@
                                             <option value="user" @selected($roleName === 'user')>
                                                 User
                                             </option>
-
                                             <option value="agent" @selected($roleName === 'agent')>
                                                 Agent
                                             </option>
@@ -146,14 +144,14 @@
                                 @endif
                             </td>
 
-                            <td class="users-center-col">
+                            <td class="users-center-col" data-label="Actions">
                                 <div class="users-role-actions">
-                                    <a href="{{ route('users.show', $user) }}" class="btn btn-secondary btn-sm">
+                                    <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary btn-sm">
                                         View
                                     </a>
 
                                     @if ($roleName !== 'admin')
-                                        <a href="{{ route('users.edit', $user) }}" class="btn btn-edit-soft btn-sm">
+                                        <a href="{{ url('/users/' . $user->id . '/edit') }}" class="btn btn-edit-soft btn-sm">
                                             Edit
                                         </a>
                                     @endif
