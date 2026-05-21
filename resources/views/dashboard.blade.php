@@ -108,16 +108,39 @@
     </section>
 
     <section class="card table-card dashboard-tickets-card">
-        <div class="table-head">
-            <div>
+        <div class="table-head dashboard-tickets-head">
+            <div class="dashboard-tickets-heading">
                 <h2>{{ $ticketsTitle }}</h2>
                 <p class="page-subtitle">{{ $ticketsSubtitle }}</p>
             </div>
 
-            <a class="btn" href="{{ route('tickets.index') }}">View All</a>
+            <div class="dashboard-ticket-tools">
+                <form method="GET" action="{{ route('tickets.index') }}" class="dashboard-ticket-search-form">
+                    <div class="dashboard-ticket-search-box">
+                        <span class="dashboard-ticket-search-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 21L16.7 16.7M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+
+                        <input
+                            type="search"
+                            name="search"
+                            placeholder="Search tickets..."
+                            aria-label="Search tickets"
+                        >
+
+                        <button type="submit" class="dashboard-ticket-search-btn">
+                            Search
+                        </button>
+                    </div>
+                </form>
+
+                <a class="btn dashboard-view-all-btn" href="{{ route('tickets.index') }}">View All</a>
+            </div>
         </div>
 
-        <table class="dashboard-latest-table">
+        <table class="dashboard-latest-table dashboard-mobile-cards-table">
             <thead>
                 <tr>
                     <th>Ticket</th>
@@ -216,23 +239,38 @@
                 <p class="page-subtitle">{{ $activitySubtitle }}</p>
             </div>
 
-            <form method="GET" action="{{ route('dashboard') }}#recent-activity" class="activity-search-form">
+            <form method="GET" action="{{ route('dashboard') }}#recent-activity" class="activity-search-form" id="activitySearchForm">
                 <input
-                    type="text"
+                    type="search"
                     name="activity_search"
+                    id="activitySearchInput"
                     value="{{ $activitySearch ?? request('activity_search') }}"
                     placeholder="Search logs..."
+                    autocomplete="off"
                 >
 
-                <button type="submit" class="btn btn-sm btn-primary">
+                <button type="submit" class="btn btn-sm btn-primary activity-search-btn" id="activitySearchBtn">
                     Search
                 </button>
 
-                @if(request('activity_search'))
-                    <a href="{{ route('dashboard') }}#recent-activity" class="btn btn-sm btn-secondary">
-                        Reset
-                    </a>
-                @endif
+                <button
+                    type="button"
+                    class="btn btn-sm btn-secondary activity-search-reset"
+                    id="activitySearchReset"
+                    {{ request('activity_search') ? '' : 'hidden' }}
+                >
+                    Reset
+                </button>
+
+                <div
+                    class="activity-search-status"
+                    id="activitySearchStatus"
+                    {{ request('activity_search') ? '' : 'hidden' }}
+                >
+                    @if(request('activity_search'))
+                        Search applied. {{ method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count() }} activity log{{ (method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count()) === 1 ? '' : 's' }} found.
+                    @endif
+                </div>
             </form>
         </div>
 
@@ -242,6 +280,7 @@
                     class="activity-item activity-openable"
                     role="button"
                     tabindex="0"
+                    data-activity-search="{{ e(strtolower(($activity->action ?? '') . ' ' . ($activity->ticket?->ticket_number ?? '') . ' ' . ($activity->ticket?->title ?? '') . ' ' . ($activity->user?->name ?? '') . ' ' . ($activity->old_value ?? '') . ' ' . ($activity->new_value ?? ''))) }}"
                     data-action="{{ e($activity->action) }}"
                     data-ticket="{{ e($activity->ticket?->ticket_number ?? 'Ticket removed') }}"
                     data-title="{{ e($activity->ticket?->title ?? 'Deleted or unavailable ticket') }}"
@@ -296,6 +335,10 @@
                     {{ request('activity_search') ? 'No activity logs matched your search.' : 'No recent activity yet.' }}
                 </div>
             @endforelse
+
+            <div class="empty activity-live-empty" id="activityLiveEmpty" hidden>
+                No activity logs matched your search.
+            </div>
         </div>
 
         @if (method_exists($latestActivities, 'hasPages') && $latestActivities->hasPages())
@@ -368,6 +411,100 @@
 
     <script>
         (() => {
+            const activitySearchForm = document.getElementById('activitySearchForm');
+            const activitySearchInput = document.getElementById('activitySearchInput');
+            const activitySearchBtn = document.getElementById('activitySearchBtn');
+            const activitySearchReset = document.getElementById('activitySearchReset');
+            const activitySearchStatus = document.getElementById('activitySearchStatus');
+            const activityLiveEmpty = document.getElementById('activityLiveEmpty');
+            const activityCard = document.getElementById('recent-activity');
+            const activityItems = Array.from(document.querySelectorAll('.activity-openable'));
+
+            function setActivityStatus(message, type = 'info') {
+                if (!activitySearchStatus) {
+                    return;
+                }
+
+                activitySearchStatus.textContent = message;
+                activitySearchStatus.hidden = false;
+                activitySearchStatus.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
+                activitySearchStatus.classList.add(`is-${type}`);
+
+                window.requestAnimationFrame(() => {
+                    activitySearchStatus.classList.add('is-visible');
+                });
+            }
+
+            function runActivitySearch() {
+                if (!activitySearchInput) {
+                    return;
+                }
+
+                const query = activitySearchInput.value.trim().toLowerCase();
+                let matchedCount = 0;
+
+                activityItems.forEach(item => {
+                    const haystack = (item.dataset.activitySearch || item.textContent || '').toLowerCase();
+                    const isMatch = query === '' || haystack.includes(query);
+
+                    item.hidden = !isMatch;
+                    item.classList.toggle('is-hidden', !isMatch);
+                    item.classList.toggle('is-search-match', query !== '' && isMatch);
+
+                    if (isMatch) {
+                        matchedCount += 1;
+                    }
+                });
+
+                if (activityLiveEmpty) {
+                    activityLiveEmpty.hidden = query === '' || matchedCount > 0;
+                }
+
+                if (activitySearchReset) {
+                    activitySearchReset.hidden = query === '';
+                }
+
+                activityCard?.classList.remove('search-pulse');
+                void activityCard?.offsetWidth;
+                activityCard?.classList.add('search-pulse');
+
+                if (query === '') {
+                    setActivityStatus('Search cleared. Showing all activity logs.', 'info');
+                    return;
+                }
+
+                if (matchedCount > 0) {
+                    setActivityStatus(`Search applied. ${matchedCount} activity log${matchedCount === 1 ? '' : 's'} found for "${activitySearchInput.value.trim()}".`, 'success');
+                } else {
+                    setActivityStatus(`No activity logs found for "${activitySearchInput.value.trim()}".`, 'warning');
+                }
+            }
+
+            activitySearchForm?.addEventListener('submit', event => {
+                event.preventDefault();
+
+                activitySearchBtn?.classList.add('is-loading');
+
+                window.setTimeout(() => {
+                    runActivitySearch();
+                    activitySearchBtn?.classList.remove('is-loading');
+                }, 160);
+            });
+
+            activitySearchReset?.addEventListener('click', () => {
+                if (!activitySearchInput) {
+                    return;
+                }
+
+                activitySearchInput.value = '';
+                runActivitySearch();
+                activitySearchInput.focus();
+            });
+
+            if (activitySearchInput && activitySearchInput.value.trim() !== '') {
+                runActivitySearch();
+            }
+
             const modalBackdrop = document.getElementById('activityModalBackdrop');
             if (modalBackdrop && modalBackdrop.parentElement !== document.body) {
                 document.body.appendChild(modalBackdrop);

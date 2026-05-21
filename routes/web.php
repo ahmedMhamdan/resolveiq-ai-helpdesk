@@ -7,7 +7,6 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
@@ -163,7 +162,8 @@ Route::middleware('auth')->group(function () {
             ->except(['show']);
     });
 
-    Route::get('/settings', [SettingsController::class, 'index'])
+    // Keep old /settings URL working, but send it to the real profile page.
+    Route::redirect('/settings', '/profile')
         ->name('settings.index');
 
     Route::get('/profile', [ProfileController::class, 'show'])

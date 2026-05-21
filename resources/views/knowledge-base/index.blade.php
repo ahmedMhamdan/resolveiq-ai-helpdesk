@@ -87,16 +87,33 @@
     </div>
 </div>
 
-<div class="table-card">
-    <div class="table-head">
+<div class="table-card kb-articles-card">
+    <div class="table-head kb-articles-head">
         <div>
             <h2>Articles</h2>
             <p class="page-subtitle">Reusable support content for agents and AI-assisted replies.</p>
         </div>
+
+        <form class="filters kb-search-form" id="kbSearchForm">
+            <input
+                type="search"
+                id="kbSearchInput"
+                placeholder="Search articles..."
+                autocomplete="off"
+            >
+
+            <button type="submit" class="kb-search-btn">Search</button>
+
+            <button type="button" class="btn btn-secondary kb-search-reset" id="kbSearchReset" hidden>
+                Reset
+            </button>
+
+            <div class="kb-search-status" id="kbSearchStatus" hidden></div>
+        </form>
     </div>
 
-    <div class="table-wrap">
-        <table>
+    <div class="table-wrap kb-articles-wrap">
+        <table class="kb-articles-table">
             <thead>
                 <tr>
                     <th>Article</th>
@@ -109,25 +126,39 @@
 
             <tbody>
                 @forelse ($articles as $article)
-                    <tr>
-                        <td>
+                    @php
+                        $articleSearchText = Str::lower(trim(
+                            $article->title . ' ' .
+                            strip_tags($article->content) . ' ' .
+                            $article->status . ' ' .
+                            ($article->user?->name ?? 'System') . ' ' .
+                            $article->created_at->format('M d, Y')
+                        ));
+                    @endphp
+
+                    <tr class="kb-article-row" data-search="{{ $articleSearchText }}">
+                        <td data-label="Article">
                             <strong>{{ $article->title }}</strong>
                             <div class="text-muted">
                                 {{ Str::limit($article->content, 80) }}
                             </div>
                         </td>
 
-                        <td>
+                        <td data-label="Status">
                             <span class="badge {{ $article->status === 'published' ? 'solved' : 'pending' }}">
                                 {{ ucfirst($article->status) }}
                             </span>
                         </td>
 
-                        <td>{{ $article->user?->name ?? 'System' }}</td>
+                        <td data-label="Author">
+                            {{ $article->user?->name ?? 'System' }}
+                        </td>
 
-                        <td>{{ $article->created_at->format('M d, Y') }}</td>
+                        <td data-label="Created">
+                            {{ $article->created_at->format('M d, Y') }}
+                        </td>
 
-                        <td>
+                        <td data-label="Actions">
                             <div class="row-actions">
                                 <a href="{{ route('knowledge.edit', $article) }}" class="btn btn-sm btn-edit-soft">
                                     Edit
@@ -149,13 +180,14 @@
                         <td colspan="5">
                             <div class="kb-empty-state">
                                 <div class="kb-empty-icon">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                        <path d="M7 3H14L19 8V21H7C5.9 21 5 20.1 5 19V5C5 3.9 5.9 3 7 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M14 3V8H19" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                        <path d="M9 17H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                </div>
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                                        <path d="M7 3H14L19 8V21H7C5.9 21 5 20.1 5 19V5C5 3.9 5.9 3 7 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                        <path d="M14 3V8H19" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                        <path d="M9 13H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M9 17H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+
                                 <strong>No articles found yet.</strong>
                                 <p>Create your first article to start building the support knowledge library.</p>
                             </div>
@@ -164,10 +196,101 @@
                 @endforelse
             </tbody>
         </table>
+
+        <div class="kb-live-empty" id="kbLiveEmpty" hidden>
+            No articles matched your search.
+        </div>
     </div>
 
     <div class="pagination">
         {{ $articles->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const card = document.querySelector('.kb-articles-card');
+        const form = document.getElementById('kbSearchForm');
+        const input = document.getElementById('kbSearchInput');
+        const reset = document.getElementById('kbSearchReset');
+        const status = document.getElementById('kbSearchStatus');
+        const empty = document.getElementById('kbLiveEmpty');
+        const rows = Array.from(document.querySelectorAll('.kb-article-row'));
+
+        if (!card || !form || !input || !reset || !status || !empty) {
+            return;
+        }
+
+        const setStatus = (message, type) => {
+            status.hidden = false;
+            status.textContent = message;
+            status.className = `kb-search-status is-visible ${type}`;
+        };
+
+        const clearStatus = () => {
+            status.hidden = true;
+            status.textContent = '';
+            status.className = 'kb-search-status';
+        };
+
+        const runSearch = () => {
+            const query = input.value.trim().toLowerCase();
+            let matchedCount = 0;
+
+            rows.forEach((row) => {
+                const text = row.dataset.search || row.textContent.toLowerCase();
+                const isMatch = query === '' || text.includes(query);
+
+                row.classList.toggle('is-hidden', !isMatch);
+                row.classList.remove('is-search-match');
+
+                if (isMatch) {
+                    matchedCount++;
+
+                    if (query !== '') {
+                        row.classList.add('is-search-match');
+                    }
+                }
+            });
+
+            empty.hidden = !(query !== '' && matchedCount === 0);
+            reset.hidden = query === '';
+            card.classList.toggle('live-search-no-results', query !== '' && matchedCount === 0);
+
+            card.classList.remove('search-pulse');
+            void card.offsetWidth;
+            card.classList.add('search-pulse');
+
+            if (query === '') {
+                clearStatus();
+                return;
+            }
+
+            if (matchedCount > 0) {
+                setStatus(`Search applied. ${matchedCount} article${matchedCount === 1 ? '' : 's'} found for "${query}".`, 'is-success');
+            } else {
+                setStatus(`No results found for "${query}".`, 'is-warning');
+            }
+        };
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            runSearch();
+        });
+
+        reset.addEventListener('click', () => {
+            input.value = '';
+
+            rows.forEach((row) => {
+                row.classList.remove('is-hidden', 'is-search-match');
+            });
+
+            empty.hidden = true;
+            reset.hidden = true;
+            card.classList.remove('live-search-no-results', 'search-pulse');
+            clearStatus();
+            input.focus();
+        });
+    });
+</script>
 @endsection

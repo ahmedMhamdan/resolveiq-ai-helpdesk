@@ -107,11 +107,11 @@
                 </nav>
             @endif
 
-            <div class="nav-section">System</div>
+            <div class="nav-section">Account</div>
             <nav class="nav">
-                <a href="{{ route('settings.index') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                    <span class="nav-icon">⚙</span>
-                    <span>Settings</span>
+                <a href="{{ route('profile.show') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                    <span class="nav-icon">P</span>
+                    <span>Profile</span>
                 </a>
             </nav>
 
@@ -123,34 +123,6 @@
             @endif
 
 
-            <div class="mobile-sidebar-account">
-                <a href="{{ route('profile.show') }}" class="mobile-sidebar-profile">
-                    <div class="avatar">
-                        @if ($currentUserAvatarUrl)
-                            <img
-                                src="{{ $currentUserAvatarUrl }}"
-                                alt="{{ $currentUserName }} avatar"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
-                            >
-                            <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
-                        @else
-                            <span class="avatar-initials">{{ $currentUserInitials }}</span>
-                        @endif
-                    </div>
-
-                    <div>
-                        <strong>{{ $currentUserName }}</strong>
-                        <span>{{ $currentUserRole }}</span>
-                    </div>
-                </a>
-
-                <form action="{{ url('/logout') }}" method="POST" class="mobile-sidebar-logout-form">
-                    @csrf
-                    <button type="submit" class="mobile-sidebar-logout-btn">
-                        Logout
-                    </button>
-                </form>
-            </div>
         </aside>
 
         <main class="main">
@@ -330,7 +302,6 @@
                         </div>
                         <div class="user-meta">
                             <strong>{{ $currentUserName }}</strong>
-                            <span>{{ $currentUserRole }}</span>
                         </div>
                     </a>
 

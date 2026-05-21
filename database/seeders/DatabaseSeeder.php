@@ -9,7 +9,9 @@ use App\Models\TicketActivityLog;
 use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +27,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Ahmed Admin',
                 'password' => Hash::make('password'),
                 'role_id' => $adminRole->id,
+                'email_verified_at' => now(),
                 'avatar_path' => 'images/avatars/admin-ahmed.svg',
             ]
         );
@@ -35,6 +38,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Support Agent',
                 'password' => Hash::make('password'),
                 'role_id' => $agentRole->id,
+                'email_verified_at' => now(),
                 'avatar_path' => 'images/avatars/support-agent.svg',
             ]
         );
@@ -45,6 +49,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Second Agent',
                 'password' => Hash::make('password'),
                 'role_id' => $agentRole->id,
+                'email_verified_at' => now(),
                 'avatar_path' => 'images/avatars/second-agent.svg',
             ]
         );
@@ -55,6 +60,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Sarah Johnson',
                 'password' => Hash::make('password'),
                 'role_id' => $userRole->id,
+                'email_verified_at' => now(),
                 'avatar_path' => 'images/avatars/user-sarah.svg',
             ]
         );
@@ -65,6 +71,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Omar Customer',
                 'password' => Hash::make('password'),
                 'role_id' => $userRole->id,
+                'email_verified_at' => now(),
                 'avatar_path' => 'images/avatars/user-omar.svg',
             ]
         );
@@ -164,6 +171,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'solved',
                 'priority' => 'medium',
                 'due_at' => now()->subDays(4),
+                'is_deleted' => true,
             ],
             [
                 'number' => 'RIQ-1008',
@@ -219,6 +227,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'closed',
                 'priority' => 'medium',
                 'due_at' => now()->subDays(7),
+                'is_deleted' => true,
             ],
             [
                 'number' => 'RIQ-1013',
@@ -359,7 +368,7 @@ class DatabaseSeeder extends Seeder
         foreach ($ticketTemplates as $ticketData) {
             $status = $ticketData['status'];
 
-            $createdTickets[$ticketData['number']] = Ticket::updateOrCreate(
+            $ticket = Ticket::withTrashed()->updateOrCreate(
                 ['ticket_number' => $ticketData['number']],
                 [
                     'user_id' => $ticketData['customer']->id,
@@ -374,6 +383,12 @@ class DatabaseSeeder extends Seeder
                     'closed_at' => $status === 'closed' ? now()->subHours(8) : null,
                 ]
             );
+
+            if (method_exists($ticket, 'restore') && $ticket->trashed()) {
+                $ticket->restore();
+            }
+
+            $createdTickets[$ticketData['number']] = $ticket;
         }
 
         $replyData = [
@@ -443,6 +458,114 @@ class DatabaseSeeder extends Seeder
                         'new_value' => $ticket->priority,
                     ]
                 );
+            }
+        }
+
+        $knowledgeArticles = [
+            [
+                'title' => 'How to reset a customer password safely',
+                'content' => "Use this article when a customer cannot access their account.\n\n1. Confirm the customer's email address.\n2. Check whether the account is locked or inactive.\n3. Send the password reset link from the support panel.\n4. Ask the customer to check inbox and spam folders.\n5. Never ask the customer to share their password or reset token.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 8,
+            ],
+            [
+                'title' => 'Troubleshooting login errors',
+                'content' => "Use this article for login issues, 500 errors, or repeated failed attempts.\n\nStart by checking the user's email, recent login attempts, browser cache, and active sessions. If the problem affects multiple users, escalate it as a possible authentication service issue.",
+                'status' => 'published',
+                'user' => $agentOne,
+                'days_ago' => 7,
+            ],
+            [
+                'title' => 'Handling invoice amount disputes',
+                'content' => "When a customer reports an incorrect invoice amount, compare the invoice total with the subscription plan, renewal date, discounts, taxes, and previous payments. Add an internal note before changing billing data.",
+                'status' => 'published',
+                'user' => $agentTwo,
+                'days_ago' => 6,
+            ],
+            [
+                'title' => 'Responding to suspicious login reports',
+                'content' => "If a customer reports a suspicious login notification, ask them to confirm whether they recognize the location and device. Recommend changing the password, reviewing active sessions, enabling 2FA, and escalating if the login looks malicious.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 5,
+            ],
+            [
+                'title' => 'What to check when notifications are delayed',
+                'content' => "Delayed notifications can be caused by mail queue issues, provider delays, incorrect email settings, or suppressed addresses. Check the notification logs, mail queue, and recent system activity before replying.",
+                'status' => 'published',
+                'user' => $agentOne,
+                'days_ago' => 4,
+            ],
+            [
+                'title' => 'Explaining ticket priority levels',
+                'content' => "Low means the issue has limited impact. Medium means the customer is affected but work can continue. High means an important workflow is blocked. Urgent means security, payment, or business-critical access is affected.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 3,
+            ],
+            [
+                'title' => 'Draft reply for attachment upload failures',
+                'content' => "Ask the customer to confirm the file type and size, then suggest trying a supported format. If the problem continues, request the error message and browser name before escalating to technical support.",
+                'status' => 'draft',
+                'user' => $agentTwo,
+                'days_ago' => 2,
+            ],
+            [
+                'title' => 'AI Assistant response quality checklist',
+                'content' => "Before using an AI-generated reply, make sure it answers the customer's issue, uses a polite tone, avoids unsupported promises, and does not expose internal notes or sensitive account details.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 1,
+            ],
+        ];
+
+        $knowledgeTable = null;
+        foreach (['knowledge_bases', 'knowledge_base_articles'] as $table) {
+            if (Schema::hasTable($table)) {
+                $knowledgeTable = $table;
+                break;
+            }
+        }
+
+        if ($knowledgeTable) {
+            foreach ($knowledgeArticles as $article) {
+                $payload = [
+                    'content' => $article['content'],
+                ];
+
+                if (Schema::hasColumn($knowledgeTable, 'status')) {
+                    $payload['status'] = $article['status'];
+                }
+
+                if (Schema::hasColumn($knowledgeTable, 'user_id')) {
+                    $payload['user_id'] = $article['user']->id;
+                }
+
+                if (Schema::hasColumn($knowledgeTable, 'created_at')) {
+                    $payload['created_at'] = now()->subDays($article['days_ago']);
+                }
+
+                if (Schema::hasColumn($knowledgeTable, 'updated_at')) {
+                    $payload['updated_at'] = now()->subDays(max($article['days_ago'] - 1, 0));
+                }
+
+                DB::table($knowledgeTable)->updateOrInsert(
+                    ['title' => $article['title']],
+                    $payload
+                );
+            }
+        }
+
+        foreach ($ticketTemplates as $ticketData) {
+            if (empty($ticketData['is_deleted'])) {
+                continue;
+            }
+
+            $ticket = $createdTickets[$ticketData['number']] ?? null;
+
+            if ($ticket && method_exists($ticket, 'trashed') && ! $ticket->trashed()) {
+                $ticket->delete();
             }
         }
     }

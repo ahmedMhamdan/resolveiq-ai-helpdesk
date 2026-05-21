@@ -1840,111 +1840,8 @@ body.dark .ai-action-card.active {
 }
 
 /* =========================================================
-   17. Settings page
+   17. Settings page removed - /settings redirects to Profile
 ========================================================= */
-.settings-layout {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.settings-card {
-  padding: 24px;
-  border-radius: 28px;
-}
-
-.settings-card:first-child {
-  grid-column: 1 / -1;
-}
-
-.settings-card-head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 22px;
-}
-
-.settings-card-head h2 {
-  margin: 0 0 6px;
-  font-size: 1.2rem;
-}
-
-.settings-card-head p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.settings-icon {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  color: #fff;
-  font-weight: 850;
-  background: linear-gradient(135deg, #38bdf8, #2563eb);
-  box-shadow: 0 14px 30px rgba(37, 99, 235, .20);
-}
-
-.settings-icon-purple {
-  background: linear-gradient(135deg, #a78bfa, #7c3aed);
-  box-shadow: 0 14px 30px rgba(124, 58, 237, .20);
-}
-
-.settings-icon-green {
-  background: linear-gradient(135deg, #2dd4bf, #22c55e);
-  box-shadow: 0 14px 30px rgba(34, 197, 94, .18);
-}
-
-.settings-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.settings-options {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.settings-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--panel-soft);
-}
-
-.settings-option strong {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--text);
-}
-
-.settings-option span {
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-.settings-pill {
-  flex: 0 0 auto;
-  padding: 7px 11px;
-  border-radius: 999px;
-  background: var(--primary-soft);
-  color: var(--primary) !important;
-  font-size: .78rem;
-  font-weight: 750;
-}
-
-.muted-pill {
-  background: rgba(148, 163, 184, .14);
-  color: var(--muted) !important;
-}
 
 /* =========================================================
    18. Page-specific safeguards
@@ -5476,9 +5373,12 @@ body.dark .profile-avatar-uploader {
     font-size: 12px !important;
   }
 
-  .sidebar-card,
-  .mobile-sidebar-account {
+  .sidebar-card {
     display: block !important;
+  }
+
+  .mobile-sidebar-account {
+    display: none !important;
   }
 
   .topbar {
@@ -6119,77 +6019,6 @@ body.dark .profile-avatar-uploader {
 /* END AI_ASSISTANT_MOBILE_POLISH */
 
 /* =========================================================
-   Settings simple restore polish
-   Removes the oversized settings hero look and keeps settings clean.
-========================================================= */
-.settings-page-head {
-  align-items: flex-start;
-}
-
-.settings-page-actions {
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.settings-clean-layout {
-  align-items: stretch;
-}
-
-.settings-summary-card {
-  grid-column: 1 / -1;
-}
-
-.settings-info-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.settings-info-grid .settings-option {
-  height: 100%;
-}
-
-@media (max-width: 900px) {
-  .settings-page-actions {
-    justify-content: flex-start;
-  }
-
-  .settings-page-actions .btn {
-    width: fit-content !important;
-  }
-
-  .settings-info-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
-  .settings-page-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 100%;
-    gap: 9px;
-  }
-
-  .settings-page-actions .btn {
-    width: 100% !important;
-    justify-content: center;
-  }
-
-  .settings-card {
-    padding: 18px;
-  }
-
-  .settings-card-head {
-    align-items: flex-start;
-  }
-
-  .settings-option {
-    padding: 14px;
-  }
-}
-
-/* =========================================================
    36. Final mobile header order
    Search stays on top row; quick actions stay below it.
 ========================================================= */
@@ -6260,5 +6089,3333 @@ body.dark .profile-avatar-uploader {
     grid-template-columns: minmax(84px, .9fr) minmax(0, 1.1fr) minmax(66px, .72fr) !important;
     gap: 7px !important;
     margin-top: 7px !important;
+  }
+}
+
+/* Dashboard ticket search + mobile cards polish */
+.dashboard-tickets-head {
+    align-items: flex-start;
+}
+
+.dashboard-tickets-heading {
+    min-width: 220px;
+}
+
+.dashboard-ticket-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.dashboard-ticket-search-form {
+    flex: 1 1 360px;
+    max-width: 520px;
+    margin: 0;
+}
+
+.dashboard-ticket-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 48px;
+    padding: 6px 7px 6px 44px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--panel-soft);
+}
+
+.dashboard-ticket-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.dashboard-ticket-search-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.dashboard-ticket-search-box input {
+    min-width: 0;
+    flex: 1;
+    height: 36px;
+    border: 0;
+    outline: 0;
+    color: var(--text);
+    background: transparent;
+    font-size: .92rem;
+}
+
+.dashboard-ticket-search-box input::placeholder {
+    color: var(--muted);
+}
+
+.dashboard-ticket-search-btn {
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    font-size: .82rem;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    .dashboard-stats-grid {
+        gap: 10px !important;
+    }
+
+    .dashboard-stats-grid .stat-card {
+        min-height: 104px !important;
+        padding: 14px 16px !important;
+        border-radius: 18px !important;
+    }
+
+    .dashboard-stats-grid .stat-icon {
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 13px !important;
+        font-size: 12px !important;
+    }
+
+    .dashboard-stats-grid .stat-number,
+    .dashboard-stats-grid .stat-value {
+        margin: 10px 0 4px !important;
+        font-size: 28px !important;
+    }
+
+    .dashboard-stats-grid .stat-top span:first-child,
+    .dashboard-stats-grid .stat-trend {
+        font-size: 12px !important;
+    }
+
+    .dashboard-tickets-head {
+        gap: 14px !important;
+        padding: 16px !important;
+    }
+
+    .dashboard-ticket-tools {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .dashboard-ticket-search-form {
+        max-width: none;
+        width: 100%;
+        flex-basis: auto;
+    }
+
+    .dashboard-ticket-search-box {
+        min-height: 46px;
+        padding: 6px 6px 6px 40px;
+        border-radius: 16px;
+    }
+
+    .dashboard-ticket-search-icon {
+        left: 14px;
+    }
+
+    .dashboard-ticket-search-box input {
+        height: 34px;
+        font-size: .86rem;
+    }
+
+    .dashboard-ticket-search-btn {
+        height: 34px;
+        padding-inline: 12px;
+        border-radius: 12px;
+        font-size: .78rem;
+    }
+
+    .dashboard-view-all-btn {
+        width: 100% !important;
+        min-height: 42px !important;
+        justify-content: center !important;
+        text-align: center !important;
+        border-radius: 15px !important;
+    }
+
+    .dashboard-mobile-cards-table {
+        min-width: 0 !important;
+        width: 100% !important;
+    }
+
+    .dashboard-mobile-cards-table thead {
+        display: none !important;
+    }
+
+    .dashboard-mobile-cards-table,
+    .dashboard-mobile-cards-table tbody,
+    .dashboard-mobile-cards-table tr,
+    .dashboard-mobile-cards-table td {
+        display: block !important;
+    }
+
+    .dashboard-mobile-cards-table tbody {
+        padding: 0 12px 14px !important;
+    }
+
+    .dashboard-mobile-cards-table tr {
+        margin-top: 12px !important;
+        padding: 14px !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 18px !important;
+        background: rgba(15, 23, 42, .42) !important;
+    }
+
+    .dashboard-mobile-cards-table td {
+        width: 100% !important;
+        padding: 9px 0 !important;
+        border: 0 !important;
+        text-align: left !important;
+    }
+
+    .dashboard-mobile-cards-table td + td {
+        border-top: 1px solid rgba(148, 163, 184, .14) !important;
+    }
+
+    .dashboard-mobile-cards-table td:not([data-label="Ticket"]) {
+        display: grid !important;
+        grid-template-columns: 92px minmax(0, 1fr) !important;
+        gap: 12px !important;
+        align-items: center !important;
+    }
+
+    .dashboard-mobile-cards-table td:not([data-label="Ticket"])::before {
+        content: attr(data-label);
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+
+    .dashboard-mobile-cards-table td[data-label="Ticket"] {
+        padding-top: 0 !important;
+    }
+
+    .dashboard-mobile-cards-table td[data-label="Ticket"] .ticket-link {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+    }
+
+    .dashboard-mobile-cards-table td[data-label="Ticket"] .ticket-link span {
+        font-size: .9rem;
+        line-height: 1.35;
+    }
+
+    .dashboard-mobile-cards-table .person {
+        justify-content: flex-start !important;
+    }
+}
+
+/* =========================================================
+   Final cleanup: dashboard avatars and mobile ticket cards
+========================================================= */
+/* Remove blue/purple ring from uploaded avatars in dashboard tables and topbar. */
+.topbar .user-box .avatar,
+.topbar .user-box .topbar-user-avatar,
+.dashboard-tickets-card .mini-avatar,
+.dashboard-tickets-card .user-list-avatar,
+.dashboard-tickets-card .agent-avatar {
+  background: transparent !important;
+  border: 1px solid rgba(148, 163, 184, .18) !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.topbar .user-box .avatar img,
+.topbar .user-box .topbar-avatar-img,
+.topbar .user-box .topbar-user-avatar img,
+.dashboard-tickets-card .mini-avatar img,
+.dashboard-tickets-card .user-list-avatar img,
+.dashboard-tickets-card .agent-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.dashboard-tickets-card .mini-avatar:not(:has(img)),
+.dashboard-tickets-card .user-list-avatar:not(:has(img)),
+.dashboard-tickets-card .agent-avatar:not(:has(img)) {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+/* Keep the removed mobile account block hidden even if old markup remains cached. */
+.mobile-sidebar-account,
+.mobile-drawer-account {
+  display: none !important;
+}
+
+/* Desktop dashboard table spacing cleanup. */
+.dashboard-tickets-card th,
+.dashboard-tickets-card td {
+  vertical-align: middle;
+}
+
+.dashboard-tickets-card .person strong {
+  line-height: 1.25;
+}
+
+@media (max-width: 760px) {
+  .dashboard-tickets-card .table-head {
+    padding: 15px !important;
+  }
+
+  .dashboard-ticket-tools {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .dashboard-ticket-search-form {
+    max-width: none;
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .dashboard-view-all-btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    justify-content: center !important;
+    border-radius: 15px !important;
+  }
+
+  .dashboard-mobile-cards-table,
+  .dashboard-latest-table {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-mobile-cards-table thead,
+  .dashboard-latest-table thead {
+    display: none !important;
+  }
+
+  .dashboard-mobile-cards-table tbody,
+  .dashboard-latest-table tbody,
+  .dashboard-mobile-cards-table tr,
+  .dashboard-latest-table tr,
+  .dashboard-mobile-cards-table td,
+  .dashboard-latest-table td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .dashboard-mobile-cards-table tbody,
+  .dashboard-latest-table tbody {
+    padding: 0 12px 14px !important;
+  }
+
+  .dashboard-mobile-cards-table tr,
+  .dashboard-latest-table tr {
+    margin-top: 12px !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    animation: none !important;
+  }
+
+  html[data-theme="light"] .dashboard-mobile-cards-table tr,
+  body:not(.dark) .dashboard-mobile-cards-table tr,
+  html[data-theme="light"] .dashboard-latest-table tr,
+  body:not(.dark) .dashboard-latest-table tr {
+    background: #fff !important;
+  }
+
+  .dashboard-mobile-cards-table td,
+  .dashboard-latest-table td {
+    padding: 9px 0 !important;
+    border: 0 !important;
+    text-align: left !important;
+  }
+
+  .dashboard-mobile-cards-table td + td,
+  .dashboard-latest-table td + td {
+    border-top: 1px solid rgba(148, 163, 184, .14) !important;
+  }
+
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"]),
+  .dashboard-latest-table td:not([data-label="Ticket"]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    align-items: center !important;
+  }
+
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"])::before,
+  .dashboard-latest-table td:not([data-label="Ticket"])::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .dashboard-mobile-cards-table td[data-label="Ticket"],
+  .dashboard-latest-table td[data-label="Ticket"] {
+    padding-top: 0 !important;
+  }
+
+  .dashboard-mobile-cards-table td[data-label="Ticket"] .ticket-link,
+  .dashboard-latest-table td[data-label="Ticket"] .ticket-link {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .dashboard-mobile-cards-table .person,
+  .dashboard-latest-table .person {
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+  }
+
+  .dashboard-mobile-cards-table .badge,
+  .dashboard-mobile-cards-table .priority,
+  .dashboard-mobile-cards-table .due-date-info,
+  .dashboard-latest-table .badge,
+  .dashboard-latest-table .priority,
+  .dashboard-latest-table .due-date-info {
+    justify-self: start !important;
+    margin: 0 !important;
+  }
+}
+
+/* =========================================================
+   Deleted Tickets page only
+   Button-based search, clean avatars, and mobile vertical cards.
+========================================================= */
+.deleted-ticket-row.is-hidden {
+  display: none !important;
+}
+
+.btn-page-back {
+  color: #fff !important;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  border: 1px solid rgba(14, 165, 233, .35) !important;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
+}
+
+.btn-page-back:hover {
+  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
+}
+
+.deleted-ticket-search {
+  margin: 0;
+  align-items: center;
+}
+
+.deleted-ticket-reset[hidden],
+.live-search-empty[hidden] {
+  display: none !important;
+}
+
+.live-search-empty {
+  margin: 0 14px 16px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(148, 163, 184, .28);
+  border-radius: 16px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  text-align: center;
+  font-weight: 750;
+}
+
+.deleted-ticket-search-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.deleted-ticket-search-btn.is-loading {
+  cursor: wait;
+  opacity: .88;
+  pointer-events: none;
+}
+
+.deleted-ticket-search-btn.is-loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .45);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: deletedSearchSpin .75s linear infinite;
+}
+
+.deleted-search-status {
+  flex: 1 0 100%;
+  margin: 2px 0 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 14px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  font-size: .88rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.deleted-search-status[hidden] {
+  display: none !important;
+}
+
+.deleted-search-status.is-visible {
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.deleted-search-status.is-success {
+  color: #16a34a;
+  border-color: rgba(34, 197, 94, .28);
+  background: rgba(34, 197, 94, .10);
+}
+
+.deleted-search-status.is-warning {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, .30);
+  background: rgba(245, 158, 11, .11);
+}
+
+.deleted-search-status.is-info {
+  color: var(--primary);
+  border-color: rgba(99, 102, 241, .26);
+  background: var(--primary-soft);
+}
+
+.deleted-tickets-card.search-pulse .deleted-tickets-wrap {
+  animation: deletedResultsPulse 520ms var(--ease-out) both;
+}
+
+.deleted-ticket-row.is-search-match {
+  animation: deletedMatchedRow 360ms var(--ease-out) both;
+}
+
+@keyframes deletedSearchSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes deletedSearchStatusIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes deletedResultsPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+
+  45% {
+    box-shadow: 0 0 0 5px rgba(99, 102, 241, .13);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+@keyframes deletedMatchedRow {
+  from {
+    opacity: .55;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.deleted-tickets-card .ticket-person .mini-avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.deleted-tickets-card .ticket-person .mini-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border: 0 !important;
+  border-radius: inherit !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.deleted-tickets-card .ticket-person .mini-avatar:not(:has(img)) {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+@media (max-width: 760px) {
+  .deleted-tickets-card {
+    overflow: visible !important;
+    border-radius: 22px !important;
+  }
+
+  .deleted-tickets-card .card-head {
+    gap: 14px !important;
+    padding: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .deleted-ticket-search {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .deleted-ticket-search input,
+  .deleted-ticket-search button,
+  .deleted-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .deleted-tickets-wrap {
+    overflow: visible !important;
+  }
+
+  .deleted-tickets-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+  }
+
+  .deleted-tickets-table thead {
+    display: none !important;
+  }
+
+  .deleted-tickets-table tbody {
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .deleted-tickets-table .deleted-ticket-row {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+
+  html[data-theme="light"] .deleted-tickets-table .deleted-ticket-row,
+  body:not(.dark) .deleted-tickets-table .deleted-ticket-row {
+    background: #fff !important;
+  }
+
+  .deleted-tickets-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .deleted-tickets-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .deleted-tickets-table td:not([data-label="Ticket"]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .deleted-tickets-table td:not([data-label="Ticket"])::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .deleted-tickets-table td[data-label="Ticket"] {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .deleted-tickets-table .ticket-number {
+    display: inline-block !important;
+    margin-bottom: 5px !important;
+    color: var(--primary) !important;
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .deleted-tickets-table .ticket-title {
+    display: block !important;
+    color: var(--text) !important;
+    font-size: .88rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .deleted-tickets-table .ticket-person,
+  .deleted-tickets-table .person {
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .deleted-tickets-table .person-meta {
+    min-width: 0 !important;
+  }
+
+  .deleted-tickets-table .badge,
+  .deleted-tickets-table .priority,
+  .deleted-tickets-table .due-date-info,
+  .deleted-tickets-table .page-subtitle {
+    justify-self: start !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  .deleted-ticket-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .deleted-ticket-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .deleted-ticket-actions .btn {
+    width: 100% !important;
+    min-height: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 14px !important;
+  }
+
+  .deleted-tickets-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+
+  .deleted-tickets-table td[colspan]::before {
+    display: none !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .deleted-tickets-table td:not([data-label="Ticket"]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   41. Unassigned Tickets search fix + Create page back button
+   Matches Deleted Tickets behavior and keeps mobile cards vertical.
+========================================================= */
+
+.unassigned-ticket-row.is-hidden,
+.live-ticket-row.is-hidden {
+  display: none !important;
+}
+
+.unassigned-ticket-search {
+  margin: 0;
+  align-items: center;
+}
+
+.unassigned-ticket-reset[hidden],
+.unassigned-search-status[hidden] {
+  display: none !important;
+}
+
+.unassigned-ticket-search-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.unassigned-ticket-search-btn.is-loading {
+  cursor: wait;
+  opacity: .88;
+  pointer-events: none;
+}
+
+.unassigned-ticket-search-btn.is-loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .45);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: deletedSearchSpin .75s linear infinite;
+}
+
+.unassigned-search-status {
+  flex: 1 0 100%;
+  margin: 2px 0 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 14px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  font-size: .88rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.unassigned-search-status.is-visible {
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.unassigned-search-status.is-success {
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, .22);
+  background: rgba(34, 197, 94, .08);
+}
+
+.unassigned-search-status.is-warning {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, .26);
+  background: rgba(245, 158, 11, .08);
+}
+
+.unassigned-search-status.is-info {
+  color: var(--primary);
+  border-color: rgba(99, 102, 241, .24);
+  background: var(--primary-soft);
+}
+
+.unassigned-table-card.search-pulse .table-wrap {
+  animation: deletedResultsPulse 520ms var(--ease-out) both;
+}
+
+.unassigned-ticket-row.is-search-match {
+  animation: deletedMatchedRow 360ms var(--ease-out) both;
+}
+
+/* Clean uploaded profile photos on Ticket show page. */
+.ticket-layout .avatar,
+.ticket-layout .mini-avatar,
+.ticket-layout .user-avatar,
+.ticket-layout .agent-avatar,
+.ticket-layout .user-list-avatar,
+.ticket-layout .reply-avatar,
+.ticket-layout .ticket-person .mini-avatar,
+.ticket-hero .avatar,
+.ticket-hero .mini-avatar,
+.ticket-hero .user-avatar,
+.ticket-hero .agent-avatar,
+.ticket-hero .reply-avatar,
+.thread .avatar,
+.thread .mini-avatar,
+.thread .reply-avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.ticket-layout .avatar img,
+.ticket-layout .mini-avatar img,
+.ticket-layout .user-avatar img,
+.ticket-layout .agent-avatar img,
+.ticket-layout .user-list-avatar img,
+.ticket-layout .reply-avatar img,
+.ticket-layout .profile-avatar-img,
+.ticket-layout .reply-avatar-img,
+.ticket-hero .avatar img,
+.ticket-hero .mini-avatar img,
+.ticket-hero .user-avatar img,
+.ticket-hero .agent-avatar img,
+.thread .avatar img,
+.thread .mini-avatar img,
+.thread .reply-avatar img,
+.thread .reply-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.ticket-layout .avatar:not(:has(img)),
+.ticket-layout .mini-avatar:not(:has(img)),
+.ticket-layout .user-avatar:not(:has(img)),
+.ticket-layout .agent-avatar:not(:has(img)),
+.ticket-layout .reply-avatar:not(:has(img)),
+.ticket-hero .avatar:not(:has(img)),
+.ticket-hero .mini-avatar:not(:has(img)),
+.ticket-hero .user-avatar:not(:has(img)),
+.ticket-hero .agent-avatar:not(:has(img)),
+.thread .avatar:not(:has(img)),
+.thread .mini-avatar:not(:has(img)),
+.thread .reply-avatar:not(:has(img)) {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+/* Create Ticket page: make Back to Tickets match the rest of the action buttons. */
+body:has(.ticket-create-card) .page-head a.btn-secondary,
+body:has(.ticket-create-card) .page-head .btn.secondary {
+  color: #fff !important;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  border: 1px solid rgba(14, 165, 233, .35) !important;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
+}
+
+body:has(.ticket-create-card) .page-head a.btn-secondary:hover,
+body:has(.ticket-create-card) .page-head .btn.secondary:hover {
+  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
+}
+
+/* Unassigned page: clean avatars and make ticket text match Deleted/Overdue. */
+.unassigned-table .ticket-link span,
+.unassigned-table .ticket-title,
+.unassigned-table-card .ticket-link span,
+.unassigned-table-card .ticket-title {
+  color: var(--text) !important;
+  font-weight: 750 !important;
+  line-height: 1.45 !important;
+}
+
+.unassigned-table .person .mini-avatar,
+.unassigned-table .ticket-person .mini-avatar,
+.unassigned-table .agent-avatar,
+.unassigned-table .user-list-avatar,
+.unassigned-table-card .person .mini-avatar,
+.unassigned-table-card .ticket-person .mini-avatar,
+.unassigned-table-card .agent-avatar,
+.unassigned-table-card .user-list-avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.unassigned-table .person .mini-avatar img,
+.unassigned-table .ticket-person .mini-avatar img,
+.unassigned-table .agent-avatar img,
+.unassigned-table .user-list-avatar img,
+.unassigned-table-card .person .mini-avatar img,
+.unassigned-table-card .ticket-person .mini-avatar img,
+.unassigned-table-card .agent-avatar img,
+.unassigned-table-card .user-list-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.unassigned-table .person .mini-avatar:not(:has(img)),
+.unassigned-table .ticket-person .mini-avatar:not(:has(img)),
+.unassigned-table .agent-avatar:not(:has(img)),
+.unassigned-table .user-list-avatar:not(:has(img)),
+.unassigned-table-card .person .mini-avatar:not(:has(img)),
+.unassigned-table-card .ticket-person .mini-avatar:not(:has(img)),
+.unassigned-table-card .agent-avatar:not(:has(img)),
+.unassigned-table-card .user-list-avatar:not(:has(img)) {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+@media (min-width: 761px) {
+  .unassigned-table-card {
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    background:
+      radial-gradient(circle at top right, rgba(6, 182, 212, .08), transparent 32%),
+      var(--surface) !important;
+  }
+
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 22px !important;
+    padding: 26px 28px !important;
+  }
+
+  .unassigned-table-card .table-head > h2,
+  .unassigned-table-card .card-head > h2,
+  .unassigned-table-card .table-head > div:first-child,
+  .unassigned-table-card .card-head > div:first-child {
+    flex: 1 1 auto !important;
+    min-width: 260px !important;
+  }
+
+  .unassigned-table-card .table-head h2,
+  .unassigned-table-card .card-head h2 {
+    margin: 0 0 10px !important;
+    font-size: 1.25rem !important;
+  }
+
+  .unassigned-ticket-search {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .unassigned-ticket-search input {
+    width: 260px !important;
+    min-width: 260px !important;
+    height: 50px !important;
+    padding: 0 16px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    color: var(--text) !important;
+    background: var(--surface) !important;
+    box-shadow: none !important;
+  }
+
+  .unassigned-ticket-search input::placeholder {
+    color: var(--muted) !important;
+  }
+
+  .unassigned-ticket-search .unassigned-ticket-search-btn,
+  .unassigned-ticket-search .unassigned-ticket-reset {
+    width: auto !important;
+    min-width: 86px !important;
+    height: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 19px !important;
+    border-radius: 16px !important;
+    white-space: nowrap !important;
+  }
+
+  .unassigned-ticket-search .unassigned-ticket-search-btn {
+    min-width: 92px !important;
+  }
+
+  .unassigned-search-status {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 2px 0 0 !important;
+    padding: 9px 12px !important;
+    border-radius: 13px !important;
+    font-size: .82rem !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    box-shadow: none !important;
+  }
+
+  .unassigned-table-card .table-wrap {
+    border-top: 1px solid var(--border) !important;
+  }
+
+  .unassigned-table th {
+    padding: 17px 22px !important;
+    background: rgba(15, 23, 42, .12) !important;
+    font-size: 11.5px !important;
+  }
+
+  html[data-theme="light"] .unassigned-table th,
+  body:not(.dark) .unassigned-table th {
+    background: #f8fafc !important;
+  }
+
+  .unassigned-table td {
+    padding: 20px 22px !important;
+  }
+
+  .unassigned-table-card .unassigned-table tbody tr:hover {
+    background: rgba(99, 102, 241, .045) !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .unassigned-ticket-search {
+    justify-content: flex-start !important;
+  }
+
+  .unassigned-ticket-search input {
+    flex: 1 1 260px !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .unassigned-table-card {
+    overflow: visible !important;
+    border-radius: 22px !important;
+  }
+
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head {
+    gap: 14px !important;
+    padding: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .unassigned-ticket-search {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .unassigned-ticket-search input,
+  .unassigned-ticket-search button,
+  .unassigned-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .unassigned-table-card .table-wrap {
+    overflow: visible !important;
+  }
+
+  .unassigned-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+  }
+
+  .unassigned-table thead {
+    display: none !important;
+  }
+
+  .unassigned-table tbody {
+    width: 100% !important;
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .unassigned-table .unassigned-ticket-row,
+  .unassigned-table .live-ticket-row {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .unassigned-table .unassigned-ticket-row,
+  body:not(.dark) .unassigned-table .unassigned-ticket-row,
+  html[data-theme="light"] .unassigned-table .live-ticket-row,
+  body:not(.dark) .unassigned-table .live-ticket-row {
+    background: #fff !important;
+  }
+
+  .unassigned-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .unassigned-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .unassigned-table td[data-label="Ticket"],
+  .unassigned-table td:first-child {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .unassigned-table td[data-label="Ticket"]::before,
+  .unassigned-table td:first-child::before,
+  .unassigned-table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .unassigned-table td:not(:first-child):not([colspan])::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  .unassigned-table .ticket-link {
+    display: flex !important;
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .unassigned-table .ticket-link strong,
+  .unassigned-table .ticket-number {
+    display: inline-block !important;
+    margin-bottom: 2px !important;
+    color: var(--primary) !important;
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .unassigned-table .ticket-link span,
+  .unassigned-table .ticket-title {
+    display: block !important;
+    color: var(--text) !important;
+    font-size: .88rem !important;
+    font-weight: 750 !important;
+    line-height: 1.45 !important;
+  }
+
+  .unassigned-table .person,
+  .unassigned-table .ticket-person {
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .unassigned-table .badge,
+  .unassigned-table .priority,
+  .unassigned-table .due-date-info,
+  .unassigned-table .role-select,
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input {
+    justify-self: start !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  .unassigned-table .users-role-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .btn,
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .unassigned-table .users-role-actions .btn {
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .unassigned-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+/* =========================================================
+   42. Ticket pages unified layout
+   Makes Tickets / Deleted / Overdue / Unassigned use one
+   search/filter layout and one mobile vertical-card system.
+========================================================= */
+
+/* Shared hidden state used by live search scripts. */
+.tickets-table tr.is-hidden,
+.ticket-row.is-hidden,
+.deleted-ticket-row.is-hidden,
+.overdue-ticket-row.is-hidden,
+.unassigned-ticket-row.is-hidden,
+.live-ticket-row.is-hidden {
+  display: none !important;
+}
+
+/* Shared ticket text weight across ticket lists. */
+.tickets-table .ticket-link span,
+.tickets-table .ticket-title,
+.deleted-tickets-table .ticket-title,
+.overdue-table .ticket-link span,
+.overdue-table .ticket-title,
+.unassigned-table .ticket-link span,
+.unassigned-table .ticket-title {
+  color: var(--text) !important;
+  font-weight: 750 !important;
+  line-height: 1.45 !important;
+}
+
+/* Clean avatar photos in all ticket listing pages. */
+.tickets-index-card .mini-avatar,
+.tickets-index-card .user-list-avatar,
+.tickets-index-card .agent-avatar,
+.deleted-tickets-card .mini-avatar,
+.deleted-tickets-card .user-list-avatar,
+.deleted-tickets-card .agent-avatar,
+.table-card:has(.overdue-table) .mini-avatar,
+.table-card:has(.overdue-table) .user-list-avatar,
+.table-card:has(.overdue-table) .agent-avatar,
+.unassigned-table-card .mini-avatar,
+.unassigned-table-card .user-list-avatar,
+.unassigned-table-card .agent-avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.tickets-index-card .mini-avatar img,
+.tickets-index-card .user-list-avatar img,
+.tickets-index-card .agent-avatar img,
+.deleted-tickets-card .mini-avatar img,
+.deleted-tickets-card .user-list-avatar img,
+.deleted-tickets-card .agent-avatar img,
+.table-card:has(.overdue-table) .mini-avatar img,
+.table-card:has(.overdue-table) .user-list-avatar img,
+.table-card:has(.overdue-table) .agent-avatar img,
+.unassigned-table-card .mini-avatar img,
+.unassigned-table-card .user-list-avatar img,
+.unassigned-table-card .agent-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.tickets-index-card .mini-avatar:not(:has(img)),
+.tickets-index-card .user-list-avatar:not(:has(img)),
+.tickets-index-card .agent-avatar:not(:has(img)),
+.deleted-tickets-card .mini-avatar:not(:has(img)),
+.deleted-tickets-card .user-list-avatar:not(:has(img)),
+.deleted-tickets-card .agent-avatar:not(:has(img)),
+.table-card:has(.overdue-table) .mini-avatar:not(:has(img)),
+.table-card:has(.overdue-table) .user-list-avatar:not(:has(img)),
+.table-card:has(.overdue-table) .agent-avatar:not(:has(img)),
+.unassigned-table-card .mini-avatar:not(:has(img)),
+.unassigned-table-card .user-list-avatar:not(:has(img)),
+.unassigned-table-card .agent-avatar:not(:has(img)) {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+@media (min-width: 761px) {
+  .tickets-index-card,
+  .deleted-tickets-card,
+  .unassigned-table-card,
+  .table-card:has(.overdue-table) {
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    background:
+      radial-gradient(circle at top right, rgba(6, 182, 212, .08), transparent 32%),
+      var(--surface) !important;
+  }
+
+  .tickets-index-card .table-head,
+  .tickets-index-card .card-head,
+  .deleted-tickets-card .card-head,
+  .deleted-tickets-card .table-head,
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head,
+  .table-card:has(.overdue-table) .table-head,
+  .table-card:has(.overdue-table) .card-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 22px !important;
+    padding: 26px 28px !important;
+  }
+
+  .tickets-index-card .table-head > div:first-child,
+  .tickets-index-card .card-head > div:first-child,
+  .deleted-tickets-card .card-head > div:first-child,
+  .deleted-tickets-card .table-head > div:first-child,
+  .unassigned-table-card .table-head > div:first-child,
+  .unassigned-table-card .card-head > div:first-child,
+  .table-card:has(.overdue-table) .table-head > div:first-child,
+  .table-card:has(.overdue-table) .card-head > div:first-child {
+    flex: 1 1 auto !important;
+    min-width: 260px !important;
+  }
+
+  .tickets-index-card .table-head h2,
+  .tickets-index-card .card-head h2,
+  .deleted-tickets-card .card-head h2,
+  .deleted-tickets-card .table-head h2,
+  .unassigned-table-card .table-head h2,
+  .unassigned-table-card .card-head h2,
+  .table-card:has(.overdue-table) .table-head h2,
+  .table-card:has(.overdue-table) .card-head h2 {
+    margin: 0 0 10px !important;
+    font-size: 1.25rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .tickets-index-card .table-head p,
+  .tickets-index-card .card-head p,
+  .deleted-tickets-card .card-head p,
+  .deleted-tickets-card .table-head p,
+  .unassigned-table-card .table-head p,
+  .unassigned-table-card .card-head p,
+  .table-card:has(.overdue-table) .table-head p,
+  .table-card:has(.overdue-table) .card-head p {
+    margin: 0 !important;
+    color: var(--muted) !important;
+    line-height: 1.6 !important;
+  }
+
+  /* One desktop search/filter shape for all ticket pages. */
+  .tickets-index-card .filters,
+  .deleted-ticket-search,
+  .overdue-ticket-search,
+  .overdue-search-form,
+  .table-card:has(.overdue-table) .filters,
+  .unassigned-ticket-search {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .tickets-index-card .filters input,
+  .deleted-ticket-search input,
+  .overdue-ticket-search input,
+  .overdue-search-form input,
+  .table-card:has(.overdue-table) .filters input,
+  .unassigned-ticket-search input {
+    width: 260px !important;
+    min-width: 260px !important;
+    height: 50px !important;
+    padding: 0 16px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    color: var(--text) !important;
+    background: var(--surface) !important;
+    box-shadow: none !important;
+  }
+
+  .tickets-index-card .filters select,
+  .overdue-ticket-search select,
+  .overdue-search-form select,
+  .table-card:has(.overdue-table) .filters select {
+    min-width: 150px !important;
+    height: 50px !important;
+    padding: 0 42px 0 16px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 16px !important;
+    color: var(--text) !important;
+    background-color: var(--surface) !important;
+    box-shadow: none !important;
+  }
+
+  .tickets-index-card .filters input::placeholder,
+  .deleted-ticket-search input::placeholder,
+  .overdue-ticket-search input::placeholder,
+  .overdue-search-form input::placeholder,
+  .table-card:has(.overdue-table) .filters input::placeholder,
+  .unassigned-ticket-search input::placeholder {
+    color: var(--muted) !important;
+  }
+
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn,
+  .deleted-ticket-search .deleted-ticket-search-btn,
+  .deleted-ticket-search .deleted-ticket-reset,
+  .overdue-ticket-search button,
+  .overdue-ticket-search .btn,
+  .overdue-search-form button,
+  .overdue-search-form .btn,
+  .table-card:has(.overdue-table) .filters button,
+  .table-card:has(.overdue-table) .filters .btn,
+  .unassigned-ticket-search .unassigned-ticket-search-btn,
+  .unassigned-ticket-search .unassigned-ticket-reset {
+    width: auto !important;
+    min-width: 86px !important;
+    height: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 19px !important;
+    border-radius: 16px !important;
+    white-space: nowrap !important;
+  }
+
+  .deleted-search-status,
+  .overdue-search-status,
+  .unassigned-search-status,
+  .ticket-search-status {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    margin: 2px 0 0 !important;
+    padding: 9px 12px !important;
+    border-radius: 13px !important;
+    font-size: .82rem !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    box-shadow: none !important;
+  }
+
+  .tickets-index-card .table-wrap,
+  .deleted-tickets-wrap,
+  .unassigned-table-card .table-wrap,
+  .table-card:has(.overdue-table) .table-wrap {
+    border-top: 1px solid var(--border) !important;
+  }
+
+  .tickets-table th,
+  .deleted-tickets-table th,
+  .overdue-table th,
+  .unassigned-table th {
+    padding: 17px 22px !important;
+    background: rgba(15, 23, 42, .12) !important;
+    font-size: 11.5px !important;
+  }
+
+  html[data-theme="light"] .tickets-table th,
+  body:not(.dark) .tickets-table th,
+  html[data-theme="light"] .deleted-tickets-table th,
+  body:not(.dark) .deleted-tickets-table th,
+  html[data-theme="light"] .overdue-table th,
+  body:not(.dark) .overdue-table th,
+  html[data-theme="light"] .unassigned-table th,
+  body:not(.dark) .unassigned-table th {
+    background: #f8fafc !important;
+  }
+
+  .tickets-table td,
+  .deleted-tickets-table td,
+  .overdue-table td,
+  .unassigned-table td {
+    padding: 20px 22px !important;
+    vertical-align: middle !important;
+  }
+
+  .tickets-table tbody tr:hover,
+  .deleted-tickets-table tbody tr:hover,
+  .overdue-table tbody tr:hover,
+  .unassigned-table tbody tr:hover {
+    background: rgba(99, 102, 241, .045) !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  .tickets-index-card .table-head,
+  .tickets-index-card .card-head,
+  .deleted-tickets-card .card-head,
+  .deleted-tickets-card .table-head,
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head,
+  .table-card:has(.overdue-table) .table-head,
+  .table-card:has(.overdue-table) .card-head {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .tickets-index-card .filters,
+  .deleted-ticket-search,
+  .overdue-ticket-search,
+  .overdue-search-form,
+  .table-card:has(.overdue-table) .filters,
+  .unassigned-ticket-search {
+    justify-content: flex-start !important;
+  }
+
+  .tickets-index-card .filters input,
+  .deleted-ticket-search input,
+  .overdue-ticket-search input,
+  .overdue-search-form input,
+  .table-card:has(.overdue-table) .filters input,
+  .unassigned-ticket-search input {
+    flex: 1 1 260px !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .tickets-index-card,
+  .deleted-tickets-card,
+  .unassigned-table-card,
+  .table-card:has(.overdue-table) {
+    overflow: visible !important;
+    border-radius: 22px !important;
+  }
+
+  .tickets-index-card .table-head,
+  .tickets-index-card .card-head,
+  .deleted-tickets-card .card-head,
+  .deleted-tickets-card .table-head,
+  .unassigned-table-card .table-head,
+  .unassigned-table-card .card-head,
+  .table-card:has(.overdue-table) .table-head,
+  .table-card:has(.overdue-table) .card-head {
+    gap: 14px !important;
+    padding: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .tickets-index-card .filters,
+  .deleted-ticket-search,
+  .overdue-ticket-search,
+  .overdue-search-form,
+  .table-card:has(.overdue-table) .filters,
+  .unassigned-ticket-search {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  .tickets-index-card .filters input,
+  .tickets-index-card .filters select,
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn,
+  .deleted-ticket-search input,
+  .deleted-ticket-search button,
+  .deleted-ticket-search .btn,
+  .overdue-ticket-search input,
+  .overdue-ticket-search select,
+  .overdue-ticket-search button,
+  .overdue-ticket-search .btn,
+  .overdue-search-form input,
+  .overdue-search-form select,
+  .overdue-search-form button,
+  .overdue-search-form .btn,
+  .table-card:has(.overdue-table) .filters input,
+  .table-card:has(.overdue-table) .filters select,
+  .table-card:has(.overdue-table) .filters button,
+  .table-card:has(.overdue-table) .filters .btn,
+  .unassigned-ticket-search input,
+  .unassigned-ticket-search button,
+  .unassigned-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .tickets-index-card .table-wrap,
+  .deleted-tickets-wrap,
+  .unassigned-table-card .table-wrap,
+  .table-card:has(.overdue-table) .table-wrap {
+    overflow: visible !important;
+  }
+
+  .tickets-table,
+  .deleted-tickets-table,
+  .overdue-table,
+  .unassigned-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  .tickets-table thead,
+  .deleted-tickets-table thead,
+  .overdue-table thead,
+  .unassigned-table thead {
+    display: none !important;
+  }
+
+  .tickets-table tbody,
+  .deleted-tickets-table tbody,
+  .overdue-table tbody,
+  .unassigned-table tbody {
+    width: 100% !important;
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .tickets-table tr,
+  .deleted-tickets-table tr,
+  .overdue-table tr,
+  .unassigned-table tr {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .tickets-table tr,
+  body:not(.dark) .tickets-table tr,
+  html[data-theme="light"] .deleted-tickets-table tr,
+  body:not(.dark) .deleted-tickets-table tr,
+  html[data-theme="light"] .overdue-table tr,
+  body:not(.dark) .overdue-table tr,
+  html[data-theme="light"] .unassigned-table tr,
+  body:not(.dark) .unassigned-table tr {
+    background: #fff !important;
+  }
+
+  .tickets-table td,
+  .deleted-tickets-table td,
+  .overdue-table td,
+  .unassigned-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .tickets-table td:last-child,
+  .deleted-tickets-table td:last-child,
+  .overdue-table td:last-child,
+  .unassigned-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .tickets-table td[data-label="Ticket"],
+  .tickets-table td:first-child,
+  .deleted-tickets-table td[data-label="Ticket"],
+  .deleted-tickets-table td:first-child,
+  .overdue-table td[data-label="Ticket"],
+  .overdue-table td:first-child,
+  .unassigned-table td[data-label="Ticket"],
+  .unassigned-table td:first-child {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .tickets-table td[data-label="Ticket"]::before,
+  .tickets-table td:first-child::before,
+  .deleted-tickets-table td[data-label="Ticket"]::before,
+  .deleted-tickets-table td:first-child::before,
+  .overdue-table td[data-label="Ticket"]::before,
+  .overdue-table td:first-child::before,
+  .unassigned-table td[data-label="Ticket"]::before,
+  .unassigned-table td:first-child::before,
+  .tickets-table td[colspan]::before,
+  .deleted-tickets-table td[colspan]::before,
+  .overdue-table td[colspan]::before,
+  .unassigned-table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .tickets-table td:not(:first-child):not([colspan]),
+  .deleted-tickets-table td:not(:first-child):not([colspan]),
+  .overdue-table td:not(:first-child):not([colspan]),
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .tickets-table td:not(:first-child):not([colspan])::before,
+  .deleted-tickets-table td:not(:first-child):not([colspan])::before,
+  .overdue-table td:not(:first-child):not([colspan])::before,
+  .unassigned-table td:not(:first-child):not([colspan])::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .06em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  /* Fallback labels for pages that do not have data-label attributes. */
+  .overdue-table td:nth-child(2)::before { content: "REQUESTER" !important; }
+  .overdue-table td:nth-child(3)::before { content: "AGENT" !important; }
+  .overdue-table td:nth-child(4)::before { content: "DEPARTMENT" !important; }
+  .overdue-table td:nth-child(5)::before { content: "DUE DATE" !important; }
+  .overdue-table td:nth-child(6)::before { content: "STATUS" !important; }
+  .overdue-table td:nth-child(7)::before { content: "PRIORITY" !important; }
+  .overdue-table td:nth-child(8)::before { content: "ACTIONS" !important; }
+
+  .tickets-table .ticket-link,
+  .deleted-tickets-table .ticket-link,
+  .overdue-table .ticket-link,
+  .unassigned-table .ticket-link {
+    display: flex !important;
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .tickets-table .ticket-link strong,
+  .tickets-table .ticket-number,
+  .deleted-tickets-table .ticket-link strong,
+  .deleted-tickets-table .ticket-number,
+  .overdue-table .ticket-link strong,
+  .overdue-table .ticket-number,
+  .unassigned-table .ticket-link strong,
+  .unassigned-table .ticket-number {
+    display: inline-block !important;
+    margin-bottom: 2px !important;
+    color: var(--primary) !important;
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .tickets-table .ticket-link span,
+  .tickets-table .ticket-title,
+  .deleted-tickets-table .ticket-link span,
+  .deleted-tickets-table .ticket-title,
+  .overdue-table .ticket-link span,
+  .overdue-table .ticket-title,
+  .unassigned-table .ticket-link span,
+  .unassigned-table .ticket-title {
+    display: block !important;
+    color: var(--text) !important;
+    font-size: .88rem !important;
+    font-weight: 750 !important;
+    line-height: 1.45 !important;
+  }
+
+  .tickets-table .person,
+  .tickets-table .ticket-person,
+  .deleted-tickets-table .person,
+  .deleted-tickets-table .ticket-person,
+  .overdue-table .person,
+  .overdue-table .ticket-person,
+  .overdue-table .overdue-agent-person,
+  .unassigned-table .person,
+  .unassigned-table .ticket-person {
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .tickets-table .badge,
+  .tickets-table .priority,
+  .tickets-table .due-date-info,
+  .deleted-tickets-table .badge,
+  .deleted-tickets-table .priority,
+  .deleted-tickets-table .due-date-info,
+  .overdue-table .badge,
+  .overdue-table .priority,
+  .overdue-table .due-date-info,
+  .overdue-table .overdue-date-badge,
+  .unassigned-table .badge,
+  .unassigned-table .priority,
+  .unassigned-table .due-date-info,
+  .unassigned-table .role-select,
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input {
+    justify-self: start !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  .tickets-table .row-actions,
+  .deleted-ticket-actions,
+  .overdue-table .row-actions,
+  .unassigned-table .users-role-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .tickets-table .row-actions .btn,
+  .deleted-ticket-actions .btn,
+  .overdue-table .row-actions .btn,
+  .unassigned-table .users-role-actions .btn,
+  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .tickets-table td[colspan],
+  .deleted-tickets-table td[colspan],
+  .overdue-table td[colspan],
+  .unassigned-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .tickets-table td:not(:first-child):not([colspan]),
+  .deleted-tickets-table td:not(:first-child):not([colspan]),
+  .overdue-table td:not(:first-child):not([colspan]),
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+}
+/* =========================================================
+   Overdue search message - match Deleted Tickets message
+========================================================= */
+
+.overdue-search-status {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+  margin: 2px 0 0 !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 13px !important;
+  color: var(--muted) !important;
+  background: var(--panel-soft) !important;
+  font-size: .82rem !important;
+  font-weight: 750 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.overdue-search-status[hidden] {
+  display: none !important;
+}
+
+.overdue-search-status.is-visible {
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.overdue-search-status.is-success {
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, .22) !important;
+  background: rgba(34, 197, 94, .08) !important;
+}
+
+.overdue-search-status.is-warning {
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, .26) !important;
+  background: rgba(245, 158, 11, .08) !important;
+}
+
+.overdue-search-status.is-info {
+  color: var(--primary) !important;
+  border-color: rgba(99, 102, 241, .24) !important;
+  background: var(--primary-soft) !important;
+}
+
+@media (min-width: 761px) {
+  .overdue-ticket-search,
+  .overdue-search-form,
+  .table-card:has(.overdue-table) .filters {
+    align-items: center !important;
+  }
+
+  .overdue-search-status {
+    flex: 0 0 100% !important;
+    margin-top: 2px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .overdue-search-status {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    border-radius: 13px !important;
+    font-size: .8rem !important;
+  }
+}
+/* =========================================================
+   Final Back buttons color + Ticket show mobile actions
+========================================================= */
+
+/* Color all Back buttons in page headers/actions */
+.btn-page-back,
+.page-head a.btn-secondary,
+.page-head a.btn.secondary,
+.page-actions a.btn-secondary,
+.page-actions a.btn.secondary,
+.ticket-actions a.btn-secondary,
+.ticket-actions a.btn.secondary,
+.ticket-show-actions a.btn-secondary,
+.ticket-show-actions a.btn.secondary {
+  color: #fff !important;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
+  border: 1px solid rgba(14, 165, 233, .35) !important;
+  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
+}
+
+.btn-page-back:hover,
+.page-head a.btn-secondary:hover,
+.page-head a.btn.secondary:hover,
+.page-actions a.btn-secondary:hover,
+.page-actions a.btn.secondary:hover,
+.ticket-actions a.btn-secondary:hover,
+.ticket-actions a.btn.secondary:hover,
+.ticket-show-actions a.btn-secondary:hover,
+.ticket-show-actions a.btn.secondary:hover {
+  color: #fff !important;
+  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
+}
+
+/* Mobile only: arrange Ticket Show action buttons cleanly */
+@media (max-width: 760px) {
+  .page-head .page-actions,
+  .ticket-actions,
+  .ticket-show-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+
+  .page-head .page-actions .btn,
+  .ticket-actions .btn,
+  .ticket-show-actions .btn,
+  .page-head .page-actions form,
+  .ticket-actions form,
+  .ticket-show-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .page-head .page-actions .btn,
+  .ticket-actions .btn,
+  .ticket-show-actions .btn {
+    min-height: 46px !important;
+    padding: 0 10px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: .86rem !important;
+    line-height: 1.15 !important;
+    white-space: normal !important;
+  }
+
+  .page-head .page-actions form .btn,
+  .ticket-actions form .btn,
+  .ticket-show-actions form .btn {
+    height: 100% !important;
+  }
+
+  /* Back small left */
+  .page-head .page-actions > a.btn-secondary,
+  .page-head .page-actions > a.btn.secondary,
+  .ticket-actions > a.btn-secondary,
+  .ticket-actions > a.btn.secondary,
+  .ticket-show-actions > a.btn-secondary,
+  .ticket-show-actions > a.btn.secondary {
+    grid-column: span 1 !important;
+  }
+
+  /* Edit and Close get more balanced space */
+  .page-head .page-actions > a.btn-edit-soft,
+  .page-head .page-actions > a[href*="edit"],
+  .ticket-actions > a.btn-edit-soft,
+  .ticket-actions > a[href*="edit"],
+  .ticket-show-actions > a.btn-edit-soft,
+  .ticket-show-actions > a[href*="edit"] {
+    grid-column: span 1 !important;
+  }
+
+  .page-head .page-actions > form,
+  .ticket-actions > form,
+  .ticket-show-actions > form {
+    grid-column: span 1 !important;
+  }
+
+  /* Delete small right */
+  .page-head .page-actions > form:last-child,
+  .ticket-actions > form:last-child,
+  .ticket-show-actions > form:last-child {
+    grid-column: span 1 !important;
+  }
+}
+
+/* Very small phones: keep buttons readable as 2x2 */
+@media (max-width: 420px) {
+  .page-head .page-actions,
+  .ticket-actions,
+  .ticket-show-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .page-head .page-actions .btn,
+  .ticket-actions .btn,
+  .ticket-show-actions .btn {
+    min-height: 44px !important;
+  }
+}
+/* =========================================================
+   Topbar search clear button - desktop only
+   Mobile stays unchanged.
+========================================================= */
+
+@media (min-width: 861px) {
+  .topbar .search[type="search"] {
+    padding-right: 78px !important;
+  }
+
+  .topbar .search[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+    margin-right: -56px;
+  }
+}
+/* =========================================================
+   Topbar search clear button - desktop only
+   Mobile stays unchanged.
+========================================================= */
+
+@media (min-width: 861px) {
+  .topbar .search[type="search"] {
+    padding-right: 78px !important;
+  }
+
+  .topbar .search[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+    margin-right: 16px;
+  }
+}
+
+/* =========================================================
+   Tickets index filter message
+   Same style as Deleted/Overdue messages.
+========================================================= */
+
+.tickets-filter-status {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  margin: 2px 0 0 !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 13px !important;
+  color: var(--muted) !important;
+  background: var(--panel-soft) !important;
+  font-size: .82rem !important;
+  font-weight: 750 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.tickets-filter-status.is-success {
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, .22) !important;
+  background: rgba(34, 197, 94, .08) !important;
+}
+
+.tickets-filter-status.is-warning {
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, .26) !important;
+  background: rgba(245, 158, 11, .08) !important;
+}
+
+@media (max-width: 760px) {
+  .tickets-filter-status {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    font-size: .8rem !important;
+  }
+}
+/* =========================================================
+   Tickets index filters - keep left aligned after search
+========================================================= */
+
+@media (min-width: 761px) {
+  .tickets-index-card .table-head {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+
+  .tickets-index-card .filters {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  .tickets-index-card .filters input {
+    width: 260px !important;
+    min-width: 260px !important;
+  }
+
+  .tickets-index-card .filters select {
+    min-width: 170px !important;
+  }
+
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn {
+    width: auto !important;
+    min-width: 86px !important;
+  }
+
+  .tickets-index-card .tickets-filter-status {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 760px !important;
+    margin: 0 !important;
+  }
+}
+/* =========================================================
+   Dashboard Recent Activity live search
+   No reload + unified search message
+========================================================= */
+
+.activity-item.is-hidden {
+  display: none !important;
+}
+
+.activity-live-empty[hidden],
+.activity-search-reset[hidden],
+.activity-search-status[hidden] {
+  display: none !important;
+}
+
+.activity-search-form {
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+}
+
+.activity-search-status {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  margin: 2px 0 0 !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 13px !important;
+  color: var(--muted) !important;
+  background: var(--panel-soft) !important;
+  font-size: .82rem !important;
+  font-weight: 750 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.activity-search-status.is-visible {
+  animation: activitySearchStatusIn 320ms var(--ease-out) both;
+}
+
+.activity-search-status.is-success {
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, .22) !important;
+  background: rgba(34, 197, 94, .08) !important;
+}
+
+.activity-search-status.is-warning {
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, .26) !important;
+  background: rgba(245, 158, 11, .08) !important;
+}
+
+.activity-search-status.is-info {
+  color: var(--primary) !important;
+  border-color: rgba(99, 102, 241, .24) !important;
+  background: var(--primary-soft) !important;
+}
+
+.activity-search-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.activity-search-btn.is-loading {
+  cursor: wait;
+  opacity: .88;
+  pointer-events: none;
+}
+
+.activity-search-btn.is-loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .45);
+  border-top-color: #fff;
+  border-radius: 999px;
+  animation: activitySearchSpin .75s linear infinite;
+}
+
+.dashboard-activity-card.search-pulse .activity-list {
+  animation: activityResultsPulse 520ms var(--ease-out) both;
+}
+
+.activity-item.is-search-match {
+  animation: activityMatchedRow 360ms var(--ease-out) both;
+}
+
+.activity-live-empty {
+  padding: 26px 20px !important;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 750;
+}
+
+@keyframes activitySearchSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes activitySearchStatusIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes activityResultsPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+
+  45% {
+    box-shadow: 0 0 0 5px rgba(99, 102, 241, .13);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+@keyframes activityMatchedRow {
+  from {
+    opacity: .55;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .activity-search-form {
+    width: 100% !important;
+    justify-content: stretch !important;
+  }
+
+  .activity-search-form input,
+  .activity-search-form button,
+  .activity-search-form .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .activity-search-status {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    font-size: .8rem !important;
+  }
+}
+/* =========================================================
+   Live search pagination fix
+   Hide pagination when client-side search has no results.
+========================================================= */
+
+.live-search-no-results .riq-pagination,
+.live-search-no-results .pagination,
+.live-search-no-results .pagination-wrap {
+  display: none !important;
+}
+/* =========================================================
+   Departments mobile cards - final fix
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 760px) {
+  body:has(a[href*="departments/create"]) .table-card {
+    overflow: visible !important;
+    border-radius: 22px !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card .table-wrap {
+    overflow: visible !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table thead {
+    display: none !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table tbody {
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table tr {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] body:has(a[href*="departments/create"]) .table-card table tr,
+  body:not(.dark):has(a[href*="departments/create"]) .table-card table tr {
+    background: #fff !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Department name */
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(1) {
+    display: block !important;
+    padding-top: 0 !important;
+    color: var(--text) !important;
+    font-size: .98rem !important;
+    font-weight: 850 !important;
+    line-height: 1.35 !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(1)::before,
+  body:has(a[href*="departments/create"]) .table-card table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* All fields after department name */
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(n+2):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 88px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(n+2):not([colspan])::before {
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Correct labels حسب ترتيب الأعمدة */
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(2)::before {
+    content: "DESCRIPTION" !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(3)::before {
+    content: "TICKETS" !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(4)::before {
+    content: "CREATED" !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(5)::before {
+    content: "ACTIONS" !important;
+  }
+
+  /* Description text */
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(2) {
+    color: var(--text) !important;
+    font-weight: 700 !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Ticket count badge */
+  body:has(a[href*="departments/create"]) .table-card .ticket-count-badge,
+  body:has(a[href*="departments/create"]) .table-card .badge {
+    justify-self: start !important;
+    margin: 0 !important;
+  }
+
+  /* Actions */
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(5) {
+    align-items: start !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card .row-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card .row-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card .row-actions .btn {
+    width: 100% !important;
+    min-height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 13px !important;
+    font-size: .82rem !important;
+  }
+
+  body:has(a[href*="departments/create"]) .table-card table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  body:has(a[href*="departments/create"]) .table-card table td:nth-child(n+2):not([colspan]) {
+    grid-template-columns: 78px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+}
+/* =========================================================
+   Agents page - mobile vertical cards
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 760px) {
+  .agents-table-wrap {
+    overflow: visible !important;
+  }
+
+  .agents-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+  }
+
+  .agents-table thead {
+    display: none !important;
+  }
+
+  .agents-table tbody {
+    width: 100% !important;
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .agents-table tr {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .agents-table tr,
+  body:not(.dark) .agents-table tr {
+    background: #fff !important;
+  }
+
+  .agents-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .agents-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* First cell: agent info */
+  .agents-table td:first-child {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .agents-table td:first-child::before,
+  .agents-table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .agents-table .agent-person {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    text-align: left !important;
+  }
+
+  .agents-table .agent-avatar {
+    width: 46px !important;
+    height: 46px !important;
+    flex: 0 0 46px !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .agents-table .agent-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: inherit !important;
+    transform: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .agents-table .agent-avatar:not(:has(img)) {
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  }
+
+  .agents-table .agent-person strong {
+    color: var(--text) !important;
+    font-size: .95rem !important;
+    font-weight: 850 !important;
+    line-height: 1.3 !important;
+  }
+
+  .agents-table .agent-person small {
+    margin-top: 4px !important;
+    color: var(--muted) !important;
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Other cells: label + value */
+  .agents-table td:not(:first-child):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .agents-table td:not(:first-child):not([colspan])::before {
+    content: attr(data-label);
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Fallback labels لو ما في data-label بالـ Blade */
+  .agents-table td:nth-child(2)::before {
+    content: "EMAIL" !important;
+  }
+
+  .agents-table td:nth-child(3)::before {
+    content: "TICKETS" !important;
+  }
+
+  .agents-table td:nth-child(4)::before {
+    content: "CREATED" !important;
+  }
+
+  .agents-table td:nth-child(5)::before {
+    content: "ACTIONS" !important;
+  }
+
+  .agents-table td:not(:first-child) {
+    color: var(--text) !important;
+    font-weight: 700 !important;
+    line-height: 1.5 !important;
+  }
+
+  .agents-table .row-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .agents-table .row-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .agents-table .row-actions .btn {
+    width: 100% !important;
+    min-height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 13px !important;
+    font-size: .82rem !important;
+  }
+
+  .agents-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .agents-table td:not(:first-child):not([colspan]) {
+    grid-template-columns: 74px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+}
+/* =========================================================
+   Users Management search status
+========================================================= */
+
+.users-search-form {
+  flex-wrap: wrap !important;
+}
+
+.users-search-status {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  margin: 2px 0 0 !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 13px !important;
+  color: var(--muted) !important;
+  background: var(--panel-soft) !important;
+  font-size: .82rem !important;
+  font-weight: 750 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  box-shadow: none !important;
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.users-search-status.is-success {
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, .22) !important;
+  background: rgba(34, 197, 94, .08) !important;
+}
+
+.users-search-status.is-warning {
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, .26) !important;
+  background: rgba(245, 158, 11, .08) !important;
+}
+
+@media (min-width: 761px) {
+  .users-table-head {
+    align-items: flex-start !important;
+  }
+
+  .users-search-form {
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .users-search-form input {
+    width: 260px !important;
+    min-width: 260px !important;
+    height: 50px !important;
+    border-radius: 16px !important;
+  }
+
+  .users-search-form button,
+  .users-search-form .btn {
+    height: 50px !important;
+    min-width: 86px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 16px !important;
+  }
+
+  .users-search-status {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .users-search-form {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .users-search-form input,
+  .users-search-form button,
+  .users-search-form .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .users-search-status {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    font-size: .8rem !important;
+  }
+}
+/* =========================================================
+   Knowledge Base page - search + mobile vertical cards
+========================================================= */
+
+.kb-article-row.is-hidden {
+  display: none !important;
+}
+
+.kb-live-empty[hidden],
+.kb-search-status[hidden],
+.kb-search-reset[hidden] {
+  display: none !important;
+}
+
+.kb-live-empty {
+  margin: 0 14px 16px;
+  padding: 18px;
+  border: 1px dashed rgba(148, 163, 184, .28);
+  border-radius: 16px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  text-align: center;
+  font-weight: 750;
+}
+
+.kb-search-form {
+  margin: 0;
+  align-items: center;
+}
+
+.kb-search-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.kb-search-status {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  margin: 2px 0 0 !important;
+  padding: 9px 12px !important;
+  border: 1px solid rgba(148, 163, 184, .22) !important;
+  border-radius: 13px !important;
+  color: var(--muted) !important;
+  background: var(--panel-soft) !important;
+  font-size: .82rem !important;
+  font-weight: 750 !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  box-shadow: none !important;
+}
+
+.kb-search-status.is-visible {
+  animation: deletedSearchStatusIn 320ms var(--ease-out) both;
+}
+
+.kb-search-status.is-success {
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, .22) !important;
+  background: rgba(34, 197, 94, .08) !important;
+}
+
+.kb-search-status.is-warning {
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, .26) !important;
+  background: rgba(245, 158, 11, .08) !important;
+}
+
+.kb-articles-card.search-pulse .kb-articles-wrap {
+  animation: deletedResultsPulse 520ms var(--ease-out) both;
+}
+
+.kb-article-row.is-search-match {
+  animation: deletedMatchedRow 360ms var(--ease-out) both;
+}
+
+.kb-articles-card.live-search-no-results .pagination,
+.kb-articles-card.live-search-no-results .riq-pagination,
+.kb-articles-card.live-search-no-results .pagination-wrap {
+  display: none !important;
+}
+
+@media (min-width: 761px) {
+  .kb-articles-card {
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    background:
+      radial-gradient(circle at top right, rgba(6, 182, 212, .08), transparent 32%),
+      var(--surface) !important;
+  }
+
+  .kb-articles-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 22px !important;
+    padding: 26px 28px !important;
+  }
+
+  .kb-articles-head > div:first-child {
+    flex: 1 1 auto !important;
+    min-width: 260px !important;
+  }
+
+  .kb-search-form {
+    flex: 0 1 auto !important;
+    width: auto !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  .kb-search-form input {
+    width: 260px !important;
+    min-width: 260px !important;
+    height: 50px !important;
+    padding: 0 16px !important;
+    border-radius: 16px !important;
+  }
+
+  .kb-search-form button,
+  .kb-search-form .btn {
+    width: auto !important;
+    min-width: 86px !important;
+    height: 50px !important;
+    padding: 0 19px !important;
+    border-radius: 16px !important;
+  }
+
+  .kb-articles-table th {
+    padding: 17px 22px !important;
+    background: rgba(15, 23, 42, .12) !important;
+    font-size: 11.5px !important;
+  }
+
+  html[data-theme="light"] .kb-articles-table th,
+  body:not(.dark) .kb-articles-table th {
+    background: #f8fafc !important;
+  }
+
+  .kb-articles-table td {
+    padding: 20px 22px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .kb-intro-head {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    padding: 18px !important;
+  }
+
+  .kb-intro-body {
+    padding: 18px !important;
+  }
+
+  .kb-feature-grid {
+    grid-template-columns: 1fr !important;
+    gap: 13px !important;
+  }
+
+  .kb-feature-item {
+    width: 100% !important;
+    display: flex !important;
+    gap: 12px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+  }
+
+  .kb-articles-card {
+    overflow: visible !important;
+    border-radius: 22px !important;
+  }
+
+  .kb-articles-head {
+    gap: 14px !important;
+    padding: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .kb-search-form {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .kb-search-form input,
+  .kb-search-form button,
+  .kb-search-form .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .kb-search-status {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 12px !important;
+    font-size: .8rem !important;
+  }
+
+  .kb-articles-wrap {
+    overflow: visible !important;
+  }
+
+  .kb-articles-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+  }
+
+  .kb-articles-table thead {
+    display: none !important;
+  }
+
+  .kb-articles-table tbody {
+    width: 100% !important;
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .kb-articles-table tr {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .kb-articles-table tr,
+  body:not(.dark) .kb-articles-table tr {
+    background: #fff !important;
+  }
+
+  .kb-articles-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .kb-articles-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .kb-articles-table td[data-label="Article"] {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .kb-articles-table td[data-label="Article"]::before,
+  .kb-articles-table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .kb-articles-table td[data-label="Article"] strong {
+    display: block !important;
+    margin-bottom: 7px !important;
+    color: var(--primary) !important;
+    font-size: .95rem !important;
+    font-weight: 850 !important;
+    line-height: 1.3 !important;
+  }
+
+  .kb-articles-table .text-muted {
+    color: var(--text) !important;
+    font-size: .88rem !important;
+    font-weight: 700 !important;
+    line-height: 1.55 !important;
+  }
+
+  .kb-articles-table td:not([data-label="Article"]):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 86px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .kb-articles-table td:not([data-label="Article"]):not([colspan])::before {
+    content: attr(data-label);
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
+
+  .kb-articles-table .badge {
+    justify-self: start !important;
+    margin: 0 !important;
+  }
+
+  .kb-articles-table .row-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .kb-articles-table .row-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .kb-articles-table .row-actions .btn {
+    width: 100% !important;
+    min-height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 13px !important;
+    font-size: .82rem !important;
+  }
+
+  .kb-articles-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .kb-articles-table td:not([data-label="Article"]):not([colspan]) {
+    grid-template-columns: 76px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    font-size: 13px !important;
+  }
+}
+/* =========================================================
+   Knowledge Base Create Article - writing guide text fix
+========================================================= */
+
+body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card {
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card > .text-muted {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  color: var(--text) !important;
+  line-height: 1.8 !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+@media (max-width: 760px) {
+  body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card {
+    border-radius: 22px !important;
+  }
+
+  body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card > .table-head {
+    padding: 16px !important;
+  }
+
+  body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card > .text-muted {
+    padding: 16px !important;
+    font-size: .9rem !important;
+    line-height: 1.75 !important;
   }
 }

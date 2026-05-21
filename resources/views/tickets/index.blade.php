@@ -79,6 +79,20 @@
                 @if(request()->hasAny(['search', 'status', 'priority']))
                     <a class="btn secondary" href="{{ route('tickets.index') }}">Reset</a>
                 @endif
+
+                @if(request()->filled('search') || request()->filled('status') || request()->filled('priority'))
+                    @php
+                        $ticketsCount = method_exists($tickets, 'total') ? $tickets->total() : $tickets->count();
+                    @endphp
+
+                    <div class="tickets-filter-status {{ $ticketsCount > 0 ? 'is-success' : 'is-warning' }}">
+                        @if($ticketsCount > 0)
+                            Search applied. {{ $ticketsCount }} ticket{{ $ticketsCount === 1 ? '' : 's' }} found.
+                        @else
+                            No tickets found for your current search.
+                        @endif
+                    </div>
+                @endif
             </form>
         </div>
 

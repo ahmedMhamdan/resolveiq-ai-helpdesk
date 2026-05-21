@@ -33,7 +33,7 @@
                 </p>
             </div>
 
-            <form method="GET" action="{{ route('users.index') }}" class="filters">
+            <form method="GET" action="{{ route('users.index') }}" class="filters users-search-form">
                 <input
                     type="text"
                     name="search"
@@ -44,9 +44,23 @@
                 <button type="submit">Search</button>
 
                 @if (!empty($search))
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary">
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary users-search-reset">
                         Reset
                     </a>
+                @endif
+
+                @if (!empty($search))
+                    @php
+                        $usersCount = method_exists($users, 'total') ? $users->total() : $users->count();
+                    @endphp
+
+                    <div class="users-search-status {{ $usersCount > 0 ? 'is-success' : 'is-warning' }}">
+                        @if ($usersCount > 0)
+                            Search applied. {{ $usersCount }} user{{ $usersCount === 1 ? '' : 's' }} found for "{{ $search }}".
+                        @else
+                            No users found for "{{ $search }}".
+                        @endif
+                    </div>
                 @endif
             </form>
         </div>

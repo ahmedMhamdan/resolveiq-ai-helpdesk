@@ -40,4 +40,156 @@
             @endif
         </div>
     </nav>
+
+    @once
+        <style>
+            .live-search-no-results .riq-pagination,
+            .riq-pagination.is-live-hidden {
+                display: none !important;
+            }
+        </style>
+
+        <script>
+            (function () {
+                if (window.__resolveIqPaginationLiveSearchFix) {
+                    return;
+                }
+
+                window.__resolveIqPaginationLiveSearchFix = true;
+
+                const paginationSelector = '.riq-pagination';
+                const cardSelector = [
+                    '.dashboard-activity-card',
+                    '.deleted-tickets-card',
+                    '.unassigned-table-card',
+                    '.tickets-index-card',
+                    '.table-card',
+                    '.card'
+                ].join(', ');
+
+                const rowSelector = [
+                    '.activity-item',
+                    '.deleted-ticket-row',
+                    '.unassigned-ticket-row',
+                    '.live-ticket-row',
+                    '.overdue-ticket-row',
+                    '.ticket-row',
+                    '.tickets-table tbody tr',
+                    '.deleted-tickets-table tbody tr',
+                    '.unassigned-table tbody tr',
+                    '.overdue-table tbody tr',
+                    'table tbody tr'
+                ].join(', ');
+
+                const inputSelector = [
+                    '.activity-search-form input',
+                    '.deleted-ticket-search input',
+                    '.unassigned-ticket-search input',
+                    '.overdue-ticket-search input',
+                    '.overdue-search-form input',
+                    '.filters input[name="search"]',
+                    '.filters input[type="search"]',
+                    '.filters input[type="text"]'
+                ].join(', ');
+
+                const emptySelector = [
+                    '.activity-live-empty',
+                    '.live-search-empty'
+                ].join(', ');
+
+                function isVisible(element) {
+                    if (!element || element.hidden) {
+                        return false;
+                    }
+
+                    const style = window.getComputedStyle(element);
+
+                    return style.display !== 'none'
+                        && style.visibility !== 'hidden'
+                        && style.opacity !== '0';
+                }
+
+                function hasActiveLiveSearch(card) {
+                    return Array.from(card.querySelectorAll(inputSelector))
+                        .some((input) => input.value && input.value.trim() !== '');
+                }
+
+                function hasVisibleLiveEmpty(card) {
+                    return Array.from(card.querySelectorAll(emptySelector))
+                        .some((empty) => isVisible(empty));
+                }
+
+                function isDataRow(row) {
+                    return !row.querySelector('td[colspan], th[colspan]');
+                }
+
+                function getSearchRows(card) {
+                    return Array.from(card.querySelectorAll(rowSelector))
+                        .filter((row) => !row.closest(paginationSelector))
+                        .filter(isDataRow);
+                }
+
+                function hasVisibleSearchRows(card) {
+                    return getSearchRows(card).some((row) => {
+                        return isVisible(row) && !row.classList.contains('is-hidden');
+                    });
+                }
+
+                function updatePagination(pagination) {
+                    const card = pagination.closest(cardSelector) || pagination.parentElement;
+
+                    if (!card) {
+                        return;
+                    }
+
+                    const hasNoResultsClass = card.classList.contains('live-search-no-results');
+                    const activeSearch = hasActiveLiveSearch(card);
+                    const rows = getSearchRows(card);
+                    const noVisibleRows = rows.length > 0 && !hasVisibleSearchRows(card);
+                    const hasLiveEmpty = hasVisibleLiveEmpty(card);
+
+                    pagination.classList.toggle(
+                        'is-live-hidden',
+                        hasNoResultsClass || hasLiveEmpty || (activeSearch && noVisibleRows)
+                    );
+                }
+
+                function refreshPaginations() {
+                    document.querySelectorAll(paginationSelector).forEach(updatePagination);
+                }
+
+                function bootPaginationFix() {
+                    refreshPaginations();
+
+                    document.addEventListener('input', (event) => {
+                        if (event.target.matches(inputSelector)) {
+                            window.requestAnimationFrame(refreshPaginations);
+                        }
+                    });
+
+                    document.addEventListener('click', () => {
+                        window.setTimeout(refreshPaginations, 0);
+                    });
+
+                    const observer = new MutationObserver(() => {
+                        window.requestAnimationFrame(refreshPaginations);
+                    });
+
+                    observer.observe(document.body, {
+                        subtree: true,
+                        childList: true,
+                        attributes: true,
+                        attributeFilter: ['class', 'hidden', 'style']
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', bootPaginationFix);
+                } else {
+                    bootPaginationFix();
+                }
+            })();
+        </script>
+    @endonce
+
 @endif
