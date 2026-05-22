@@ -106,6 +106,35 @@ class AgentController extends Controller
             ->with('success', 'Agent updated successfully.');
     }
 
+    public function makeUser(User $agent)
+    {
+        $this->abortIfNotAgent($agent);
+
+        if (auth()->id() === $agent->id) {
+            return redirect()
+                ->route('agents.index')
+                ->with('error', 'You cannot change your own role.');
+        }
+
+        $userRole = Role::query()
+            ->where('name', 'user')
+            ->firstOrFail();
+
+        Ticket::query()
+            ->where('agent_id', $agent->id)
+            ->update([
+                'agent_id' => null,
+            ]);
+
+        $agent->update([
+            'role_id' => $userRole->id,
+        ]);
+
+        return redirect()
+            ->route('agents.index')
+            ->with('success', $agent->name . ' moved back to Users successfully.');
+    }
+
     public function destroy(User $agent)
     {
         $this->abortIfNotAgent($agent);

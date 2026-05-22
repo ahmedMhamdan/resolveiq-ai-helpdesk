@@ -153,6 +153,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('departments', DepartmentController::class)
             ->except(['show']);
 
+        Route::patch('/agents/{agent}/make-user', [AgentController::class, 'makeUser'])
+            ->name('agents.makeUser');
+
         Route::resource('agents', AgentController::class)
             ->except(['show']);
 

@@ -60,7 +60,7 @@
                             <img src="{{ $avatarUrl }}" alt="{{ $user->name }} avatar" id="avatarPreviewImage">
                         @else
                             <div class="avatar-fallback" id="avatarFallback">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                <span class="avatar-fallback">?</span>
                             </div>
                         @endif
                     </div>

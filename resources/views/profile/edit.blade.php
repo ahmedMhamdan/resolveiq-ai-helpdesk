@@ -34,7 +34,6 @@
 
     @php
         $profileAvatarUrl = $user->avatar_path ? $user->avatarUrl() : '';
-        $profileInitial = strtoupper(substr($user->name ?? 'U', 0, 1));
     @endphp
 
     <form action="{{ route('profile.update') }}" method="POST" class="ticket-form" enctype="multipart/form-data">
@@ -55,7 +54,7 @@
                             >
                         @else
                             <div class="avatar-fallback" id="avatarFallback">
-                                {{ $profileInitial }}
+                                ?
                             </div>
                         @endif
                     </div>

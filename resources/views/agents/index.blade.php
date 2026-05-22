@@ -16,13 +16,7 @@
     </div>
 </div>
 
-@if (session('error'))
-    <div class="flash-message flash-error">
-        {{ session('error') }}
-    </div>
-@endif
-
-<div class="table-card">
+<div class="table-card agents-table-card">
     <div class="table-head">
         <div>
             <h2>Agents</h2>
@@ -39,14 +33,16 @@
                     <th class="tickets-col">Assigned Tickets</th>
                     <th class="tickets-col">Replies</th>
                     <th>Created</th>
-                    <th>Actions</th>
+                    <th class="users-center-col">Change Role</th>
+                    <th class="users-center-col">Actions</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse ($agents as $agent)
                     @php
-                        $agentAvatar = '';
+                        $agentAvatar = null;
+                        $isCurrentUser = auth()->id() === $agent->id;
 
                         if ($agent->avatar_path) {
                             $agentAvatar = method_exists($agent, 'avatarUrl')
@@ -58,13 +54,13 @@
                     @endphp
 
                     <tr>
-                        <td>
+                        <td data-label="Agent">
                             <div class="person agent-person">
                                 <span class="mini-avatar agent-avatar">
                                     @if ($agentAvatar)
                                         <img src="{{ $agentAvatar }}" alt="{{ $agent->name }} avatar">
                                     @else
-                                        {{ strtoupper(substr($agent->name, 0, 1)) }}
+                                        <span class="avatar-fallback">?</span>
                                     @endif
                                 </span>
 
@@ -75,26 +71,50 @@
                             </div>
                         </td>
 
-                        <td>
+                        <td data-label="Email">
                             <span class="agent-email">{{ $agent->email }}</span>
                         </td>
 
-                        <td class="tickets-col">
+                        <td class="tickets-col" data-label="Assigned Tickets">
                             <span class="badge open ticket-count-badge">
                                 {{ $agent->assigned_tickets_count }}
                             </span>
                         </td>
 
-                        <td class="tickets-col">
+                        <td class="tickets-col" data-label="Replies">
                             <span class="badge pending ticket-count-badge">
                                 {{ $agent->ticket_replies_count }}
                             </span>
                         </td>
 
-                        <td>{{ $agent->created_at->format('M d, Y') }}</td>
+                        <td data-label="Created">
+                            {{ $agent->created_at->format('M d, Y') }}
+                        </td>
 
-                        <td>
-                            <div class="row-actions">
+                        <td class="users-center-col" data-label="Change Role">
+                            @if ($isCurrentUser)
+                                <span class="role-badge role-user">
+                                    Current Account
+                                </span>
+                            @else
+                                <form
+                                    method="POST"
+                                    action="{{ route('agents.makeUser', $agent) }}"
+                                    class="users-role-form agents-downgrade-form"
+                                    onsubmit="return confirm('Move this agent back to users? Assigned tickets will become unassigned.')"
+                                >
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button type="submit" class="btn btn-sm btn-downgrade-user">
+                                        Make User
+                                    </button>
+                                </form>
+                            @endif
+                        </td>
+
+                        <td class="users-center-col" data-label="Actions">
+                            <div class="row-actions agents-row-actions">
                                 <a href="{{ route('agents.edit', $agent) }}" class="btn btn-sm btn-edit-soft">
                                     Edit
                                 </a>
@@ -112,7 +132,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">
+                        <td colspan="7">
                             <div class="empty-state compact-empty-state">
                                 <strong>No agents found.</strong>
                                 <span>Create your first support agent to start assigning tickets.</span>

@@ -9419,3 +9419,1402 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     line-height: 1.75 !important;
   }
 }
+/* =========================================================
+   Users Management - remove avatar borders
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+.users-management-table .user-list-avatar,
+.users-mobile-table .user-list-avatar,
+.users-management-table .avatar,
+.users-mobile-table .avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.users-management-table .user-list-avatar:has(img),
+.users-mobile-table .user-list-avatar:has(img),
+.users-management-table .avatar:has(img),
+.users-mobile-table .avatar:has(img) {
+  background: transparent !important;
+}
+
+.users-management-table .user-list-avatar img,
+.users-mobile-table .user-list-avatar img,
+.users-management-table .avatar img,
+.users-mobile-table .avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.users-management-table .user-list-avatar:not(:has(img)),
+.users-mobile-table .user-list-avatar:not(:has(img)),
+.users-management-table .avatar:not(:has(img)),
+.users-mobile-table .avatar:not(:has(img)) {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+/* =========================================================
+   Agents page - downgrade to user + users-like layout polish
+========================================================= */
+
+.agents-table-card .agents-downgrade-form {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+.btn-downgrade-user {
+  color: #fff !important;
+  background: linear-gradient(135deg, #0ea5e9, #6366f1) !important;
+  border: 1px solid rgba(99, 102, 241, .32) !important;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, .22) !important;
+}
+
+.btn-downgrade-user:hover {
+  box-shadow: 0 16px 36px rgba(99, 102, 241, .32) !important;
+}
+
+.agents-table-card .agents-row-actions {
+  justify-content: center !important;
+}
+
+/* Remove avatar borders on Agents page */
+.agents-table .agent-avatar,
+.agents-table .mini-avatar {
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.agents-table .agent-avatar:has(img),
+.agents-table .mini-avatar:has(img) {
+  background: transparent !important;
+}
+
+.agents-table .agent-avatar img,
+.agents-table .mini-avatar img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border-radius: inherit !important;
+  transform: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.agents-table .agent-avatar:not(:has(img)),
+.agents-table .mini-avatar:not(:has(img)) {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+
+/* Mobile fix after adding Change Role column */
+@media (max-width: 760px) {
+  .agents-table td:nth-child(2)::before {
+    content: "EMAIL" !important;
+  }
+
+  .agents-table td:nth-child(3)::before {
+    content: "ASSIGNED TICKETS" !important;
+  }
+
+  .agents-table td:nth-child(4)::before {
+    content: "REPLIES" !important;
+  }
+
+  .agents-table td:nth-child(5)::before {
+    content: "CREATED" !important;
+  }
+
+  .agents-table td:nth-child(6)::before {
+    content: "CHANGE ROLE" !important;
+  }
+
+  .agents-table td:nth-child(7)::before {
+    content: "ACTIONS" !important;
+  }
+
+  .agents-table .agents-downgrade-form,
+  .agents-table .agents-row-actions {
+    width: 100% !important;
+  }
+
+  .agents-table .agents-downgrade-form .btn,
+  .agents-table .agents-row-actions .btn,
+  .agents-table .agents-row-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .agents-table .agents-row-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .agents-table .btn-downgrade-user {
+    min-height: 40px !important;
+    border-radius: 13px !important;
+  }
+}
+/* =========================================================
+   Agent avatar fallback - no broken Arabic initials
+========================================================= */
+
+.agents-table .agent-avatar .avatar-fallback,
+.agent-avatar .avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.agents-table .agent-avatar:not(:has(img)),
+.agent-avatar:not(:has(img)) {
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+}
+/* =========================================================
+   Unassigned Tickets mobile cards - match Deleted layout
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 760px) {
+  .unassigned-table-card .table-wrap {
+    overflow: visible !important;
+  }
+
+  .unassigned-table {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    border-collapse: separate !important;
+  }
+
+  .unassigned-table thead {
+    display: none !important;
+  }
+
+  .unassigned-table tbody {
+    width: 100% !important;
+    display: grid !important;
+    gap: 13px !important;
+    padding: 0 12px 14px !important;
+  }
+
+  .unassigned-table .unassigned-ticket-row,
+  .unassigned-table .live-ticket-row {
+    width: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 18px !important;
+    background: rgba(15, 23, 42, .42) !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .unassigned-table .unassigned-ticket-row,
+  body:not(.dark) .unassigned-table .unassigned-ticket-row,
+  html[data-theme="light"] .unassigned-table .live-ticket-row,
+  body:not(.dark) .unassigned-table .live-ticket-row {
+    background: #fff !important;
+  }
+
+  .unassigned-table td {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 10px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
+    text-align: left !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .unassigned-table td:last-child {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .unassigned-table td[data-label="Ticket"],
+  .unassigned-table td:first-child {
+    display: block !important;
+    padding-top: 0 !important;
+  }
+
+  .unassigned-table td[data-label="Ticket"]::before,
+  .unassigned-table td:first-child::before,
+  .unassigned-table td[colspan]::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .unassigned-table td:not(:first-child):not([colspan])::before {
+    content: attr(data-label);
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
+
+  .unassigned-table .ticket-link {
+    display: flex !important;
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+  }
+
+  .unassigned-table .ticket-link strong,
+  .unassigned-table .ticket-number {
+    display: inline-block !important;
+    margin-bottom: 2px !important;
+    color: var(--primary) !important;
+    font-size: .95rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .unassigned-table .ticket-link span,
+  .unassigned-table .ticket-title {
+    display: block !important;
+    color: var(--text) !important;
+    font-size: .88rem !important;
+    font-weight: 750 !important;
+    line-height: 1.45 !important;
+  }
+
+  .unassigned-table .person,
+  .unassigned-table .ticket-person {
+    justify-content: flex-start !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .unassigned-table .person > div:last-child,
+  .unassigned-table .ticket-person > div:last-child {
+    min-width: 0 !important;
+  }
+
+  .unassigned-table .person small,
+  .unassigned-table .ticket-person small {
+    display: block !important;
+    max-width: 150px !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  .unassigned-table .badge,
+  .unassigned-table .priority,
+  .unassigned-table .due-date-info {
+    justify-self: start !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  /* Make controls compact instead of stretched ugly */
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input,
+  .unassigned-table .role-select {
+    width: 100% !important;
+    max-width: 178px !important;
+    min-width: 0 !important;
+    height: 42px !important;
+    justify-self: start !important;
+    margin: 0 !important;
+    border-radius: 14px !important;
+    font-size: .86rem !important;
+  }
+
+  .unassigned-table .users-role-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    justify-content: stretch !important;
+  }
+
+  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .btn {
+    width: 100% !important;
+    max-width: 178px !important;
+    min-width: 0 !important;
+    justify-self: start !important;
+  }
+
+  .unassigned-table .users-role-actions .btn {
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  .unassigned-table td[colspan] {
+    display: block !important;
+    text-align: center !important;
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input,
+  .unassigned-table .role-select,
+  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .btn {
+    max-width: 165px !important;
+  }
+}
+/* =========================================================
+   Unassigned mobile cards - force field labels
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 760px) {
+  .unassigned-table td:not(:first-child):not([colspan])::before {
+    display: block !important;
+    color: var(--muted) !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    letter-spacing: .06em !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
+
+  .unassigned-table td:nth-child(2)::before {
+    content: "REQUESTER" !important;
+  }
+
+  .unassigned-table td:nth-child(3)::before {
+    content: "DEPARTMENT" !important;
+  }
+
+  .unassigned-table td:nth-child(4)::before {
+    content: "STATUS" !important;
+  }
+
+  .unassigned-table td:nth-child(5)::before {
+    content: "PRIORITY" !important;
+  }
+
+  .unassigned-table td:nth-child(6)::before {
+    content: "DUE DATE" !important;
+  }
+
+  .unassigned-table td:nth-child(7)::before {
+    content: "AGENT" !important;
+  }
+
+  .unassigned-table td:nth-child(8)::before {
+    content: "ACTIONS" !important;
+  }
+
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .unassigned-table .person,
+  .unassigned-table .ticket-person {
+    justify-self: start !important;
+  }
+
+  .unassigned-table .badge,
+  .unassigned-table .priority,
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input,
+  .unassigned-table .role-select,
+  .unassigned-table .users-role-actions {
+    justify-self: start !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .unassigned-table td:not(:first-child):not([colspan]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+}
+/* =========================================================
+   Final mobile card alignment
+   Keep all mobile card labels/values starting from the left.
+   Put at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 760px) {
+  .tickets-table td:not([data-label="Ticket"]):not([colspan]),
+  .deleted-tickets-table td:not([data-label="Ticket"]):not([colspan]),
+  .overdue-table td:not([data-label="Ticket"]):not([colspan]),
+  .unassigned-table td:not(:first-child):not([colspan]),
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"]):not([colspan]),
+  .dashboard-latest-table td:not([data-label="Ticket"]):not([colspan]),
+  .users-mobile-table td:not([data-label="User"]):not([colspan]),
+  .agents-table td:not(:first-child):not([colspan]),
+  .kb-articles-table td:not([data-label="Article"]):not([colspan]) {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+    align-items: start !important;
+    justify-items: start !important;
+    gap: 12px !important;
+    text-align: left !important;
+  }
+
+  .tickets-table td:not([data-label="Ticket"]):not([colspan])::before,
+  .deleted-tickets-table td:not([data-label="Ticket"]):not([colspan])::before,
+  .overdue-table td:not([data-label="Ticket"]):not([colspan])::before,
+  .unassigned-table td:not(:first-child):not([colspan])::before,
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"]):not([colspan])::before,
+  .dashboard-latest-table td:not([data-label="Ticket"]):not([colspan])::before,
+  .users-mobile-table td:not([data-label="User"]):not([colspan])::before,
+  .agents-table td:not(:first-child):not([colspan])::before,
+  .kb-articles-table td:not([data-label="Article"]):not([colspan])::before {
+    justify-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: left !important;
+    line-height: 1.35 !important;
+  }
+
+  .tickets-table td:not([data-label="Ticket"]):not([colspan]) > *,
+  .deleted-tickets-table td:not([data-label="Ticket"]):not([colspan]) > *,
+  .overdue-table td:not([data-label="Ticket"]):not([colspan]) > *,
+  .unassigned-table td:not(:first-child):not([colspan]) > *,
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"]):not([colspan]) > *,
+  .dashboard-latest-table td:not([data-label="Ticket"]):not([colspan]) > *,
+  .users-mobile-table td:not([data-label="User"]):not([colspan]) > *,
+  .agents-table td:not(:first-child):not([colspan]) > *,
+  .kb-articles-table td:not([data-label="Article"]):not([colspan]) > * {
+    justify-self: start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left !important;
+  }
+
+  .tickets-table .person,
+  .tickets-table .ticket-person,
+  .deleted-tickets-table .person,
+  .deleted-tickets-table .ticket-person,
+  .overdue-table .person,
+  .overdue-table .ticket-person,
+  .unassigned-table .person,
+  .unassigned-table .ticket-person,
+  .dashboard-mobile-cards-table .person,
+  .dashboard-mobile-cards-table .ticket-person,
+  .dashboard-latest-table .person,
+  .dashboard-latest-table .ticket-person,
+  .users-mobile-table .user-person,
+  .agents-table .agent-person {
+    justify-self: start !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .tickets-table .badge,
+  .tickets-table .priority,
+  .tickets-table .due-date-info,
+  .deleted-tickets-table .badge,
+  .deleted-tickets-table .priority,
+  .deleted-tickets-table .due-date-info,
+  .overdue-table .badge,
+  .overdue-table .priority,
+  .overdue-table .due-date-info,
+  .unassigned-table .badge,
+  .unassigned-table .priority,
+  .unassigned-table .due-date-info,
+  .dashboard-mobile-cards-table .badge,
+  .dashboard-mobile-cards-table .priority,
+  .dashboard-mobile-cards-table .due-date-info,
+  .dashboard-latest-table .badge,
+  .dashboard-latest-table .priority,
+  .dashboard-latest-table .due-date-info,
+  .users-mobile-table .role-badge,
+  .users-mobile-table .ticket-count-badge,
+  .agents-table .badge,
+  .agents-table .ticket-count-badge,
+  .kb-articles-table .badge {
+    justify-self: start !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  .unassigned-table .priority-assign-select,
+  .unassigned-table .unassigned-due-date-input,
+  .unassigned-table .role-select,
+  .unassigned-table .users-role-actions {
+    justify-self: start !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: left !important;
+  }
+
+  .unassigned-table .users-role-actions {
+    width: 100% !important;
+    max-width: 178px !important;
+  }
+
+  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .btn {
+    width: 100% !important;
+    max-width: 178px !important;
+    justify-self: start !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .tickets-table td:not([data-label="Ticket"]):not([colspan]),
+  .deleted-tickets-table td:not([data-label="Ticket"]):not([colspan]),
+  .overdue-table td:not([data-label="Ticket"]):not([colspan]),
+  .unassigned-table td:not(:first-child):not([colspan]),
+  .dashboard-mobile-cards-table td:not([data-label="Ticket"]):not([colspan]),
+  .dashboard-latest-table td:not([data-label="Ticket"]):not([colspan]),
+  .users-mobile-table td:not([data-label="User"]):not([colspan]),
+  .agents-table td:not(:first-child):not([colspan]),
+  .kb-articles-table td:not([data-label="Article"]):not([colspan]) {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+}
+/* =========================================================
+   Mobile theme toggle - compact quick action
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-quick-actions {
+    grid-template-columns: minmax(0, 1fr) 44px minmax(66px, .75fr) !important;
+    align-items: center !important;
+  }
+
+  .mobile-quick-actions:has(.mobile-action-primary) {
+    grid-template-columns: minmax(74px, .82fr) minmax(0, 1fr) 44px minmax(64px, .68fr) !important;
+  }
+
+  .mobile-theme-pill {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(148, 163, 184, .22) !important;
+    background:
+      radial-gradient(circle at 25% 20%, rgba(245, 158, 11, .18), transparent 30%),
+      var(--panel) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-theme-pill::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .mobile-theme-icon {
+    width: 16px !important;
+    height: 16px !important;
+    display: grid !important;
+    place-items: center !important;
+    transition: opacity var(--motion-normal) var(--ease-out), transform var(--motion-normal) var(--ease-out);
+  }
+
+  .mobile-theme-sun {
+    position: absolute !important;
+    left: 7px !important;
+    color: #f59e0b !important;
+    opacity: 1 !important;
+  }
+
+  .mobile-theme-moon {
+    position: absolute !important;
+    right: 7px !important;
+    color: #a78bfa !important;
+    opacity: .45 !important;
+  }
+
+  .mobile-theme-thumb {
+    position: absolute !important;
+    left: 22px !important;
+    width: 14px !important;
+    height: 14px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #38bdf8, #8b5cf6) !important;
+    box-shadow: 0 8px 18px rgba(99, 102, 241, .30) !important;
+    transform: translateX(0) !important;
+    transition: left var(--motion-normal) var(--ease-out), transform var(--motion-normal) var(--ease-out);
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    background:
+      radial-gradient(circle at 78% 25%, rgba(139, 92, 246, .22), transparent 34%),
+      rgba(15, 23, 42, .96) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-sun,
+  body.dark .mobile-theme-sun {
+    opacity: .45 !important;
+    transform: rotate(-12deg) scale(.92) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-moon,
+  body.dark .mobile-theme-moon {
+    opacity: 1 !important;
+    transform: rotate(-8deg) scale(1.05) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-thumb,
+  body.dark .mobile-theme-thumb {
+    left: 8px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .mobile-quick-actions:has(.mobile-action-primary) {
+    grid-template-columns: minmax(68px, .78fr) minmax(0, 1fr) 42px minmax(60px, .66fr) !important;
+    gap: 6px !important;
+  }
+
+  .mobile-theme-pill {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+  }
+}
+/* =========================================================
+   Mobile quick actions - 2x2 with theme button
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin: 8px 0 18px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill,
+  .mobile-quick-actions .mobile-theme-pill {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    font-size: .76rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-theme-pill {
+    color: var(--text) !important;
+    background: var(--panel) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-theme-pill::before {
+    display: none !important;
+    content: none !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-quick-actions {
+    gap: 7px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill,
+  .mobile-quick-actions .mobile-theme-pill {
+    height: 37px !important;
+    font-size: .72rem !important;
+  }
+}
+/* =========================================================
+   Mobile theme button - sun/moon icons only
+   Put this at the very end of resolveiq.css
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: minmax(82px, .92fr) minmax(0, 1.2fr) 48px minmax(70px, .78fr) !important;
+    gap: 7px !important;
+    align-items: center !important;
+    margin: 8px 0 18px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    min-width: 0 !important;
+    height: 38px !important;
+    padding: 0 10px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: .74rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-theme-pill {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    padding: 0 !important;
+    gap: 2px !important;
+    color: #020617 !important;
+    background: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, .36) !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-theme-pill::before,
+  .mobile-theme-pill::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .mobile-theme-svg {
+    width: 15px !important;
+    height: 15px !important;
+    color: #020617 !important;
+    flex: 0 0 auto !important;
+    display: block !important;
+  }
+
+  .mobile-theme-divider {
+    width: 1px !important;
+    height: 15px !important;
+    display: block !important;
+    background: rgba(15, 23, 42, .25) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    color: #020617 !important;
+    background: #f8fafc !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-quick-actions {
+    grid-template-columns: minmax(78px, .9fr) minmax(0, 1.1fr) 46px minmax(66px, .76fr) !important;
+    gap: 6px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    height: 36px !important;
+    padding: 0 8px !important;
+    font-size: .69rem !important;
+  }
+
+  .mobile-theme-pill {
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+  }
+
+  .mobile-theme-svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+/* =========================================================
+   Mobile theme toggle - one icon, site colors
+   Light mode shows sun only. Dark mode shows moon only.
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: minmax(84px, .9fr) minmax(0, 1.1fr) 42px minmax(68px, .76fr) !important;
+    gap: 7px !important;
+    align-items: center !important;
+  }
+
+  .mobile-theme-pill {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    border-radius: 13px !important;
+    border: 1px solid rgba(148, 163, 184, .28) !important;
+    color: #020617 !important;
+    background: rgba(255, 255, 255, .92) !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, .10) !important;
+  }
+
+  .mobile-theme-pill::before,
+  .mobile-theme-pill::after,
+  .mobile-theme-divider {
+    display: none !important;
+    content: none !important;
+  }
+
+  .mobile-theme-svg {
+    grid-area: 1 / 1 !important;
+    width: 16px !important;
+    height: 16px !important;
+    color: currentColor !important;
+    transition: transform var(--motion-fast) var(--ease-out), opacity var(--motion-fast) var(--ease-out);
+  }
+
+  .mobile-theme-moon {
+    display: none !important;
+  }
+
+  .mobile-theme-sun {
+    display: block !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    color: #e5e7eb !important;
+    background: rgba(15, 23, 42, .95) !important;
+    border-color: rgba(148, 163, 184, .22) !important;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, .20) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-sun,
+  body.dark .mobile-theme-sun {
+    display: none !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-moon,
+  body.dark .mobile-theme-moon {
+    display: block !important;
+    color: #c4b5fd !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-pill,
+  body:not(.dark) .mobile-theme-pill {
+    color: #020617 !important;
+    background: #ffffff !important;
+    border-color: rgba(203, 213, 225, .95) !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-sun,
+  body:not(.dark) .mobile-theme-sun {
+    display: block !important;
+    color: #020617 !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-moon,
+  body:not(.dark) .mobile-theme-moon {
+    display: none !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-quick-actions {
+    grid-template-columns: minmax(82px, .9fr) minmax(0, 1.1fr) 40px minmax(66px, .74fr) !important;
+    gap: 6px !important;
+  }
+
+  .mobile-theme-pill {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    height: 34px !important;
+    border-radius: 12px !important;
+  }
+
+  .mobile-theme-svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
+/* =========================================================
+   Mobile theme button - centered single icon
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-theme-pill {
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    justify-content: center !important;
+    align-content: center !important;
+    border-radius: 14px !important;
+    line-height: 1 !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-theme-pill .mobile-theme-icon,
+  .mobile-theme-pill .mobile-theme-sun,
+  .mobile-theme-pill .mobile-theme-moon {
+    width: 18px !important;
+    height: 18px !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .mobile-theme-pill svg {
+    width: 17px !important;
+    height: 17px !important;
+    display: block !important;
+    margin: 0 auto !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-pill {
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    color: #e5e7eb !important;
+    background: #0f172a !important;
+    border: 1px solid #1e293b !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-moon {
+    display: none !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-sun {
+    display: grid !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-sun,
+  body.dark .mobile-theme-sun {
+    display: none !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-moon,
+  body.dark .mobile-theme-moon {
+    display: grid !important;
+  }
+}
+/* =========================================================
+   Mobile theme icon - exact center fix
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-theme-pill {
+    position: relative !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    display: block !important;
+    border-radius: 14px !important;
+    line-height: 1 !important;
+  }
+
+  .mobile-theme-pill .mobile-theme-sun,
+  .mobile-theme-pill .mobile-theme-moon,
+  .mobile-theme-pill .mobile-theme-icon {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .mobile-theme-pill svg {
+    width: 17px !important;
+    height: 17px !important;
+    display: block !important;
+    margin: 0 !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-pill {
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    color: #e5e7eb !important;
+    background: #0f172a !important;
+    border-color: #1e293b !important;
+  }
+}
+/* =========================================================
+   Mobile theme button - final centered single icon fix
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-theme-pill {
+    position: relative !important;
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    display: block !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  .mobile-theme-thumb {
+    display: none !important;
+  }
+
+  .mobile-theme-pill .mobile-theme-icon,
+  .mobile-theme-pill .mobile-theme-sun,
+  .mobile-theme-pill .mobile-theme-moon {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 1 !important;
+    line-height: 1 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .mobile-theme-pill svg {
+    width: 17px !important;
+    height: 17px !important;
+    display: block !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-pill {
+    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-sun {
+    display: grid !important;
+    color: #0f172a !important;
+  }
+
+  html[data-theme="light"] .mobile-theme-moon {
+    display: none !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill,
+  body.dark .mobile-theme-pill {
+    color: #e5e7eb !important;
+    background: #0f172a !important;
+    border: 1px solid #1e293b !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-sun,
+  body.dark .mobile-theme-sun {
+    display: none !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-moon,
+  body.dark .mobile-theme-moon {
+    display: grid !important;
+    color: #c4b5fd !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+/* =========================================================
+   Mobile theme button - switch animation
+========================================================= */
+
+@media (max-width: 860px) {
+  .mobile-theme-pill {
+    transition:
+      transform 220ms var(--ease-out),
+      box-shadow 260ms var(--ease-out),
+      background-color 260ms var(--ease-out),
+      color 260ms var(--ease-out),
+      border-color 260ms var(--ease-out) !important;
+  }
+
+  .mobile-theme-pill:active {
+    transform: scale(.92) !important;
+  }
+
+  .mobile-theme-pill.is-switching {
+    animation: mobileThemeButtonPop 520ms var(--ease-out) both;
+  }
+
+  .mobile-theme-pill.is-switching .mobile-theme-sun,
+  .mobile-theme-pill.is-switching .mobile-theme-moon {
+    animation: mobileThemeIconSpin 520ms var(--ease-out) both;
+  }
+
+  html[data-theme="light"] .mobile-theme-pill.is-switching {
+    box-shadow:
+      0 0 0 5px rgba(245, 158, 11, .14),
+      0 12px 24px rgba(15, 23, 42, .10) !important;
+  }
+
+  html[data-theme="dark"] .mobile-theme-pill.is-switching,
+  body.dark .mobile-theme-pill.is-switching {
+    box-shadow:
+      0 0 0 5px rgba(139, 92, 246, .16),
+      0 12px 24px rgba(0, 0, 0, .24) !important;
+  }
+}
+
+@keyframes mobileThemeButtonPop {
+  0% {
+    transform: scale(.92) rotate(0deg);
+  }
+
+  45% {
+    transform: scale(1.12) rotate(8deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes mobileThemeIconSpin {
+  0% {
+    opacity: .4;
+    transform: translate(-50%, -50%) rotate(-90deg) scale(.65);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(12deg) scale(1.18);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+}
+/* =========================================================
+   Auth pages - navbar copied from app layout + password eye
+========================================================= */
+.auth-app-navbar {
+  position: fixed;
+  top: 22px;
+  left: 50%;
+  z-index: 120;
+  width: min(1180px, calc(100% - 44px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  transform: translateX(-50%);
+}
+
+.auth-app-brand {
+  margin: 0 !important;
+}
+
+.auth-app-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.auth-nav-action-btn {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 18px;
+  border-radius: 16px;
+}
+
+.auth-nav-logout-form {
+  margin: 0;
+}
+
+.auth-with-navbar {
+  padding-top: 118px !important;
+}
+
+.password-input-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrap input {
+  padding-right: 52px !important;
+}
+
+.password-eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  color: var(--muted);
+  background: transparent;
+  transform: translateY(-50%);
+  transition:
+    color var(--motion-fast) var(--ease-out),
+    background-color var(--motion-fast) var(--ease-out),
+    border-color var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.password-eye-toggle:hover {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-color: rgba(99, 102, 241, .22);
+}
+
+.password-eye-toggle:active {
+  transform: translateY(-50%) scale(.94);
+}
+
+.password-eye-toggle svg {
+  width: 19px;
+  height: 19px;
+}
+
+.password-eye-toggle .eye-closed {
+  display: none;
+}
+
+.password-eye-toggle.is-visible .eye-open {
+  display: none;
+}
+
+.password-eye-toggle.is-visible .eye-closed {
+  display: block;
+}
+
+@media (max-width: 700px) {
+  .auth-app-navbar {
+    top: 14px;
+    width: calc(100% - 28px);
+    gap: 10px;
+  }
+
+  .auth-app-navbar .brand-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .auth-app-navbar .brand-text {
+    font-size: 20px;
+  }
+
+  .auth-app-actions {
+    gap: 7px;
+  }
+
+  .auth-app-navbar .theme-switch {
+    width: 50px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 15px;
+  }
+
+  .auth-app-navbar .theme-switch .theme-icon,
+  .auth-app-navbar .theme-switch .switch-track {
+    display: none;
+  }
+
+  .auth-app-navbar .theme-switch::before {
+    content: "☀";
+    color: #f59e0b;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  html[data-theme="dark"] .auth-app-navbar .theme-switch::before,
+  body.dark .auth-app-navbar .theme-switch::before {
+    content: "☾";
+    color: #c4b5fd;
+  }
+
+  .auth-nav-action-btn {
+    min-height: 44px;
+    padding-inline: 13px;
+    border-radius: 15px;
+    font-size: .86rem;
+  }
+
+  .auth-with-navbar {
+    padding-top: 92px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .auth-app-navbar .brand-text {
+    display: none;
+  }
+
+  .auth-nav-action-btn {
+    padding-inline: 11px;
+    font-size: .8rem;
+  }
+
+  .auth-app-navbar .theme-switch {
+    width: 44px;
+  }
+}

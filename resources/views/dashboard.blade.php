@@ -49,15 +49,6 @@
                 : asset('storage/' . $person->avatar_path);
         };
 
-        $initialsFor = function ($name) {
-            $parts = preg_split('/\s+/', trim($name ?: 'U'));
-
-            if (count($parts) >= 2) {
-                return strtoupper(substr($parts[0], 0, 1) . substr($parts[1], 0, 1));
-            }
-
-            return strtoupper(substr($parts[0] ?? 'U', 0, 1));
-        };
     @endphp
 
     <div class="page-head">
@@ -182,7 +173,7 @@
                                                 class="mini-avatar-img"
                                             >
                                         @else
-                                            {{ $initialsFor($requester?->name ?? 'Unknown') }}
+                                            <span class="avatar-fallback">?</span>
                                         @endif
                                     </div>
 

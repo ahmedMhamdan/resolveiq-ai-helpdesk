@@ -33,7 +33,7 @@
             <form
                 method="GET"
                 action="{{ route('tickets.unassigned') }}#unassigned-ticket-list"
-                class="filters unassigned-ticket-search"
+                class="filters js-live-ticket-search"
                 data-live-table=".unassigned-table"
                 data-live-empty="#unassigned-empty-message"
             >
@@ -43,16 +43,14 @@
                     value="{{ request('search') }}"
                     placeholder="Search ticket..."
                     autocomplete="off"
-                    class="unassigned-ticket-search-input"
+                    class="js-live-ticket-input"
                 >
 
-                <button type="submit" class="unassigned-ticket-search-btn">Search</button>
+                <button type="submit">Search</button>
 
-                <button type="button" class="btn btn-secondary unassigned-ticket-reset" hidden>
+                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden>
                     Reset
                 </button>
-
-                <p id="unassigned-search-status" class="unassigned-search-status" aria-live="polite" hidden></p>
             </form>
         </div>
 
@@ -72,16 +70,16 @@
 
                 <tbody>
                     @forelse ($tickets as $ticket)
-                        <tr class="unassigned-ticket-row">
-                            <td data-label="Ticket">
+                        <tr class="live-ticket-row">
+                            <td>
                                 <a href="{{ route('tickets.show', $ticket) }}" class="ticket-link">
                                     <strong>{{ $ticket->ticket_number }}</strong>
                                     <span>{{ $ticket->title }}</span>
                                 </a>
                             </td>
 
-                            <td data-label="Requester">
-                                <div class="person ticket-person">
+                            <td>
+                                <div class="person">
                                     <span class="mini-avatar">
                                         @if ($ticket->user?->avatar_path)
                                             <img
@@ -89,7 +87,7 @@
                                                 alt="{{ $ticket->user->name }} avatar"
                                             >
                                         @else
-                                            {{ strtoupper(substr($ticket->user?->name ?? 'U', 0, 1)) }}
+                                            <span class="avatar-fallback">?</span>
                                         @endif
                                     </span>
 
@@ -101,17 +99,17 @@
                                 </div>
                             </td>
 
-                            <td class="users-center-col" data-label="Department">
+                            <td class="users-center-col">
                                 {{ $ticket->department?->name ?? 'No department' }}
                             </td>
 
-                            <td class="users-center-col" data-label="Status">
+                            <td class="users-center-col">
                                 <span class="badge {{ $ticket->status }}">
                                     {{ ucfirst($ticket->status) }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col" data-label="Priority">
+                            <td class="users-center-col">
                                 <select
                                     name="priority"
                                     form="assign-ticket-{{ $ticket->id }}"
@@ -135,7 +133,7 @@
                                 </select>
                             </td>
 
-                            <td class="users-center-col" data-label="Due Date">
+                            <td class="users-center-col">
                                 <input
                                     type="date"
                                     name="due_at"
@@ -145,7 +143,7 @@
                                 >
                             </td>
 
-                            <td class="users-center-col" data-label="Assign Agent">
+                            <td class="users-center-col">
                                 <form
                                     id="assign-ticket-{{ $ticket->id }}"
                                     method="POST"
@@ -191,149 +189,68 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('.unassigned-ticket-search');
+        document.querySelectorAll('.js-live-ticket-search').forEach(function (form) {
+            const input = form.querySelector('.js-live-ticket-input');
+            const reset = form.querySelector('.js-live-ticket-reset');
+            const table = document.querySelector(form.dataset.liveTable);
+            const empty = document.querySelector(form.dataset.liveEmpty);
 
-        if (!form) {
-            return;
-        }
-
-        const input = form.querySelector('.unassigned-ticket-search-input');
-        const submitButton = form.querySelector('.unassigned-ticket-search-btn');
-        const reset = form.querySelector('.unassigned-ticket-reset');
-        const table = document.querySelector(form.dataset.liveTable);
-        const empty = document.querySelector(form.dataset.liveEmpty);
-        const status = document.querySelector('#unassigned-search-status');
-        const card = document.querySelector('#unassigned-ticket-list');
-
-        if (!input || !table) {
-            return;
-        }
-
-        const rows = Array.from(table.querySelectorAll('tbody tr.unassigned-ticket-row'));
-
-        function getRowText(row) {
-            const clone = row.cloneNode(true);
-
-            clone.querySelectorAll('select, input, textarea, button, form').forEach(function (element) {
-                element.remove();
-            });
-
-            return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
-        }
-
-        rows.forEach(function (row) {
-            row.dataset.searchText = getRowText(row);
-        });
-
-        function showStatus(message, type) {
-            if (!status) {
+            if (!input || !table) {
                 return;
             }
 
-            status.textContent = message;
-            status.hidden = false;
-            status.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
-            status.classList.add('is-' + type);
+            const rows = Array.from(table.querySelectorAll('tbody tr.live-ticket-row'));
 
-            void status.offsetWidth;
-            status.classList.add('is-visible');
-        }
+            function getCleanText(row) {
+                const clone = row.cloneNode(true);
 
-        function hideStatus() {
-            if (!status) {
-                return;
+                clone.querySelectorAll('select, input, textarea, button, form').forEach(function (element) {
+                    element.remove();
+                });
+
+                return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
             }
 
-            status.hidden = true;
-            status.textContent = '';
-            status.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
-        }
+            function filterRows() {
+                const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
+                let visibleCount = 0;
 
-        function runSearch(showMessage = true) {
-            const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
-            let visibleCount = 0;
+                rows.forEach(function (row) {
+                    const isVisible = !term || getCleanText(row).includes(term);
+                    row.classList.toggle('is-hidden', !isVisible);
 
-            rows.forEach(function (row) {
-                const shouldShow = !term || row.dataset.searchText.includes(term);
-
-                row.classList.toggle('is-hidden', !shouldShow);
-                row.classList.remove('is-search-match');
-
-                if (shouldShow) {
-                    visibleCount++;
-
-                    if (term) {
-                        void row.offsetWidth;
-                        row.classList.add('is-search-match');
+                    if (isVisible) {
+                        visibleCount++;
                     }
-                }
-            });
+                });
 
-            if (reset) {
-                reset.hidden = !term;
-            }
-
-            if (empty) {
-                empty.hidden = rows.length === 0 || visibleCount > 0;
-            }
-
-            if (card) {
-                card.classList.remove('search-pulse');
-                void card.offsetWidth;
-                card.classList.add('search-pulse');
-            }
-
-            if (!showMessage) {
-                return;
-            }
-
-            if (!term) {
-                showStatus('Search cleared. Showing all unassigned tickets.', 'info');
-                return;
-            }
-
-            if (visibleCount === 0) {
-                showStatus('No results found for "' + input.value.trim() + '".', 'warning');
-                return;
-            }
-
-            const label = visibleCount === 1 ? 'unassigned ticket' : 'unassigned tickets';
-            showStatus('Search applied. ' + visibleCount + ' ' + label + ' found for "' + input.value.trim() + '".', 'success');
-        }
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            if (submitButton) {
-                submitButton.classList.add('is-loading');
-                submitButton.disabled = true;
-            }
-
-            window.setTimeout(function () {
-                runSearch(true);
-
-                if (submitButton) {
-                    submitButton.classList.remove('is-loading');
-                    submitButton.disabled = false;
+                if (reset) {
+                    reset.hidden = !term;
                 }
 
-                input.blur();
-            }, 180);
-        });
+                if (empty) {
+                    empty.hidden = visibleCount > 0;
+                }
+            }
 
-        if (reset) {
-            reset.addEventListener('click', function () {
-                input.value = '';
-                runSearch(true);
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                filterRows();
                 input.focus();
             });
-        }
 
-        if (input.value.trim()) {
-            runSearch(false);
-        } else {
-            hideStatus();
-        }
+            input.addEventListener('input', filterRows);
+
+            if (reset) {
+                reset.addEventListener('click', function () {
+                    input.value = '';
+                    filterRows();
+                    input.focus();
+                });
+            }
+
+            filterRows();
+        });
     });
 </script>
 

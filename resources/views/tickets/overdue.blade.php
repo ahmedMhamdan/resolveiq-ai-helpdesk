@@ -22,11 +22,9 @@
             <form
                 method="GET"
                 action="{{ route('tickets.overdue') }}#overdue-ticket-list"
-                class="filters overdue-ticket-search js-overdue-ticket-search"
-                data-live-card="#overdue-ticket-list"
+                class="filters js-live-ticket-search"
                 data-live-table=".overdue-table"
                 data-live-empty="#overdue-empty-message"
-                data-live-status="#overdue-search-status"
             >
                 <input
                     type="search"
@@ -37,19 +35,15 @@
                     class="js-live-ticket-input"
                 >
 
-                <button type="submit" class="overdue-ticket-search-btn js-overdue-ticket-search-btn">
-                    Search
-                </button>
+                <button type="submit">Search</button>
 
-                <button type="button" class="btn btn-secondary overdue-ticket-reset js-overdue-ticket-reset" hidden>
+                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden>
                     Reset
                 </button>
-
-                <p id="overdue-search-status" class="overdue-search-status" hidden></p>
             </form>
         </div>
 
-        <div class="table-wrap overdue-tickets-wrap">
+        <div class="table-wrap">
             <table class="overdue-table">
                 <thead>
                     <tr>
@@ -66,15 +60,15 @@
 
                 <tbody>
                     @forelse ($tickets as $ticket)
-                        <tr class="live-ticket-row overdue-ticket-row">
-                            <td data-label="Ticket" class="ticket-cell">
+                        <tr class="live-ticket-row">
+                            <td>
                                 <a href="{{ route('tickets.show', $ticket) }}" class="ticket-link">
                                     <strong>{{ $ticket->ticket_number }}</strong>
                                     <span>{{ $ticket->title }}</span>
                                 </a>
                             </td>
 
-                            <td data-label="Requester">
+                            <td>
                                 @php
                                     $requester = $ticket->user;
                                     $requesterAvatarUrl = null;
@@ -88,12 +82,12 @@
                                     }
                                 @endphp
 
-                                <div class="person ticket-person">
+                                <div class="person">
                                     <span class="mini-avatar">
                                         @if ($requesterAvatarUrl)
                                             <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? 'Requester' }} avatar">
                                         @else
-                                            {{ strtoupper(substr($requester?->name ?? 'U', 0, 1)) }}
+                                            <span class="avatar-fallback">?</span>
                                         @endif
                                     </span>
 
@@ -105,7 +99,7 @@
                                 </div>
                             </td>
 
-                            <td class="users-center-col" data-label="Agent">
+                            <td class="users-center-col">
                                 @if ($ticket->agent)
                                     @php
                                         $agent = $ticket->agent;
@@ -120,12 +114,12 @@
                                         }
                                     @endphp
 
-                                    <div class="person ticket-person overdue-agent-person">
+                                    <div class="person overdue-agent-person">
                                         <span class="mini-avatar">
                                             @if ($agentAvatarUrl)
                                                 <img src="{{ $agentAvatarUrl }}" alt="{{ $agent->name }} avatar">
                                             @else
-                                                {{ strtoupper(substr($agent->name, 0, 1)) }}
+                                                <span class="avatar-fallback">?</span>
                                             @endif
                                         </span>
 
@@ -142,23 +136,23 @@
                                 @endif
                             </td>
 
-                            <td class="users-center-col" data-label="Department">
+                            <td class="users-center-col">
                                 {{ $ticket->department?->name ?? 'No department' }}
                             </td>
 
-                            <td class="users-center-col" data-label="Due Date">
+                            <td class="users-center-col">
                                 <span class="overdue-date-badge">
                                     {{ \Carbon\Carbon::parse($ticket->due_at)->format('M d, Y') }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col" data-label="Status">
+                            <td class="users-center-col">
                                 <span class="badge {{ $ticket->status }}">
                                     {{ ucfirst($ticket->status) }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col" data-label="Priority">
+                            <td class="users-center-col">
                                 @if ($ticket->priority)
                                     <span class="priority {{ $ticket->priority }}">
                                         {{ ucfirst($ticket->priority) }}
@@ -170,8 +164,8 @@
                                 @endif
                             </td>
 
-                            <td class="users-center-col" data-label="Actions">
-                                <div class="row-actions users-role-actions overdue-ticket-actions">
+                            <td class="users-center-col">
+                                <div class="row-actions users-role-actions">
                                     <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-sm btn-view-ticket">
                                         View
                                     </a>
@@ -202,21 +196,17 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.js-overdue-ticket-search').forEach(function (form) {
+        document.querySelectorAll('.js-live-ticket-search').forEach(function (form) {
             const input = form.querySelector('.js-live-ticket-input');
-            const reset = form.querySelector('.js-overdue-ticket-reset');
-            const submitBtn = form.querySelector('.js-overdue-ticket-search-btn');
-            const card = document.querySelector(form.dataset.liveCard);
+            const reset = form.querySelector('.js-live-ticket-reset');
             const table = document.querySelector(form.dataset.liveTable);
             const empty = document.querySelector(form.dataset.liveEmpty);
-            const status = document.querySelector(form.dataset.liveStatus);
 
             if (!input || !table) {
                 return;
             }
 
             const rows = Array.from(table.querySelectorAll('tbody tr.live-ticket-row'));
-            const originalCount = rows.length;
 
             function getCleanText(row) {
                 const clone = row.cloneNode(true);
@@ -228,59 +218,16 @@
                 return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
             }
 
-            function showStatus(message, type) {
-                if (!status) {
-                    return;
-                }
-
-                status.textContent = message;
-                status.hidden = false;
-                status.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
-                status.classList.add(type, 'is-visible');
-
-                window.clearTimeout(status.dataset.timerId);
-                const timerId = window.setTimeout(function () {
-                    status.classList.remove('is-visible');
-                }, 2800);
-
-                status.dataset.timerId = timerId;
-            }
-
-            function pulseResults() {
-                if (!card) {
-                    return;
-                }
-
-                card.classList.remove('search-pulse');
-                void card.offsetWidth;
-                card.classList.add('search-pulse');
-            }
-
-            function setLoading(isLoading) {
-                if (!submitBtn) {
-                    return;
-                }
-
-                submitBtn.classList.toggle('is-loading', isLoading);
-            }
-
-            function filterRows(showMessage = true) {
+            function filterRows() {
                 const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
                 let visibleCount = 0;
 
                 rows.forEach(function (row) {
                     const isVisible = !term || getCleanText(row).includes(term);
-
                     row.classList.toggle('is-hidden', !isVisible);
-                    row.classList.remove('is-search-match');
 
                     if (isVisible) {
                         visibleCount++;
-
-                        if (term) {
-                            void row.offsetWidth;
-                            row.classList.add('is-search-match');
-                        }
                     }
                 });
 
@@ -291,42 +238,25 @@
                 if (empty) {
                     empty.hidden = visibleCount > 0;
                 }
-
-                if (showMessage) {
-                    if (!term) {
-                        showStatus(`Search cleared. Showing ${originalCount} overdue ticket${originalCount === 1 ? '' : 's'}.`, 'is-info');
-                    } else if (visibleCount > 0) {
-                        showStatus(`Search applied. Found ${visibleCount} matching overdue ticket${visibleCount === 1 ? '' : 's'}.`, 'is-success');
-                    } else {
-                        showStatus('Search applied, but no overdue tickets matched your keyword.', 'is-warning');
-                    }
-                }
-
-                pulseResults();
             }
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
-                setLoading(true);
-
-                window.setTimeout(function () {
-                    filterRows(true);
-                    setLoading(false);
-                    input.focus();
-                }, 220);
+                filterRows();
+                input.focus();
             });
+
+            input.addEventListener('input', filterRows);
 
             if (reset) {
                 reset.addEventListener('click', function () {
                     input.value = '';
-                    filterRows(true);
+                    filterRows();
                     input.focus();
                 });
             }
 
-            if (input.value.trim()) {
-                filterRows(false);
-            }
+            filterRows();
         });
     });
 </script>

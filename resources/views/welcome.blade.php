@@ -619,6 +619,171 @@
             line-height: 1.7;
         }
 
+
+
+        /* =========================================================
+           Landing footer
+        ========================================================= */
+        .landing-footer {
+            position: relative;
+            margin: 0 0 34px;
+            padding: 34px;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, .16);
+            border-radius: 34px;
+            background:
+                radial-gradient(circle at top left, rgba(34, 211, 238, .12), transparent 26%),
+                radial-gradient(circle at bottom right, rgba(139, 92, 246, .12), transparent 30%),
+                rgba(15, 23, 42, .68);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 28px 90px rgba(0, 0, 0, .24);
+        }
+
+        .landing-footer::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, .45), rgba(139, 92, 246, .45), transparent);
+            pointer-events: none;
+        }
+
+        .landing-footer-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(280px, 1.35fr) repeat(2, minmax(150px, .65fr));
+            gap: 30px;
+            align-items: start;
+        }
+
+        .landing-footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .landing-footer .brand {
+            width: fit-content;
+            margin: 0;
+        }
+
+        .landing-footer-text {
+            max-width: 440px;
+            margin: 0;
+            color: #a7b7d1;
+            line-height: 1.8;
+        }
+
+        .landing-footer-socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .landing-footer-socials span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 11px;
+            border: 1px solid rgba(148, 163, 184, .14);
+            border-radius: 999px;
+            color: #cbd5e1;
+            background: rgba(30, 41, 59, .46);
+            font-size: .82rem;
+            font-weight: 800;
+        }
+
+        .landing-footer-socials span::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22d3ee;
+            box-shadow: 0 0 0 5px rgba(34, 211, 238, .10);
+        }
+
+        .landing-footer-col h3 {
+            margin: 0 0 14px;
+            color: #f8fafc;
+            font-size: .9rem;
+            font-weight: 900;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .landing-footer-links {
+            display: grid;
+            gap: 11px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .landing-footer-links a,
+        .landing-footer-links span {
+            display: inline-flex;
+            width: fit-content;
+            color: #a7b7d1;
+            line-height: 1.5;
+            font-size: .94rem;
+            font-weight: 650;
+            transition: color .2s ease, transform .2s ease;
+        }
+
+        .landing-footer-links a:hover {
+            color: #22d3ee;
+            transform: translateX(4px);
+        }
+
+        .landing-footer-bottom {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(148, 163, 184, .14);
+            color: #94a3b8;
+            font-size: .9rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .landing-footer-bottom strong {
+            color: #e2e8f0;
+            font-weight: 850;
+        }
+
+        .landing-footer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(34, 211, 238, .20);
+            border-radius: 999px;
+            color: #22d3ee;
+            background: rgba(34, 211, 238, .08);
+            font-weight: 850;
+            white-space: nowrap;
+        }
+
+        .landing-footer-badge::before {
+            content: "AI";
+            display: inline-grid;
+            place-items: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            color: #fff;
+            background: linear-gradient(135deg, #22d3ee, #8b5cf6);
+            font-size: .68rem;
+            font-weight: 900;
+        }
+
         .reveal-up {
             opacity: 0;
             transform: translateY(24px);
@@ -785,6 +950,45 @@
         html[data-theme="light"] .landing-page .brand-text span {
             color: #0891b2;
             text-shadow: 0 0 18px rgba(14, 165, 233, .18);
+        }
+
+
+
+        html[data-theme="light"] .landing-footer {
+            border-color: rgba(148, 163, 184, .24);
+            background:
+                radial-gradient(circle at top left, rgba(14, 165, 233, .10), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(124, 58, 237, .10), transparent 30%),
+                rgba(255, 255, 255, .78);
+            box-shadow: 0 24px 70px rgba(15, 23, 42, .10);
+        }
+
+        html[data-theme="light"] .landing-footer-text,
+        html[data-theme="light"] .landing-footer-links a,
+        html[data-theme="light"] .landing-footer-links span,
+        html[data-theme="light"] .landing-footer-bottom {
+            color: #475569;
+        }
+
+        html[data-theme="light"] .landing-footer-col h3,
+        html[data-theme="light"] .landing-footer-bottom strong {
+            color: #0f172a;
+        }
+
+        html[data-theme="light"] .landing-footer-socials span {
+            color: #334155;
+            border-color: rgba(148, 163, 184, .22);
+            background: rgba(248, 250, 252, .86);
+        }
+
+        html[data-theme="light"] .landing-footer-links a:hover {
+            color: #2563eb;
+        }
+
+        html[data-theme="light"] .landing-footer-badge {
+            color: #2563eb;
+            border-color: rgba(37, 99, 235, .18);
+            background: rgba(37, 99, 235, .08);
         }
 
         @keyframes revealUp {
@@ -1193,10 +1397,103 @@
             }
         }
 
+
+        @media (max-width: 900px) {
+            .landing-footer-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .landing-footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .landing-footer {
+                margin: 0 0 28px;
+                padding: 24px;
+                border-radius: 28px;
+            }
+
+            .landing-footer-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .landing-footer-text {
+                max-width: none;
+                font-size: .94rem;
+            }
+
+            .landing-footer-col h3 {
+                margin-bottom: 10px;
+            }
+
+            .landing-footer-links {
+                gap: 9px;
+            }
+
+            .landing-footer-bottom {
+                align-items: flex-start;
+                flex-direction: column;
+                margin-top: 24px;
+                padding-top: 18px;
+            }
+
+            .landing-footer-badge {
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .landing-footer {
+                padding: 22px;
+            }
+
+            .landing-footer .brand-text {
+                font-size: 20px;
+            }
+
+            .landing-footer-socials span,
+            .landing-footer-links a,
+            .landing-footer-links span,
+            .landing-footer-bottom {
+                font-size: .86rem;
+            }
+        }
+
+
+        /* =========================================================
+           Final navbar restore
+           Brand left, actions right on desktop. Footer stays clean.
+        ========================================================= */
+        @media (min-width: 761px) {
+            .landing-nav {
+                justify-content: space-between !important;
+                align-items: center !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+            }
+
+            .landing-nav .brand {
+                flex: 0 0 auto !important;
+                margin: 0 !important;
+            }
+
+            .landing-nav-actions {
+                width: auto !important;
+                margin-left: auto !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-end !important;
+                flex-wrap: nowrap !important;
+            }
+        }
+
     </style>
 </head>
 <body>
-    <main class="landing-page">
+    <main class="landing-page" id="top">
         <div class="landing-glow"></div>
         <div class="landing-glow-secondary"></div>
 
@@ -1350,7 +1647,7 @@
                 </div>
             </section>
 
-            <section class="landing-section">
+            <section class="landing-section" id="workflow">
                 <div class="landing-section-title reveal-up">
                     <span>Workflow</span>
                     <h2>From customer issue to resolved ticket.</h2>
@@ -1434,7 +1731,7 @@
                 </div>
             </section>
 
-            <section class="landing-section">
+            <section class="landing-section" id="roles">
                 <div class="landing-section-title reveal-up">
                     <span>Access Model</span>
                     <h2>Clear responsibilities for every user type.</h2>
@@ -1486,6 +1783,44 @@
                     <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
                 </div>
             </section>
+
+            <footer class="landing-footer reveal-up" aria-label="ResolveIQ footer">
+                <div class="landing-footer-grid">
+                    <div class="landing-footer-brand">
+                        <a href="{{ route('home') }}" class="brand">
+                            <span class="brand-mark">R</span>
+                            <span class="brand-text">Resolve<span>IQ</span></span>
+                        </a>
+
+                        <p class="landing-footer-text">
+                            ResolveIQ is an AI-powered helpdesk workspace for managing tickets,
+                            agent assignment, SLA visibility, activity tracking, and practical support automation.
+                        </p>
+                    </div>
+
+                    <div class="landing-footer-col">
+                        <h3>Platform</h3>
+                        <ul class="landing-footer-links">
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#workflow">Workflow</a></li>
+                            <li><a href="#roles">Access model</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="landing-footer-col">
+                        <h3>Account</h3>
+                        <ul class="landing-footer-links">
+                            <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Create account</a></li>
+                            <li><a href="#top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">Back to top</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="landing-footer-bottom">
+                    <span>© {{ date('Y') }} <strong>ResolveIQ AI Helpdesk</strong>. All rights reserved.</span>
+                </div>
+            </footer>
         </div>
     </main>
 

@@ -37,13 +37,11 @@
                 class="deleted-ticket-search-input"
             >
 
-            <button type="submit" class="deleted-ticket-search-btn">Search</button>
+            <button type="submit">Search</button>
 
             <button type="button" class="btn btn-secondary deleted-ticket-reset" hidden>
                 Reset
             </button>
-
-            <p id="deleted-search-status" class="deleted-search-status" aria-live="polite" hidden></p>
         </form>
     </div>
 
@@ -105,7 +103,7 @@
                                     @if ($requesterAvatarUrl)
                                         <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? 'Requester' }} avatar">
                                     @else
-                                        {{ strtoupper(substr($requester?->name ?? 'U', 0, 1)) }}
+                                        <span class="avatar-fallback">?</span>
                                     @endif
                                 </div>
 
@@ -123,7 +121,7 @@
                                         @if ($agentAvatarUrl)
                                             <img src="{{ $agentAvatarUrl }}" alt="{{ $agent->name }} avatar">
                                         @else
-                                            {{ strtoupper(substr($agent->name, 0, 1)) }}
+                                            <span class="avatar-fallback">?</span>
                                         @endif
                                     </div>
 
@@ -218,12 +216,9 @@
         }
 
         const input = form.querySelector('.deleted-ticket-search-input');
-        const submitButton = form.querySelector('.deleted-ticket-search-btn');
         const reset = form.querySelector('.deleted-ticket-reset');
         const table = document.querySelector(form.dataset.liveTable);
         const empty = document.querySelector(form.dataset.liveEmpty);
-        const status = document.querySelector('#deleted-search-status');
-        const card = document.querySelector('#deleted-ticket-list');
 
         if (!input || !table) {
             return;
@@ -241,65 +236,14 @@
             return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
         }
 
-        rows.forEach(function (row) {
-            row.dataset.searchText = getRowText(row);
-        });
-
-        function showStatus(message, type) {
-            if (!status) {
-                return;
-            }
-
-            status.textContent = message;
-            status.hidden = false;
-            status.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
-            status.classList.add('is-' + type);
-
-            void status.offsetWidth;
-            status.classList.add('is-visible');
-        }
-
-        function pulseResults() {
-            if (!card) {
-                return;
-            }
-
-            card.classList.remove('search-pulse');
-            void card.offsetWidth;
-            card.classList.add('search-pulse');
-
-            window.setTimeout(function () {
-                card.classList.remove('search-pulse');
-            }, 520);
-        }
-
-        function buildStatusMessage(term, visibleCount) {
-            const cleanTerm = input.value.replace(/\s+/g, ' ').trim();
-
-            if (!term) {
-                return 'Search cleared. Showing all deleted tickets.';
-            }
-
-            if (visibleCount === 0) {
-                return 'No results found for "' + cleanTerm + '".';
-            }
-
-            if (visibleCount === 1) {
-                return 'Search applied. 1 deleted ticket found for "' + cleanTerm + '".';
-            }
-
-            return 'Search applied. ' + visibleCount + ' deleted tickets found for "' + cleanTerm + '".';
-        }
-
-        function runSearch(showFeedback) {
+        function runSearch() {
             const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
             let visibleCount = 0;
 
             rows.forEach(function (row) {
-                const shouldShow = !term || row.dataset.searchText.includes(term);
+                const shouldShow = !term || getRowText(row).includes(term);
 
                 row.classList.toggle('is-hidden', !shouldShow);
-                row.classList.toggle('is-search-match', Boolean(term && shouldShow));
 
                 if (shouldShow) {
                     visibleCount++;
@@ -313,48 +257,24 @@
             if (empty) {
                 empty.hidden = rows.length === 0 || visibleCount > 0;
             }
-
-            if (showFeedback) {
-                const statusType = !term ? 'info' : (visibleCount > 0 ? 'success' : 'warning');
-
-                showStatus(buildStatusMessage(term, visibleCount), statusType);
-                pulseResults();
-            }
         }
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-
-            form.classList.add('is-searching');
-
-            if (submitButton) {
-                submitButton.classList.add('is-loading');
-                submitButton.disabled = true;
-            }
-
-            window.setTimeout(function () {
-                runSearch(true);
-                input.blur();
-
-                form.classList.remove('is-searching');
-
-                if (submitButton) {
-                    submitButton.classList.remove('is-loading');
-                    submitButton.disabled = false;
-                }
-            }, 180);
+            runSearch();
+            input.blur();
         });
 
         if (reset) {
             reset.addEventListener('click', function () {
                 input.value = '';
-                runSearch(true);
+                runSearch();
                 input.focus();
             });
         }
 
         if (input.value.trim()) {
-            runSearch(true);
+            runSearch();
         }
     });
 </script>

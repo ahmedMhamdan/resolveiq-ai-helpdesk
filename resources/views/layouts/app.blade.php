@@ -173,13 +173,31 @@
                                 alt="{{ $currentUserName }} avatar"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
                             >
-                            <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
+                            <span class="avatar-fallback" style="display: none;">?</span>
                         @else
-                            <span class="avatar-initials">{{ $currentUserInitials }}</span>
+                            <span class="avatar-fallback">?</span>
                         @endif
                     </span>
                     <span>Profile</span>
                 </a>
+
+                <button
+                    type="button"
+                    class="mobile-action-pill mobile-theme-pill js-theme-toggle"
+                    id="mobileThemeToggle"
+                    aria-label="Toggle theme"
+                    aria-pressed="false"
+                    title="Toggle theme"
+                >
+                    <svg class="mobile-theme-svg mobile-theme-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"></circle>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+
+                    <svg class="mobile-theme-svg mobile-theme-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+                    </svg>
+                </button>
 
                 <form action="{{ url('/logout') }}" method="POST" class="mobile-logout-inline-form">
                     @csrf
@@ -267,7 +285,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="theme-switch" id="themeToggle" aria-label="Toggle theme">
+                    <button type="button" class="theme-switch js-theme-toggle" id="themeToggle" aria-label="Toggle theme">
                         <span class="theme-icon sun">
                             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="4"></circle>
@@ -295,9 +313,9 @@
                                     class="topbar-avatar-img"
                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
                                 >
-                                <span class="avatar-initials" style="display: none;">{{ $currentUserInitials }}</span>
+                                <span class="avatar-fallback" style="display: none;">?</span>
                             @else
-                                <span class="avatar-initials">{{ $currentUserInitials }}</span>
+                                <span class="avatar-fallback">?</span>
                             @endif
                         </div>
                         <div class="user-meta">
@@ -335,13 +353,19 @@
     <script>
         (() => {
             const root = document.documentElement;
-            const toggle = document.getElementById('themeToggle');
+            const themeToggles = document.querySelectorAll('.js-theme-toggle');
             const savedTheme = localStorage.getItem('resolveiq-theme') || 'light';
 
             function applyTheme(theme) {
                 root.setAttribute('data-theme', theme);
                 document.body.classList.toggle('dark', theme === 'dark');
                 localStorage.setItem('resolveiq-theme', theme);
+
+                themeToggles.forEach(button => {
+                    button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+                    button.setAttribute('title', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+                    button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+                });
             }
 
             applyTheme(savedTheme);
@@ -389,11 +413,13 @@
                 }
             });
 
-            toggle?.addEventListener('click', () => {
-                const currentTheme = root.getAttribute('data-theme') || 'light';
-                const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            themeToggles.forEach(button => {
+                button.addEventListener('click', () => {
+                    const currentTheme = root.getAttribute('data-theme') || 'light';
+                    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-                applyTheme(nextTheme);
+                    applyTheme(nextTheme);
+                });
             });
 
             const notificationsDropdown = document.getElementById('notificationsDropdown');

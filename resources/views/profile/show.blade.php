@@ -25,7 +25,6 @@
                 : asset('storage/' . $user->avatar_path));
     }
 
-    $profileInitial = strtoupper(substr($user->name ?? 'U', 0, 1));
 @endphp
 
 <div class="profile-layout">
@@ -35,7 +34,7 @@
                 @if ($profileAvatarUrl)
                     <img src="{{ $profileAvatarUrl }}" alt="{{ $user->name }} avatar" class="profile-avatar-img">
                 @else
-                    {{ $profileInitial }}
+                    <span class="avatar-fallback">?</span>
                 @endif
             </div>
 
