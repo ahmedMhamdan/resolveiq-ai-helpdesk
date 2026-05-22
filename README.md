@@ -2,7 +2,37 @@
 
 ResolveIQ is a modern Laravel helpdesk ticket system built as a full-stack portfolio project.
 
-It allows users to create support tickets, agents to manage assigned tickets and replies, and admins to manage the whole support workflow through a clean dashboard. The project also includes AI-assisted ticket handling, API authentication using Laravel Sanctum, email verification, role-based access control, and profile management.
+It allows users to create support tickets, agents to manage assigned tickets and replies, and admins to manage the full support workflow through a clean role-based dashboard. The project also includes AI-assisted ticket handling, API authentication using Laravel Sanctum, custom authentication pages, email verification, password reset by email, notifications, responsive UI polishing, and profile management.
+
+---
+
+## Project Progress
+
+Current progress: **around 95%**.
+
+The project is now functionally close to deployment. The main completed areas are:
+
+- Core ticket workflow
+- Admin, agent, and user role workflows
+- Responsive dashboard layout
+- AI assistant workflow
+- API authentication with Sanctum
+- Email verification
+- Password reset by email
+- Custom ResolveIQ email templates
+- Profile and avatar management
+- Notifications and activity logs
+- Knowledge base module
+- Seeded demo data for testing
+
+Remaining / recommended before final deployment:
+
+- Final production `.env` setup
+- Production mail provider testing
+- OpenRouter production key setup
+- Final deployment smoke test
+- Optional feature tests
+- Final README screenshots, if desired
 
 ---
 
@@ -14,9 +44,13 @@ It allows users to create support tickets, agents to manage assigned tickets and
 - Laravel Fortify-based web authentication
 - API authentication using Laravel Sanctum tokens
 - Email verification for new accounts
+- Custom email verification notification
+- Password reset by email
+- Custom password reset notification
 - Password update support
 - Profile page and profile edit
 - User avatar upload
+- Default avatar fallback
 - Role-based access control
 
 ### Roles
@@ -30,6 +64,8 @@ The system supports three main roles:
 ### Admin Features
 
 - Manage users and roles
+- Promote users to agents
+- Downgrade agents back to users
 - Manage agents
 - Manage departments
 - View all tickets
@@ -41,6 +77,7 @@ The system supports three main roles:
 - Restore and permanently delete soft-deleted tickets
 - Manage knowledge base articles
 - Access AI assistant tools
+- View notifications and activity logs
 
 ### Agent Features
 
@@ -58,6 +95,7 @@ The system supports three main roles:
 - Update profile information
 - Upload profile avatar
 - Receive email verification
+- Reset password by email
 
 ### Ticket System
 
@@ -72,6 +110,10 @@ The system supports three main roles:
 - Activity logs
 - Soft delete, restore, and force delete
 - Search and filtering
+- Overdue tickets page
+- Unassigned tickets page
+- Deleted tickets page
+- Responsive mobile card layout for ticket tables
 
 ### AI Features
 
@@ -81,6 +123,7 @@ The system supports three main roles:
 - AI priority suggestions
 - AI due date suggestions
 - Custom AI instructions
+- Ticket-level AI actions
 - OpenRouter support with mock fallback
 
 ### API Features
@@ -102,6 +145,19 @@ Implemented API endpoints include:
 - Email verification
 - Resend verification email
 
+### UI / UX Features
+
+- Dark and light mode
+- Desktop dashboard layout
+- Mobile responsive dashboard pages
+- Mobile theme toggle
+- Responsive landing page
+- Custom auth pages
+- Password visibility toggle
+- Custom landing page footer
+- Consistent buttons, cards, badges, and avatar styling
+- Search feedback messages across key pages
+
 ---
 
 ## Tech Stack
@@ -116,6 +172,7 @@ Implemented API endpoints include:
 - CSS
 - JavaScript
 - OpenRouter API
+- Gmail SMTP / SMTP mail support
 - Git / GitHub
 
 ---
@@ -134,6 +191,8 @@ Main tables:
 - `knowledge_base_articles`
 - `notifications`
 - `personal_access_tokens`
+- `password_reset_tokens`
+- `sessions`
 
 ### Main Relationships
 
@@ -258,7 +317,7 @@ MAIL_USERNAME=
 MAIL_PASSWORD=
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=
-MAIL_FROM_NAME="${APP_NAME}"
+MAIL_FROM_NAME="ResolveIQ"
 
 AI_PROVIDER=mock
 OPENROUTER_API_KEY=
@@ -267,15 +326,20 @@ OPENROUTER_MODEL=openrouter/free
 SANCTUM_STATEFUL_DOMAINS=localhost,localhost:8000,127.0.0.1,127.0.0.1:8000
 ```
 
-Important: never commit your real `.env` file or secret keys to GitHub.
+Important: never commit your real `.env` file, mail password, API keys, or any secret credentials to GitHub.
 
 ---
 
-## Email Verification
+## Email Verification & Password Reset
 
-ResolveIQ supports real email verification.
+ResolveIQ supports:
 
-For local testing with Gmail SMTP, use a Gmail App Password, not your normal Gmail password.
+- Email verification for new accounts
+- Password reset links by email
+- Custom ResolveIQ notification content
+- Custom Laravel mail theme and header
+
+For local testing with Gmail SMTP, use a **Gmail App Password**, not your normal Gmail password.
 
 Example:
 
@@ -284,7 +348,7 @@ MAIL_MAILER=smtp
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=587
 MAIL_USERNAME=your_email@gmail.com
-MAIL_PASSWORD=your_app_password
+MAIL_PASSWORD=your_16_character_app_password_without_spaces
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=your_email@gmail.com
 MAIL_FROM_NAME="ResolveIQ"
@@ -295,6 +359,21 @@ After changing mail settings, clear config cache:
 ```bash
 php artisan optimize:clear
 php artisan config:clear
+php artisan view:clear
+```
+
+For local testing without sending real emails, use:
+
+```env
+MAIL_MAILER=log
+MAIL_FROM_ADDRESS=support@resolveiq.test
+MAIL_FROM_NAME="ResolveIQ"
+```
+
+Then check:
+
+```txt
+storage/logs/laravel.log
 ```
 
 ---
@@ -435,8 +514,16 @@ Agent:
 agent@resolveiq.test
 password
 
+Second Agent:
+agent2@resolveiq.test
+password
+
 User:
 user@resolveiq.test
+password
+
+Customer:
+omar@resolveiq.test
 password
 ```
 
@@ -449,7 +536,7 @@ Before deployment, make sure to:
 - Set production environment variables
 - Set `APP_ENV=production`
 - Set `APP_DEBUG=false`
-- Set the correct `APP_URL`
+- Set the correct production `APP_URL`
 - Configure production database credentials
 - Configure SMTP mail settings
 - Configure OpenRouter API settings if AI is enabled
@@ -473,34 +560,58 @@ php artisan view:cache
 
 ## Responsive Design
 
-The dashboard layout is designed to support desktop and smaller screens. Final responsive polishing should focus on:
+The dashboard layout supports desktop and smaller screens.
 
-- Sidebar behavior on mobile
-- Tables on small screens
-- Tickets list and ticket details pages
-- Users and agents management tables
-- AI Assistant layout
+Recently polished responsive areas:
+
+- Tickets table and mobile cards
+- Deleted tickets page
+- Overdue tickets page
+- Unassigned tickets page
+- Users management page
+- Agents management page
+- Departments page
+- Knowledge base pages
+- Dashboard search sections
 - Auth pages
-- Profile and email verification pages
+- Landing page
+- Profile and verification pages
 
 ---
 
-## Project Status
-
-Current progress: around 90%.
+## Current Development Status
 
 Completed:
 
 - Core helpdesk system
 - Role-based access control
 - Admin, agent, and user workflows
+- Ticket CRUD and ticket workflow actions
+- Soft delete, restore, and force delete
+- Overdue, unassigned, and deleted ticket management
+- Knowledge base CRUD
 - AI assistant workflow
 - API authentication
 - API tickets and replies
 - API profile update
 - Email verification
+- Password reset by email
+- Custom ResolveIQ email notifications
+- Custom mail header and theme
 - User and agent avatar handling
 - Notifications and activity logs
+- Responsive UI polishing across major pages
+- Landing page footer and auth page navbar polishing
+
+Next recommended steps:
+
+- Test the full production mail flow after deployment
+- Configure production `APP_URL`
+- Configure production database
+- Configure production AI provider
+- Add screenshots to README
+- Add automated feature tests
+- Final deployment smoke test
 
 ---
 

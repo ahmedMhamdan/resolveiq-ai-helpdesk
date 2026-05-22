@@ -10818,3 +10818,170 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     width: 44px;
   }
 }
+/* =========================================================
+   Auth password reset pages
+   Add this at the end of public/css/resolveiq.css
+========================================================= */
+
+.auth-password-card {
+  width: min(100%, 520px);
+}
+
+.auth-forgot-link {
+  color: var(--primary);
+  font-size: .9rem;
+  font-weight: 850;
+  white-space: nowrap;
+  transition: color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out);
+}
+
+.auth-forgot-link:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.auth-field-hint {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.55;
+}
+
+.password-input-wrap {
+  position: relative;
+}
+
+.password-input-wrap input {
+  padding-right: 52px !important;
+}
+
+.password-eye-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  color: var(--muted);
+  background: transparent;
+  transform: translateY(-50%);
+  transition: background-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out);
+}
+
+.password-eye-toggle:hover {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.password-eye-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.password-eye-toggle .eye-closed {
+  display: none;
+}
+
+.password-eye-toggle.is-visible .eye-open {
+  display: none;
+}
+
+.password-eye-toggle.is-visible .eye-closed {
+  display: block;
+}
+
+@media (max-width: 620px) {
+  .auth-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .auth-forgot-link {
+    font-size: .88rem;
+  }
+}
+/* =========================================================
+   Email verification result page
+========================================================= */
+
+.verification-result-card {
+  max-width: 560px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.verification-result-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(34, 193, 241, .15), transparent 34%),
+    radial-gradient(circle at 100% 20%, rgba(124, 92, 255, .12), transparent 30%);
+  pointer-events: none;
+}
+
+.verification-result-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+}
+
+.verification-result-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.verification-result-icon.is-success {
+  color: #22c55e;
+  background: rgba(34, 197, 94, .13);
+  border: 1px solid rgba(34, 197, 94, .28);
+  box-shadow: 0 18px 45px rgba(34, 197, 94, .12);
+}
+
+.verification-result-icon.is-error {
+  color: #fb7185;
+  background: rgba(251, 113, 133, .13);
+  border: 1px solid rgba(251, 113, 133, .28);
+  box-shadow: 0 18px 45px rgba(251, 113, 133, .12);
+}
+
+.verification-result-head h1,
+.verification-result-head p {
+  text-align: center;
+}
+
+.verification-result-btn {
+  max-width: 230px;
+  margin: 8px auto 0;
+}
+
+.verification-result-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .verification-result-card {
+    max-width: 100%;
+  }
+
+  .verification-result-icon {
+    width: 66px;
+    height: 66px;
+    border-radius: 20px;
+  }
+
+  .verification-result-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+}

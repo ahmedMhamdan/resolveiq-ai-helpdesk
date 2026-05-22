@@ -438,7 +438,10 @@ class TicketController extends Controller
                 ->withInput();
         }
 
-        $oldAgentName = $ticket->agent?->name ?? 'Unassigned';
+        $oldAgentId = $ticket->agent_id;
+        $oldAgentName = $oldAgentId
+            ? (User::query()->whereKey($oldAgentId)->value('name') ?? 'Unassigned')
+            : 'Unassigned';
         $oldPriority = $ticket->priority;
         $oldDueAt = $ticket->due_at?->copy();
 
@@ -447,23 +450,26 @@ class TicketController extends Controller
         $ticket->due_at = $data['due_at'] ?? null;
         $ticket->save();
 
-        $ticket->loadMissing(['user', 'agent']);
+        $ticket->refresh();
+        $ticket->load(['user', 'agent']);
 
-        $ticket->activityLogs()->create([
-            'user_id' => $user->id,
-            'action' => 'Agent assigned',
-            'old_value' => $oldAgentName,
-            'new_value' => $ticket->agent?->name ?? 'Unassigned',
-        ]);
+        if ((int) $oldAgentId !== (int) $ticket->agent_id) {
+            $ticket->activityLogs()->create([
+                'user_id' => $user->id,
+                'action' => 'Agent assigned',
+                'old_value' => $oldAgentName,
+                'new_value' => $ticket->agent?->name ?? 'Unassigned',
+            ]);
 
-        if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
-            $ticket->agent->notify(new TicketEventNotification(
-                'Ticket assigned to you',
-                "You were assigned to ticket {$ticket->ticket_number}.",
-                $ticket,
-                'assigned',
-                $user
-            ));
+            if ($ticket->agent && (int) $ticket->agent_id !== (int) $user->id) {
+                $ticket->agent->notify(new TicketEventNotification(
+                    'Ticket assigned to you',
+                    "You were assigned to ticket {$ticket->ticket_number}.",
+                    $ticket,
+                    'assigned',
+                    $user
+                ));
+            }
         }
 
         if ($oldPriority !== $ticket->priority) {

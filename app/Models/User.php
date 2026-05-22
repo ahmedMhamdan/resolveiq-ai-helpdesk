@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\ResolveIqResetPasswordNotification;
+use App\Notifications\ResolveIqVerifyEmailNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -59,6 +61,16 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return asset('storage/' . $this->avatar_path);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResolveIqResetPasswordNotification($token));
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new ResolveIqVerifyEmailNotification());
     }
 
     protected function casts(): array
