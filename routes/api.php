@@ -23,7 +23,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
         ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
+        ->name('api.verification.verify');
 
     Route::post('/register', [AuthController::class, 'register'])
         ->middleware('throttle:5,1');
