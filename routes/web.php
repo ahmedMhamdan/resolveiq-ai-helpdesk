@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AiAssistantController;
+use App\Http\Controllers\Api\EmailVerificationController as PublicEmailVerificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\KnowledgeBaseController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\UserRoleController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +23,10 @@ Route::get('/', function () {
 
     return view('welcome');
 })->name('home');
+
+Route::get('/email/verify/{id}/{hash}', [PublicEmailVerificationController::class, 'verify'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -37,14 +41,6 @@ Route::middleware('auth')->group(function () {
 
         return view('auth.verify-email');
     })->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-
-        return redirect()
-            ->intended(route('dashboard'))
-            ->with('success', 'Email verified successfully.');
-    })->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 
     Route::post('/email/verification-notification', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
