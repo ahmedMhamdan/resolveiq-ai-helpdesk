@@ -33,7 +33,9 @@
                     </svg>
                 </span>
             </button>
-            <a href="{{ route('register') }}" class="btn new-ticket-btn auth-nav-action-btn">Register</a>
+            @guest
+                <a href="{{ route('register') }}" class="btn new-ticket-btn auth-nav-action-btn">Register</a>
+            @endguest
         </div>
     </header>
     <main class="auth-page auth-with-navbar">
@@ -113,10 +115,12 @@
                     Login
                 </button>
 
-                <div class="auth-bottom-link">
-                    Don’t have an account?
-                    <a href="{{ route('register') }}">Register</a>
-                </div>
+                @guest
+                    <div class="auth-bottom-link">
+                        Don’t have an account?
+                        <a href="{{ route('register') }}">Register</a>
+                    </div>
+                @endguest
             </form>
         </section>
     </main>

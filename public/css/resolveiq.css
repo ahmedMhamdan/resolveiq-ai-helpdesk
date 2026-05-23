@@ -10985,3 +10985,87 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     height: 30px;
   }
 }
+
+/* =========================================================
+   44. Mobile quick actions compact row fix
+   Fixes agent mobile dashboard gaps when the New Ticket action is hidden.
+========================================================= */
+@media (max-width: 860px) {
+  .mobile-quick-actions {
+    width: 100% !important;
+    display: flex !important;
+    grid-template-columns: none !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    margin: 8px 0 18px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    width: auto !important;
+    min-width: 0 !important;
+    height: 38px !important;
+    padding: 0 11px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    font-size: .74rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-quick-actions .mobile-profile-pill {
+    flex: 1 1 auto !important;
+    justify-content: flex-start !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-quick-actions .mobile-action-primary {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+  }
+
+  .mobile-quick-actions .mobile-theme-pill {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    padding: 0 !important;
+  }
+
+  .mobile-quick-actions .mobile-logout-inline-form {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+  }
+
+  .mobile-quick-actions .mobile-logout-pill {
+    flex: 0 0 auto !important;
+    min-width: 68px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-quick-actions {
+    gap: 7px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    height: 36px !important;
+    padding: 0 9px !important;
+    font-size: .71rem !important;
+  }
+
+  .mobile-quick-actions .mobile-theme-pill {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+  }
+
+  .mobile-quick-actions .mobile-logout-pill {
+    min-width: 64px !important;
+  }
+}

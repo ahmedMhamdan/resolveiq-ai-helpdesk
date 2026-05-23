@@ -1534,8 +1534,6 @@
                     </p>
 
                     <div class="landing-actions reveal-up delay-3">
-                        <a href="{{ route('register') }}" class="btn btn-primary">Create Account</a>
-                        <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
                         <a href="#features" class="landing-ghost-link">Explore platform <span>→</span></a>
                     </div>
 
@@ -1774,13 +1772,12 @@
                 <div>
                     <h2>Ready to try ResolveIQ?</h2>
                     <p>
-                        Create an account, open a ticket, and explore how the AI assistant improves the support workflow from the first response to final resolution.
+                        Review the workflow, role permissions, ticket lifecycle, and AI assistant features before testing the full support journey.
                     </p>
                 </div>
 
                 <div class="landing-actions">
-                    <a href="{{ route('register') }}" class="btn btn-primary">Create Account</a>
-                    <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
+                    <a href="#features" class="landing-ghost-link">Review platform features <span>→</span></a>
                 </div>
             </section>
 

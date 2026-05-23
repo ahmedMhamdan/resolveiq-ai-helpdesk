@@ -165,7 +165,11 @@
                     </a>
                 @endif
 
-                <a href="{{ route('profile.show') }}" class="mobile-action-pill mobile-profile-pill">
+                <a
+                    href="{{ route('profile.show') }}"
+                    class="mobile-action-pill mobile-profile-pill"
+                    title="{{ $currentUserName }}"
+                >
                     <span class="mobile-profile-avatar">
                         @if ($currentUserAvatarUrl)
                             <img
@@ -178,7 +182,7 @@
                             <span class="avatar-fallback">?</span>
                         @endif
                     </span>
-                    <span>Profile</span>
+                    <span>{{ $currentUserName }}</span>
                 </a>
 
                 <button
