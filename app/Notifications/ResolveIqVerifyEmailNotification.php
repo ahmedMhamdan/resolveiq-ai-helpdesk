@@ -12,27 +12,26 @@ class ResolveIqVerifyEmailNotification extends Notification
 {
     use Queueable;
 
-    /**
-     * Get the notification delivery channels.
-     */
     public function via(object $notifiable): array
     {
         return ['mail'];
     }
 
-    /**
-     * Build the email verification message.
-     */
     public function toMail(object $notifiable): MailMessage
     {
-        $verificationUrl = URL::temporarySignedRoute(
+        $relativeUrl = URL::temporarySignedRoute(
             'verification.verify',
             Carbon::now()->addMinutes(config('auth.verification.expire', 60)),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),
-            ]
+            ],
+            false
         );
+
+        $appUrl = (string) config('app.url', 'http://127.0.0.1:8000');
+
+        $verificationUrl = rtrim($appUrl, '/') . $relativeUrl;
 
         return (new MailMessage)
             ->subject('Verify your ResolveIQ email address')

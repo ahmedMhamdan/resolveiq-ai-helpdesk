@@ -25,7 +25,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/email/verify/{id}/{hash}', [PublicEmailVerificationController::class, 'verify'])
-    ->middleware(['signed', 'throttle:6,1'])
+    ->middleware(['signed:relative', 'throttle:6,1'])
     ->name('verification.verify');
 
 Route::middleware('auth')->group(function () {

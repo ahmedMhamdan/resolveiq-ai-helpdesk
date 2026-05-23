@@ -14,7 +14,7 @@ class EmailVerificationController extends Controller
     {
         $redirectUrl = route('login');
 
-        if (! $request->hasValidSignature()) {
+        if (! $request->hasValidSignature(false)) {
             return response()->view('auth.email-verification-result', [
                 'status' => 'error',
                 'title' => 'Verification link expired',
