@@ -6,8 +6,13 @@ php artisan config:clear
 php artisan route:clear
 php artisan view:clear
 
-echo "Running migrations..."
-php artisan migrate --force
+if [ "$APP_FRESH_MIGRATE" = "true" ]; then
+    echo "Fresh migrating database..."
+    php artisan migrate:fresh --force
+else
+    echo "Running migrations..."
+    php artisan migrate --force
+fi
 
 if [ "$APP_SEED_DATABASE" = "true" ]; then
     echo "Seeding database..."
