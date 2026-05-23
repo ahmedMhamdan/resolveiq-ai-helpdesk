@@ -1,14 +1,10 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 set -e
 
-echo "Clearing Laravel cache..."
+echo "Clearing Laravel config, routes, and views..."
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
-php artisan cache:clear
-
-echo "Linking storage..."
-php artisan storage:link || true
 
 echo "Running migrations..."
 php artisan migrate --force
@@ -19,6 +15,9 @@ if [ "$APP_SEED_DATABASE" = "true" ]; then
 else
     echo "Skipping database seeding."
 fi
+
+echo "Linking storage..."
+php artisan storage:link || true
 
 echo "Caching Laravel..."
 php artisan config:cache

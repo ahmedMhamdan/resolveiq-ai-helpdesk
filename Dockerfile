@@ -1,4 +1,4 @@
-﻿FROM php:8.3-apache
+FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
@@ -40,7 +40,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
 COPY start.sh /usr/local/bin/start.sh
-RUN sed -i 's/\r$//' /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
+RUN sed -i '1s/^\xEF\xBB\xBF//' /usr/local/bin/start.sh \
+    && sed -i 's/\r$//' /usr/local/bin/start.sh \
+    && chmod +x /usr/local/bin/start.sh
 
 EXPOSE 80
 
