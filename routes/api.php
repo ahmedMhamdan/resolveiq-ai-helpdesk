@@ -31,8 +31,9 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:5,1');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
+
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
@@ -40,16 +41,23 @@ Route::prefix('v1')->group(function () {
             ->name('api.verification.send');
 
         Route::get('/profile', [ProfileController::class, 'show']);
-        Route::post('/profile', [ProfileController::class, 'update']);
+
+        Route::post('/profile', [ProfileController::class, 'update'])
+            ->middleware('throttle:10,1');
 
         Route::get('/departments', [DepartmentController::class, 'index']);
 
         Route::middleware('verified')->group(function () {
             Route::get('/tickets/{ticket}/replies', [TicketReplyController::class, 'index']);
-            Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
+
+            Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store'])
+                ->middleware('throttle:12,1');
 
             Route::get('/tickets', [TicketController::class, 'index']);
-            Route::post('/tickets', [TicketController::class, 'store']);
+
+            Route::post('/tickets', [TicketController::class, 'store'])
+                ->middleware('throttle:10,1');
+
             Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
         });
     });
