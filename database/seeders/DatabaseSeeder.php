@@ -12,6 +12,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -392,14 +393,39 @@ class DatabaseSeeder extends Seeder
         }
 
         $replyData = [
-            ['RIQ-1001', $customerOne, 'I tried clearing cache but the issue still happens.', false],
-            ['RIQ-1001', $agentOne, 'Thanks for the details. We are checking the login service now.', false],
-            ['RIQ-1002', $agentTwo, 'Internal review started for the billing record.', true],
-            ['RIQ-1004', $agentOne, 'We are checking the mail queue and notification service.', false],
-            ['RIQ-1008', $customerTwo, 'I checked spam and still did not receive anything.', false],
-            ['RIQ-1010', $agentOne, 'Please confirm if you recognize the login location.', false],
-            ['RIQ-1014', $agentOne, 'Billing team is reviewing the renewal record.', false],
-            ['RIQ-1019', $agentTwo, 'We escalated this payment issue for urgent review.', true],
+            ['RIQ-1001', $customerOne, 'I tried clearing the browser cache and using another device, but the login still returns a 500 error after I submit the form.', false],
+            ['RIQ-1001', $agentOne, 'Thanks for the details. We are checking the authentication service logs, recent failed login attempts, and whether the account session table has any errors.', false],
+            ['RIQ-1001', $agentOne, 'Internal note: possible login service issue. Check Laravel logs, session driver, database sessions table, and recent deployment changes before asking the customer to retry again.', true],
+
+            ['RIQ-1002', $customerTwo, 'The invoice should be for the basic monthly plan, but the total looks higher than expected.', false],
+            ['RIQ-1002', $agentTwo, 'Internal review started for the billing record. Compare plan price, renewal date, tax, discounts, and previous unpaid balance.', true],
+
+            ['RIQ-1003', $customerOne, 'I changed my phone and lost the authenticator app, so I cannot pass the 2FA challenge.', false],
+            ['RIQ-1003', $admin, 'Internal note: verify account ownership before resetting two-factor authentication. Do not ask for passwords or recovery codes in chat.', true],
+
+            ['RIQ-1004', $customerTwo, 'The notification eventually arrives, but it is delayed by around 20 minutes.', false],
+            ['RIQ-1004', $agentOne, 'We are checking the mail queue, notification logs, and whether the address was delayed by the mail provider.', false],
+
+            ['RIQ-1005', $customerOne, 'The download button shows loading for a few seconds and then nothing happens.', false],
+            ['RIQ-1005', $agentTwo, 'Internal note: check invoice PDF generation, file permissions, storage link, and browser console errors.', true],
+
+            ['RIQ-1006', $customerTwo, 'I noticed a login from a location I do not recognize.', false],
+            ['RIQ-1006', $agentTwo, 'Please change your password, review active sessions, and confirm whether you recognize the device shown in the security notification.', false],
+
+            ['RIQ-1008', $customerTwo, 'I checked spam and promotions folders, but I still did not receive the reset email.', false],
+            ['RIQ-1008', $agentOne, 'Internal note: verify mail provider settings, reset token creation, and whether the email is suppressed or blocked.', true],
+
+            ['RIQ-1010', $agentOne, 'Please confirm if you recognize the login location. If you do not, we recommend changing your password and enabling 2FA immediately.', false],
+            ['RIQ-1010', $admin, 'Internal note: treat as urgent security alert if the customer does not recognize the location. Review login activity and active sessions.', true],
+
+            ['RIQ-1014', $agentOne, 'Billing team is reviewing the renewal record and checking whether the subscription webhook completed successfully.', false],
+            ['RIQ-1019', $agentTwo, 'We escalated this payment issue for urgent review because checkout is blocking the customer from completing payment.', true],
+
+            ['RIQ-1021', $customerOne, 'The previous answer did not explain what I should do next.', false],
+            ['RIQ-1021', $agentOne, 'Internal note: next reply should be clearer, avoid vague wording, and include exactly one practical next step.', true],
+
+            ['RIQ-1023', $customerOne, 'I tried logging in several times and now the account says it is locked.', false],
+            ['RIQ-1023', $admin, 'Internal note: check login rate limiting, lockout timestamp, and whether account verification is complete before unlocking.', true],
         ];
 
         foreach ($replyData as [$ticketNumber, $replyUser, $message, $isInternalNote]) {
@@ -463,65 +489,114 @@ class DatabaseSeeder extends Seeder
 
         $knowledgeArticles = [
             [
-                'title' => 'How to reset a customer password safely',
-                'content' => "Use this article when a customer cannot access their account.\n\n1. Confirm the customer's email address.\n2. Check whether the account is locked or inactive.\n3. Send the password reset link from the support panel.\n4. Ask the customer to check inbox and spam folders.\n5. Never ask the customer to share their password or reset token.",
+                'title' => 'Password reset email troubleshooting',
+                'content' => "Use this article when a customer says the password reset email was not received.\n\nRecommended steps:\n1. Confirm the customer is using the correct account email.\n2. Ask them to check inbox, spam, promotions, and blocked sender settings.\n3. Check whether a reset token was created.\n4. Check the mail queue and SMTP provider logs.\n5. Resend the reset link only after confirming the email address.\n6. Never ask the customer to share their password or reset token.\n\nCustomer reply guidance: apologize briefly, give clear checks, and explain that support can resend the link after verification.",
                 'status' => 'published',
                 'user' => $admin,
+                'days_ago' => 14,
+            ],
+            [
+                'title' => 'Login issue and 500 error checklist',
+                'content' => "Use this article for login issue, login error, 500 error, session failure, or account access problems.\n\nAgent checklist:\n1. Confirm the exact error and when it appears.\n2. Ask whether the customer tried another browser or private window.\n3. Check application logs for authentication exceptions.\n4. Check session storage, database sessions table, and recent deployments.\n5. If multiple users are affected, escalate as an authentication service incident.\n\nCustomer reply guidance: avoid blaming the customer, explain that logs are being reviewed, and provide one safe next step.",
+                'status' => 'published',
+                'user' => $agentOne,
+                'days_ago' => 13,
+            ],
+            [
+                'title' => 'Two factor authentication 2FA reset policy',
+                'content' => "Use this article when a customer lost access to an authenticator app or asks to reset two factor authentication / 2FA.\n\nSecurity rules:\n1. Verify account ownership before resetting 2FA.\n2. Do not ask for passwords, recovery codes, or screenshots containing secrets.\n3. Review recent login activity before disabling 2FA.\n4. Add an internal note explaining why the reset was approved.\n5. Ask the customer to re-enable 2FA after regaining access.\n\nSuggested priority: high if the customer is locked out, urgent if there is suspicious activity.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 12,
+            ],
+            [
+                'title' => 'Suspicious login and security alert response',
+                'content' => "Use this article for suspicious login notification, security alert, unknown location, or account compromise reports.\n\nRecommended steps:\n1. Ask whether the customer recognizes the device and location.\n2. Recommend changing the password immediately if the login is unknown.\n3. Recommend enabling 2FA.\n4. Review active sessions and revoke unknown sessions.\n5. Escalate as urgent if unauthorized access is likely.\n\nCustomer reply guidance: be calm, direct, and security-focused. Do not expose internal risk scores or investigation details.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 11,
+            ],
+            [
+                'title' => 'Invoice amount dispute workflow',
+                'content' => "Use this article when a customer says an invoice amount is incorrect.\n\nBilling checklist:\n1. Compare the invoice total with the active subscription plan.\n2. Check renewal date, taxes, discounts, credits, and previous unpaid balance.\n3. Confirm whether a plan upgrade or add-on was applied.\n4. Add an internal note before changing billing data.\n5. If the customer may have been overcharged, escalate to billing review.\n\nCustomer reply guidance: acknowledge the concern, explain what will be checked, and avoid promising a refund until billing confirms it.",
+                'status' => 'published',
+                'user' => $agentTwo,
+                'days_ago' => 10,
+            ],
+            [
+                'title' => 'Refund request follow-up workflow',
+                'content' => "Use this article for refund request, payment dispute, or billing follow-up tickets.\n\nAgent checklist:\n1. Confirm the invoice number or payment date.\n2. Check refund eligibility based on policy.\n3. Review whether the request was already escalated.\n4. Add an internal note with the refund status.\n5. Give the customer a clear next step and realistic review timeframe.\n\nSuggested priority: medium for normal follow-up, high if payment access is blocked, urgent only for duplicate or business-critical charges.",
+                'status' => 'published',
+                'user' => $agentTwo,
+                'days_ago' => 9,
+            ],
+            [
+                'title' => 'Payment method rejected at checkout',
+                'content' => "Use this article when a payment method is rejected or checkout fails.\n\nRecommended checks:\n1. Ask the customer to confirm card details were entered correctly without collecting card numbers.\n2. Check payment gateway logs for decline reason.\n3. Ask the customer to try another supported payment method.\n4. Escalate if many customers are affected or the billing page is blank.\n5. Do not ask for full card details in the ticket.\n\nCustomer reply guidance: keep it practical, protect payment data, and provide safe next steps.",
+                'status' => 'published',
+                'user' => $agentTwo,
                 'days_ago' => 8,
             ],
             [
-                'title' => 'Troubleshooting login errors',
-                'content' => "Use this article for login issues, 500 errors, or repeated failed attempts.\n\nStart by checking the user's email, recent login attempts, browser cache, and active sessions. If the problem affects multiple users, escalate it as a possible authentication service issue.",
+                'title' => 'Mail queue and delayed notification checks',
+                'content' => "Use this article for delayed notifications, reset email delay, ticket reply notification missing, or mail queue issues.\n\nAgent checklist:\n1. Check notification logs and queue worker status.\n2. Check SMTP provider delivery status.\n3. Confirm the user's email address is verified.\n4. Check whether the address is suppressed, bounced, or blocked.\n5. If queue jobs are failing, escalate to engineering.\n\nCustomer reply guidance: explain that delivery is being checked and ask them to monitor inbox and spam while support reviews logs.",
                 'status' => 'published',
                 'user' => $agentOne,
                 'days_ago' => 7,
             ],
             [
-                'title' => 'Handling invoice amount disputes',
-                'content' => "When a customer reports an incorrect invoice amount, compare the invoice total with the subscription plan, renewal date, discounts, taxes, and previous payments. Add an internal note before changing billing data.",
+                'title' => 'Attachment upload failure troubleshooting',
+                'content' => "Use this article when a customer cannot upload an attachment.\n\nRecommended checks:\n1. Ask for file type and approximate file size.\n2. Confirm the file type is supported.\n3. Ask whether the upload fails on another browser.\n4. Check storage permissions and upload validation errors.\n5. If uploads fail for multiple users, escalate as a storage or server configuration issue.\n\nCustomer reply guidance: request only the needed details and avoid asking for sensitive files unless required.",
                 'status' => 'published',
-                'user' => $agentTwo,
+                'user' => $agentOne,
                 'days_ago' => 6,
             ],
             [
-                'title' => 'Responding to suspicious login reports',
-                'content' => "If a customer reports a suspicious login notification, ask them to confirm whether they recognize the location and device. Recommend changing the password, reviewing active sessions, enabling 2FA, and escalating if the login looks malicious.",
+                'title' => 'Profile update form not saving',
+                'content' => "Use this article when profile details, avatar upload, or account settings do not save.\n\nChecklist:\n1. Confirm which field fails to save.\n2. Check validation errors and browser console messages.\n3. Check whether the user is authenticated and email verified.\n4. Check file upload size/type if the issue is avatar related.\n5. Review recent profile controller or route changes.\n\nCustomer reply guidance: ask for the failed field and reassure the user that existing data is not lost.",
                 'status' => 'published',
                 'user' => $admin,
                 'days_ago' => 5,
             ],
             [
-                'title' => 'What to check when notifications are delayed',
-                'content' => "Delayed notifications can be caused by mail queue issues, provider delays, incorrect email settings, or suppressed addresses. Check the notification logs, mail queue, and recent system activity before replying.",
+                'title' => 'Dashboard performance and slow loading',
+                'content' => "Use this article for dashboard loads slowly, slow page, or long first request reports.\n\nAgent checklist:\n1. Ask whether the delay happens only on first visit or every request.\n2. For free hosting, explain that the service may wake up after inactivity.\n3. Check database query count for dashboard statistics.\n4. Check external API calls and notification queries.\n5. If the delay happens after login only, check session and dashboard role queries.\n\nCustomer reply guidance: be transparent and separate temporary hosting delay from real application bugs.",
                 'status' => 'published',
                 'user' => $agentOne,
                 'days_ago' => 4,
             ],
             [
-                'title' => 'Explaining ticket priority levels',
-                'content' => "Low means the issue has limited impact. Medium means the customer is affected but work can continue. High means an important workflow is blocked. Urgent means security, payment, or business-critical access is affected.",
+                'title' => 'Ticket priority decision guide',
+                'content' => "Use this article when suggesting ticket priority.\n\nPriority rules:\nLow: minor inconvenience, no important workflow blocked.\nMedium: customer is affected but has a workaround.\nHigh: important workflow is blocked, repeated failure, or billing/account access problem.\nUrgent: security risk, suspicious login, payment blocked, account locked, or business-critical access unavailable.\n\nAI output should include an exact line like: Priority: high\nThen add a short reason.",
                 'status' => 'published',
                 'user' => $admin,
                 'days_ago' => 3,
             ],
             [
-                'title' => 'Draft reply for attachment upload failures',
-                'content' => "Ask the customer to confirm the file type and size, then suggest trying a supported format. If the problem continues, request the error message and browser name before escalating to technical support.",
-                'status' => 'draft',
-                'user' => $agentTwo,
+                'title' => 'Due date SLA suggestion guide',
+                'content' => "Use this article when suggesting a due date.\n\nSLA guide:\nUrgent: same day or next business day.\nHigh: within 2 business days.\nMedium: within 3 to 5 business days.\nLow: within 5 to 7 business days.\nUnassigned tickets should be reviewed before setting a final due date.\n\nAI output should include an exact line like: Due Date: 2026-05-22\nThen add a short reason.",
+                'status' => 'published',
+                'user' => $admin,
                 'days_ago' => 2,
             ],
             [
-                'title' => 'AI Assistant response quality checklist',
-                'content' => "Before using an AI-generated reply, make sure it answers the customer's issue, uses a polite tone, avoids unsupported promises, and does not expose internal notes or sensitive account details.",
+                'title' => 'Writing clear customer replies',
+                'content' => "Use this article to improve AI replies and agent responses.\n\nA strong customer reply should:\n1. Greet the customer by name when available.\n2. Acknowledge the issue directly.\n3. Explain what support is checking without exposing internal notes.\n4. Give one clear next step.\n5. Avoid unsupported promises.\n6. Stay under 140 words unless more detail is requested.\n\nFor unclear previous responses, rewrite the reply using simple language and practical next steps.",
                 'status' => 'published',
                 'user' => $admin,
                 'days_ago' => 1,
             ],
+            [
+                'title' => 'AI Assistant response quality checklist',
+                'content' => "Before using an AI-generated reply, make sure it answers the customer's issue, uses a polite tone, avoids unsupported promises, and does not expose internal notes or sensitive account details.\n\nThe AI should use Knowledge Base context when relevant and should refuse unrelated requests that are not connected to the ticket or helpdesk workflow.",
+                'status' => 'published',
+                'user' => $admin,
+                'days_ago' => 0,
+            ],
         ];
 
         $knowledgeTable = null;
-        foreach (['knowledge_bases', 'knowledge_base_articles'] as $table) {
+        foreach (['knowledge_articles', 'knowledge_base_articles', 'knowledge_bases'] as $table) {
             if (Schema::hasTable($table)) {
                 $knowledgeTable = $table;
                 break;
@@ -533,6 +608,10 @@ class DatabaseSeeder extends Seeder
                 $payload = [
                     'content' => $article['content'],
                 ];
+
+                if (Schema::hasColumn($knowledgeTable, 'slug')) {
+                    $payload['slug'] = Str::slug($article['title']);
+                }
 
                 if (Schema::hasColumn($knowledgeTable, 'status')) {
                     $payload['status'] = $article['status'];

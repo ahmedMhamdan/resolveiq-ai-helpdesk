@@ -273,6 +273,19 @@
                         required
                     >{{ old('message') }}</textarea>
 
+                    <div class="reply-options reply-options-before-attachments">
+                        @if ($isAdmin || $isAgent)
+                            <label class="check-row">
+                                <input type="checkbox" name="is_internal_note" value="1">
+                                <span>Internal note</span>
+                            </label>
+                        @endif
+
+                        <button type="submit" class="btn btn-primary">
+                            Send Reply
+                        </button>
+                    </div>
+
                     <div class="reply-attachments-field">
                         <label for="attachments">Attachments</label>
 
@@ -294,19 +307,6 @@
                         >
 
                         <div class="selected-files-list" id="selectedFilesList"></div>
-                    </div>
-
-                    <div class="reply-options">
-                        @if ($isAdmin || $isAgent)
-                            <label class="check-row">
-                                <input type="checkbox" name="is_internal_note" value="1">
-                                <span>Internal note</span>
-                            </label>
-                        @endif
-
-                        <button type="submit" class="btn btn-primary">
-                            Send Reply
-                        </button>
                     </div>
                 </form>
             </div>
