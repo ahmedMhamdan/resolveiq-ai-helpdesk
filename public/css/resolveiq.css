@@ -26,9 +26,9 @@
   --shadow-soft: 0 16px 40px rgba(15, 23, 42, .08);
   --ring-primary: rgba(99, 102, 241, .22);
 
-  --motion-fast: 180ms;
-  --motion-normal: 280ms;
-  --motion-slow: 520ms;
+  --motion-fast: 140ms;
+  --motion-normal: 180ms;
+  --motion-slow: 360ms;
   --ease-out: cubic-bezier(.2, .8, .2, 1);
 }
 
@@ -242,8 +242,6 @@ button {
 }
 
 .sidebar-card {
-  margin-top: 28px;
-  padding: 16px;
   border: 1px solid var(--border);
   border-radius: 22px;
   background: linear-gradient(135deg, var(--primary-soft), rgba(124, 58, 237, .08));
@@ -256,8 +254,6 @@ button {
 .sidebar-card p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.6;
-  font-size: 13px;
 }
 
 /* =========================================================
@@ -1533,9 +1529,7 @@ body:not(.dark) .reply-delete-btn:hover {
 
 .activity-item {
   display: grid;
-  grid-template-columns: 14px 1fr auto;
   gap: 14px;
-  align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border);
 }
@@ -1947,9 +1941,7 @@ body.dark select option:disabled {
   animation: softFloat 3.8s ease-in-out infinite;
 }
 
-.theme-changing * {
-  transition-duration: 320ms !important;
-}
+/* Keep theme switching light on mobile/low-power devices. */
 
 @keyframes pageIn {
   from {
@@ -2043,20 +2035,8 @@ body.dark select option:disabled {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
-    position: static;
-    height: auto;
-  }
 
-  .topbar {
-    height: auto;
-    grid-template-columns: 1fr;
-    align-items: stretch;
-  }
 
-  .search-wrap {
-    max-width: none;
-  }
 
   .page-head,
   .table-head,
@@ -2114,15 +2094,6 @@ body.dark select option:disabled {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-    scroll-behavior: auto !important;
-  }
-}
 /* =========================
    Profile page
 ========================= */
@@ -2951,16 +2922,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
     background-color: #f8fafc;
 }
 
-@media (max-width: 900px) {
-    .users-management-table {
-        min-width: 900px;
-    }
-
-    .users-table-head {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
 /* =========================
    Unassigned Tickets
 ========================= */
@@ -2994,10 +2955,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
     margin-inline: auto;
 }
 
-.unassigned-table .users-role-actions {
-    justify-content: center;
-    flex-wrap: nowrap;
-}
 
 .unassigned-table .role-select {
     min-width: 145px;
@@ -3050,9 +3007,7 @@ body:not(.dark) .users-role-actions .role-select:hover {
 }
 
 .unassigned-table .btn-assign-agent {
-    height: 48px;
     padding-inline: 20px;
-    border-radius: 14px;
 }
 /* Make Assign button smaller in Unassigned Tickets */
 .unassigned-table .btn-assign-agent {
@@ -3271,8 +3226,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
-    min-width: 180px;
 }
 
 .ai-btn-spinner {
@@ -3360,15 +3313,7 @@ body:not(.dark) .users-role-actions .role-select:hover {
 }
 
 .ai-empty-orb {
-    width: 54px;
-    height: 54px;
-    display: grid;
-    place-items: center;
-    border-radius: 18px;
-    color: #fff;
     font-size: 22px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    box-shadow: 0 18px 42px rgba(99, 102, 241, .28);
 }
 
 .ai-empty-state strong {
@@ -3469,17 +3414,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
     background: rgba(239, 68, 68, .08);
 }
 
-.meta-warning {
-    display: inline-flex;
-    width: fit-content;
-    margin-top: 6px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    color: var(--danger);
-    background: rgba(239, 68, 68, .12);
-    font-size: 12px;
-    font-weight: 750;
-}
 
 @media (min-width: 1200px) {
     .ticket-meta-grid {
@@ -3911,7 +3845,6 @@ body.dark .meta-overdue {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
 }
 
 .activity-search-form input {
@@ -5383,16 +5316,9 @@ body.dark .profile-avatar-uploader {
 
   .topbar {
     height: auto !important;
-    display: grid !important;
-    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
-    grid-template-rows: 44px !important;
-    align-items: center;
-    gap: 8px !important;
-    margin: 0 0 10px !important;
   }
 
   .mobile-sidebar-toggle {
-    grid-column: 1;
     width: 44px;
     height: 44px;
     display: inline-flex !important;
@@ -5415,7 +5341,6 @@ body.dark .profile-avatar-uploader {
   }
 
   .search-wrap {
-    grid-column: 2 !important;
     width: 100%;
     max-width: none;
     min-width: 0;
@@ -5442,12 +5367,8 @@ body.dark .profile-avatar-uploader {
     display: none !important;
   }
 
-  .top-actions {
-    display: contents !important;
-  }
 
   .top-actions .notifications-dropdown {
-    grid-column: 3;
     width: 44px;
     height: 44px;
   }
@@ -5469,23 +5390,15 @@ body.dark .profile-avatar-uploader {
     width: auto !important;
   }
 
-  .mobile-quick-actions {
-    display: grid !important;
-    grid-template-columns: minmax(90px, .9fr) minmax(0, 1.15fr) minmax(70px, .75fr);
-    gap: 8px;
-    margin: 0 0 20px;
-  }
 
   .mobile-action-pill {
     min-width: 0;
-    height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     padding: 0 12px;
     border: 1px solid var(--border);
-    border-radius: 14px;
     color: var(--text);
     background: var(--panel);
     font-size: .78rem;
@@ -5705,11 +5618,6 @@ body.dark .profile-avatar-uploader {
     padding: 12px 12px 24px !important;
   }
 
-  .topbar {
-    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
-    grid-template-rows: 42px !important;
-    gap: 7px !important;
-  }
 
   .mobile-sidebar-toggle,
   .top-notification-btn,
@@ -5725,10 +5633,6 @@ body.dark .profile-avatar-uploader {
     font-size: .76rem;
   }
 
-  .mobile-quick-actions {
-    grid-template-columns: minmax(82px, .9fr) minmax(0, 1.1fr) minmax(64px, .72fr);
-    gap: 7px;
-  }
 
   .mobile-action-pill {
     height: 36px;
@@ -6054,10 +5958,6 @@ body.dark .profile-avatar-uploader {
   .mobile-quick-actions {
     grid-column: 1 / -1 !important;
     grid-row: 2 !important;
-    display: grid !important;
-    grid-template-columns: minmax(96px, .9fr) minmax(0, 1.15fr) minmax(74px, .75fr) !important;
-    gap: 8px !important;
-    margin: 8px 0 4px !important;
   }
 
   .mobile-action-pill {
@@ -6086,8 +5986,6 @@ body.dark .profile-avatar-uploader {
   }
 
   .mobile-quick-actions {
-    grid-template-columns: minmax(84px, .9fr) minmax(0, 1.1fr) minmax(66px, .72fr) !important;
-    gap: 7px !important;
     margin-top: 7px !important;
   }
 }
@@ -6211,19 +6109,7 @@ body.dark .profile-avatar-uploader {
         padding: 16px !important;
     }
 
-    .dashboard-ticket-tools {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
 
-    .dashboard-ticket-search-form {
-        max-width: none;
-        width: 100%;
-        flex-basis: auto;
-    }
 
     .dashboard-ticket-search-box {
         min-height: 46px;
@@ -6248,11 +6134,7 @@ body.dark .profile-avatar-uploader {
     }
 
     .dashboard-view-all-btn {
-        width: 100% !important;
-        min-height: 42px !important;
-        justify-content: center !important;
         text-align: center !important;
-        border-radius: 15px !important;
     }
 
     .dashboard-mobile-cards-table {
@@ -7264,126 +7146,21 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     border-radius: 14px !important;
   }
 
-  .unassigned-table-card .table-wrap {
-    overflow: visible !important;
-  }
 
-  .unassigned-table {
-    width: 100% !important;
-    min-width: 0 !important;
-    display: block !important;
-    border-collapse: separate !important;
-  }
 
-  .unassigned-table thead {
-    display: none !important;
-  }
 
-  .unassigned-table tbody {
-    width: 100% !important;
-    display: grid !important;
-    gap: 13px !important;
-    padding: 0 12px 14px !important;
-  }
 
-  .unassigned-table .unassigned-ticket-row,
-  .unassigned-table .live-ticket-row {
-    width: 100% !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 14px !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
-    box-shadow: none !important;
-    animation: none !important;
-    transform: none !important;
-  }
 
-  html[data-theme="light"] .unassigned-table .unassigned-ticket-row,
-  body:not(.dark) .unassigned-table .unassigned-ticket-row,
-  html[data-theme="light"] .unassigned-table .live-ticket-row,
-  body:not(.dark) .unassigned-table .live-ticket-row {
-    background: #fff !important;
-  }
 
-  .unassigned-table td {
-    width: 100% !important;
-    min-width: 0 !important;
-    padding: 10px 0 !important;
-    border: 0 !important;
-    border-bottom: 1px solid rgba(148, 163, 184, .14) !important;
-    text-align: left !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-  }
 
-  .unassigned-table td:last-child {
-    border-bottom: 0 !important;
-    padding-bottom: 0 !important;
-  }
 
-  .unassigned-table td[data-label="Ticket"],
-  .unassigned-table td:first-child {
-    display: block !important;
-    padding-top: 0 !important;
-  }
 
-  .unassigned-table td[data-label="Ticket"]::before,
-  .unassigned-table td:first-child::before,
-  .unassigned-table td[colspan]::before {
-    display: none !important;
-    content: none !important;
-  }
 
-  .unassigned-table td:not(:first-child):not([colspan]) {
-    display: grid !important;
-    grid-template-columns: 92px minmax(0, 1fr) !important;
-    align-items: center !important;
-    gap: 12px !important;
-  }
 
-  .unassigned-table td:not(:first-child):not([colspan])::before {
-    content: attr(data-label);
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: .06em;
-    line-height: 1.3;
-    text-transform: uppercase;
-  }
 
-  .unassigned-table .ticket-link {
-    display: flex !important;
-    width: 100% !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-  }
 
-  .unassigned-table .ticket-link strong,
-  .unassigned-table .ticket-number {
-    display: inline-block !important;
-    margin-bottom: 2px !important;
-    color: var(--primary) !important;
-    font-size: .95rem !important;
-    line-height: 1.25 !important;
-  }
 
-  .unassigned-table .ticket-link span,
-  .unassigned-table .ticket-title {
-    display: block !important;
-    color: var(--text) !important;
-    font-size: .88rem !important;
-    font-weight: 750 !important;
-    line-height: 1.45 !important;
-  }
 
-  .unassigned-table .person,
-  .unassigned-table .ticket-person {
-    justify-content: flex-start !important;
-    min-width: 0 !important;
-    text-align: left !important;
-  }
 
   .unassigned-table .badge,
   .unassigned-table .priority,
@@ -7396,13 +7173,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     text-align: left !important;
   }
 
-  .unassigned-table .users-role-actions {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-    justify-content: stretch !important;
-  }
 
   .unassigned-table .users-role-actions .role-select,
   .unassigned-table .users-role-actions .btn,
@@ -7412,22 +7182,11 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     min-width: 0 !important;
   }
 
-  .unassigned-table .users-role-actions .btn {
-    min-height: 42px !important;
-    border-radius: 14px !important;
-  }
 
-  .unassigned-table td[colspan] {
-    display: block !important;
-    text-align: center !important;
-    border-bottom: 0 !important;
-  }
 }
 
 @media (max-width: 380px) {
   .unassigned-table td:not(:first-child):not([colspan]) {
-    grid-template-columns: 82px minmax(0, 1fr) !important;
-    gap: 10px !important;
     font-size: 13px !important;
   }
 }
@@ -8287,16 +8046,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
    Mobile stays unchanged.
 ========================================================= */
 
-@media (min-width: 861px) {
-  .topbar .search[type="search"] {
-    padding-right: 78px !important;
-  }
-
-  .topbar .search[type="search"]::-webkit-search-cancel-button {
-    cursor: pointer;
-    margin-right: -56px;
-  }
-}
 /* =========================================================
    Topbar search clear button - desktop only
    Mobile stays unchanged.
@@ -8882,21 +8631,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   }
 
   /* Fallback labels لو ما في data-label بالـ Blade */
-  .agents-table td:nth-child(2)::before {
-    content: "EMAIL" !important;
-  }
 
-  .agents-table td:nth-child(3)::before {
-    content: "TICKETS" !important;
-  }
 
-  .agents-table td:nth-child(4)::before {
-    content: "CREATED" !important;
-  }
 
-  .agents-table td:nth-child(5)::before {
-    content: "ACTIONS" !important;
-  }
 
   .agents-table td:not(:first-child) {
     color: var(--text) !important;
@@ -9674,21 +9411,9 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     content: none !important;
   }
 
-  .unassigned-table td:not(:first-child):not([colspan]) {
-    display: grid !important;
-    grid-template-columns: 92px minmax(0, 1fr) !important;
-    align-items: center !important;
-    gap: 12px !important;
-  }
 
   .unassigned-table td:not(:first-child):not([colspan])::before {
     content: attr(data-label);
-    color: var(--muted) !important;
-    font-size: 10px !important;
-    font-weight: 900 !important;
-    letter-spacing: .06em !important;
-    line-height: 1.3 !important;
-    text-transform: uppercase !important;
   }
 
   .unassigned-table .ticket-link {
@@ -9759,7 +9484,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   }
 
   .unassigned-table .users-role-actions {
-    width: 100% !important;
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 8px !important;
@@ -9768,10 +9492,7 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
   .unassigned-table .users-role-actions .role-select,
   .unassigned-table .users-role-actions .btn {
-    width: 100% !important;
-    max-width: 178px !important;
     min-width: 0 !important;
-    justify-self: start !important;
   }
 
   .unassigned-table .users-role-actions .btn {
@@ -9787,10 +9508,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 }
 
 @media (max-width: 380px) {
-  .unassigned-table td:not(:first-child):not([colspan]) {
-    grid-template-columns: 82px minmax(0, 1fr) !important;
-    gap: 10px !important;
-  }
 
   .unassigned-table .priority-assign-select,
   .unassigned-table .unassigned-due-date-input,
@@ -10019,34 +9736,12 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 ========================================================= */
 
 @media (max-width: 860px) {
-  .mobile-quick-actions {
-    grid-template-columns: minmax(0, 1fr) 44px minmax(66px, .75fr) !important;
-    align-items: center !important;
-  }
 
   .mobile-quick-actions:has(.mobile-action-primary) {
     grid-template-columns: minmax(74px, .82fr) minmax(0, 1fr) 44px minmax(64px, .68fr) !important;
   }
 
-  .mobile-theme-pill {
-    width: 44px !important;
-    min-width: 44px !important;
-    max-width: 44px !important;
-    padding: 0 !important;
-    gap: 0 !important;
-    position: relative !important;
-    overflow: hidden !important;
-    border: 1px solid rgba(148, 163, 184, .22) !important;
-    background:
-      radial-gradient(circle at 25% 20%, rgba(245, 158, 11, .18), transparent 30%),
-      var(--panel) !important;
-    box-shadow: none !important;
-  }
 
-  .mobile-theme-pill::before {
-    display: none !important;
-    content: none !important;
-  }
 
   .mobile-theme-icon {
     width: 16px !important;
@@ -10082,12 +9777,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     transition: left var(--motion-normal) var(--ease-out), transform var(--motion-normal) var(--ease-out);
   }
 
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    background:
-      radial-gradient(circle at 78% 25%, rgba(139, 92, 246, .22), transparent 34%),
-      rgba(15, 23, 42, .96) !important;
-  }
 
   html[data-theme="dark"] .mobile-theme-sun,
   body.dark .mobile-theme-sun {
@@ -10098,7 +9787,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   html[data-theme="dark"] .mobile-theme-moon,
   body.dark .mobile-theme-moon {
     opacity: 1 !important;
-    transform: rotate(-8deg) scale(1.05) !important;
   }
 
   html[data-theme="dark"] .mobile-theme-thumb,
@@ -10124,12 +9812,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 ========================================================= */
 
 @media (max-width: 860px) {
-  .mobile-quick-actions {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    margin: 8px 0 18px !important;
-  }
 
   .mobile-quick-actions .mobile-action-pill,
   .mobile-quick-actions .mobile-theme-pill {
@@ -10147,12 +9829,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     white-space: nowrap !important;
   }
 
-  .mobile-theme-pill {
-    color: var(--text) !important;
-    background: var(--panel) !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: none !important;
-  }
 
   .mobile-theme-pill::before {
     display: none !important;
@@ -10161,9 +9837,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 }
 
 @media (max-width: 430px) {
-  .mobile-quick-actions {
-    gap: 7px !important;
-  }
 
   .mobile-quick-actions .mobile-action-pill,
   .mobile-quick-actions .mobile-theme-pill {
@@ -10177,37 +9850,10 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 ========================================================= */
 
 @media (max-width: 860px) {
-  .mobile-quick-actions {
-    display: grid !important;
-    grid-template-columns: minmax(82px, .92fr) minmax(0, 1.2fr) 48px minmax(70px, .78fr) !important;
-    gap: 7px !important;
-    align-items: center !important;
-    margin: 8px 0 18px !important;
-  }
 
-  .mobile-quick-actions .mobile-action-pill {
-    min-width: 0 !important;
-    height: 38px !important;
-    padding: 0 10px !important;
-    border-radius: 14px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: .74rem !important;
-    font-weight: 850 !important;
-    white-space: nowrap !important;
-  }
 
   .mobile-theme-pill {
-    width: 48px !important;
-    min-width: 48px !important;
-    max-width: 48px !important;
-    padding: 0 !important;
     gap: 2px !important;
-    color: #020617 !important;
-    background: #f8fafc !important;
-    border: 1px solid rgba(148, 163, 184, .36) !important;
-    box-shadow: none !important;
   }
 
   .mobile-theme-pill::before,
@@ -10217,9 +9863,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   }
 
   .mobile-theme-svg {
-    width: 15px !important;
-    height: 15px !important;
-    color: #020617 !important;
     flex: 0 0 auto !important;
     display: block !important;
   }
@@ -10231,62 +9874,19 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     background: rgba(15, 23, 42, .25) !important;
   }
 
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    color: #020617 !important;
-    background: #f8fafc !important;
-  }
 }
 
-@media (max-width: 430px) {
-  .mobile-quick-actions {
-    grid-template-columns: minmax(78px, .9fr) minmax(0, 1.1fr) 46px minmax(66px, .76fr) !important;
-    gap: 6px !important;
-  }
-
-  .mobile-quick-actions .mobile-action-pill {
-    height: 36px !important;
-    padding: 0 8px !important;
-    font-size: .69rem !important;
-  }
-
-  .mobile-theme-pill {
-    width: 46px !important;
-    min-width: 46px !important;
-    max-width: 46px !important;
-  }
-
-  .mobile-theme-svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
-}
 /* =========================================================
    Mobile theme toggle - one icon, site colors
    Light mode shows sun only. Dark mode shows moon only.
 ========================================================= */
 
 @media (max-width: 860px) {
-  .mobile-quick-actions {
-    display: grid !important;
-    grid-template-columns: minmax(84px, .9fr) minmax(0, 1.1fr) 42px minmax(68px, .76fr) !important;
-    gap: 7px !important;
-    align-items: center !important;
-  }
 
   .mobile-theme-pill {
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    display: inline-grid !important;
-    place-items: center !important;
-    border-radius: 13px !important;
     border: 1px solid rgba(148, 163, 184, .28) !important;
     color: #020617 !important;
     background: rgba(255, 255, 255, .92) !important;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, .10) !important;
   }
 
   .mobile-theme-pill::before,
@@ -10314,22 +9914,10 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
   html[data-theme="dark"] .mobile-theme-pill,
   body.dark .mobile-theme-pill {
-    color: #e5e7eb !important;
-    background: rgba(15, 23, 42, .95) !important;
-    border-color: rgba(148, 163, 184, .22) !important;
     box-shadow: 0 10px 22px rgba(0, 0, 0, .20) !important;
   }
 
-  html[data-theme="dark"] .mobile-theme-sun,
-  body.dark .mobile-theme-sun {
-    display: none !important;
-  }
 
-  html[data-theme="dark"] .mobile-theme-moon,
-  body.dark .mobile-theme-moon {
-    display: block !important;
-    color: #c4b5fd !important;
-  }
 
   html[data-theme="light"] .mobile-theme-pill,
   body:not(.dark) .mobile-theme-pill {
@@ -10353,7 +9941,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 @media (max-width: 430px) {
   .mobile-quick-actions {
     grid-template-columns: minmax(82px, .9fr) minmax(0, 1.1fr) 40px minmax(66px, .74fr) !important;
-    gap: 6px !important;
   }
 
   .mobile-theme-pill {
@@ -10375,69 +9962,18 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 @media (max-width: 860px) {
   .mobile-theme-pill {
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 38px !important;
-    padding: 0 !important;
-    display: inline-grid !important;
     place-items: center !important;
     justify-content: center !important;
     align-content: center !important;
-    border-radius: 14px !important;
-    line-height: 1 !important;
-    overflow: hidden !important;
   }
 
-  .mobile-theme-pill .mobile-theme-icon,
-  .mobile-theme-pill .mobile-theme-sun,
-  .mobile-theme-pill .mobile-theme-moon {
-    width: 18px !important;
-    height: 18px !important;
-    display: grid !important;
-    place-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-  }
 
-  .mobile-theme-pill svg {
-    width: 17px !important;
-    height: 17px !important;
-    display: block !important;
-    margin: 0 auto !important;
-  }
 
-  html[data-theme="light"] .mobile-theme-pill {
-    color: #0f172a !important;
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-  }
 
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    color: #e5e7eb !important;
-    background: #0f172a !important;
-    border: 1px solid #1e293b !important;
-  }
 
-  html[data-theme="light"] .mobile-theme-moon {
-    display: none !important;
-  }
 
-  html[data-theme="light"] .mobile-theme-sun {
-    display: grid !important;
-  }
 
-  html[data-theme="dark"] .mobile-theme-sun,
-  body.dark .mobile-theme-sun {
-    display: none !important;
-  }
 
-  html[data-theme="dark"] .mobile-theme-moon,
-  body.dark .mobile-theme-moon {
-    display: grid !important;
-  }
 }
 /* =========================================================
    Mobile theme icon - exact center fix
@@ -10445,14 +9981,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 @media (max-width: 860px) {
   .mobile-theme-pill {
-    position: relative !important;
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 38px !important;
-    padding: 0 !important;
-    display: block !important;
-    border-radius: 14px !important;
     line-height: 1 !important;
   }
 
@@ -10472,23 +10000,13 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     transform: translate(-50%, -50%) !important;
   }
 
-  .mobile-theme-pill svg {
-    width: 17px !important;
-    height: 17px !important;
-    display: block !important;
-    margin: 0 !important;
-  }
 
   html[data-theme="light"] .mobile-theme-pill {
-    color: #0f172a !important;
-    background: #ffffff !important;
     border-color: #e2e8f0 !important;
   }
 
   html[data-theme="dark"] .mobile-theme-pill,
   body.dark .mobile-theme-pill {
-    color: #e5e7eb !important;
-    background: #0f172a !important;
     border-color: #1e293b !important;
   }
 }
@@ -10690,38 +10208,12 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 }
 
 .password-input-wrap {
-  position: relative;
   width: 100%;
 }
 
-.password-input-wrap input {
-  padding-right: 52px !important;
-}
 
-.password-eye-toggle {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 1px solid transparent;
-  border-radius: 13px;
-  color: var(--muted);
-  background: transparent;
-  transform: translateY(-50%);
-  transition:
-    color var(--motion-fast) var(--ease-out),
-    background-color var(--motion-fast) var(--ease-out),
-    border-color var(--motion-fast) var(--ease-out),
-    transform var(--motion-fast) var(--ease-out);
-}
 
 .password-eye-toggle:hover {
-  color: var(--primary);
-  background: var(--primary-soft);
   border-color: rgba(99, 102, 241, .22);
 }
 
@@ -10729,22 +10221,9 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   transform: translateY(-50%) scale(.94);
 }
 
-.password-eye-toggle svg {
-  width: 19px;
-  height: 19px;
-}
 
-.password-eye-toggle .eye-closed {
-  display: none;
-}
 
-.password-eye-toggle.is-visible .eye-open {
-  display: none;
-}
 
-.password-eye-toggle.is-visible .eye-closed {
-  display: block;
-}
 
 @media (max-width: 700px) {
   .auth-app-navbar {
@@ -10910,47 +10389,12 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 .verification-result-card {
   max-width: 560px;
-  text-align: center;
-  overflow: hidden;
 }
 
-.verification-result-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(34, 193, 241, .15), transparent 34%),
-    radial-gradient(circle at 100% 20%, rgba(124, 92, 255, .12), transparent 30%);
-  pointer-events: none;
-}
 
-.verification-result-icon {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 22px;
-  display: grid;
-  place-items: center;
-  border-radius: 24px;
-}
 
-.verification-result-icon svg {
-  width: 34px;
-  height: 34px;
-}
 
-.verification-result-icon.is-success {
-  color: #22c55e;
-  background: rgba(34, 197, 94, .13);
-  border: 1px solid rgba(34, 197, 94, .28);
-  box-shadow: 0 18px 45px rgba(34, 197, 94, .12);
-}
 
-.verification-result-icon.is-error {
-  color: #fb7185;
-  background: rgba(251, 113, 133, .13);
-  border: 1px solid rgba(251, 113, 133, .28);
-  box-shadow: 0 18px 45px rgba(251, 113, 133, .12);
-}
 
 .verification-result-head h1,
 .verification-result-head p {
@@ -10959,13 +10403,9 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 .verification-result-btn {
   max-width: 230px;
-  margin: 8px auto 0;
 }
 
 .verification-result-note {
-  margin: 18px 0 0;
-  color: var(--muted);
-  font-size: .9rem;
   text-align: center;
 }
 
@@ -11252,4 +10692,84 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
         width: 100%;
         min-width: 0;
     }
+}
+
+
+/* =========================================================
+   44. Theme performance optimization
+   Keeps dark/light switching fast without changing layout.
+========================================================= */
+
+/* Reduce expensive full-page repaint feeling during theme changes. */
+html,
+body {
+  transition-duration: 140ms !important;
+}
+
+/* Keep only the switch itself animated and lightweight. */
+.theme-switch,
+.theme-switch *,
+.switch-track,
+.switch-thumb,
+.theme-icon,
+.theme-icon svg {
+  transition-duration: 140ms !important;
+}
+
+/* Heavy surfaces should not animate slowly when CSS variables change. */
+.sidebar,
+.topbar,
+.card,
+.table-card,
+.auth-card,
+.ai-card,
+.ai-workspace-card,
+.ai-output-card,
+.profile-main-card,
+.profile-info-card,
+.profile-activity-card,
+.notifications-menu,
+.notification-summary-card,
+.ticket-create-card,
+.deleted-tickets-card,
+.unassigned-table-card,
+.public-preview-card,
+.mobile-action-pill,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.search,
+.filters input,
+.filters select {
+  transition-duration: 120ms !important;
+}
+
+/* Avoid running decorative animations while switching theme. */
+html.theme-changing *,
+body.theme-changing *,
+.theme-changing * {
+  animation-duration: 0ms !important;
+  transition-duration: 0ms !important;
+}
+
+/* Mobile devices feel smoother without constant floating header CTA animation. */
+@media (max-width: 860px) {
+  .topbar .btn-primary,
+  .topbar .new-ticket-btn,
+  .ai-empty-orb,
+  .ai-empty-orb::before,
+  .ai-empty-svg {
+    animation: none !important;
+  }
+}
+
+/* Keep accessibility preference respected at the very end of the file. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }
