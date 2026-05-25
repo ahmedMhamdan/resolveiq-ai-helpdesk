@@ -13,19 +13,14 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-
     return view('welcome');
 })->name('home');
 
 Route::get('/email/verify/{id}/{hash}', [PublicEmailVerificationController::class, 'verify'])
-    ->middleware(['signed:relative', 'throttle:6,1'])
+    ->middleware(['signed', 'throttle:6,1'])
     ->name('verification.verify');
 
 Route::middleware('auth')->group(function () {
