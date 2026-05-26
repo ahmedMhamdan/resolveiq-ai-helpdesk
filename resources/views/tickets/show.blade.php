@@ -200,7 +200,7 @@
                                 </div>
 
                                 <div class="reply-body">
-                                    {{ $reply->message }}
+                                    {!! nl2br(e($reply->message)) !!}
                                 </div>
 
                                 @if ($reply->attachments->count())

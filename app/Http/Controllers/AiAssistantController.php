@@ -59,15 +59,21 @@ class AiAssistantController extends Controller
 
         $mode = $data['mode'];
         $customPrompt = trim($data['custom_prompt'] ?? '') ?: null;
+        $blockedAsOffTopic = $aiService->shouldBlockCustomInstruction($customPrompt);
 
         try {
-            $body = $aiService->generate(
-                $ticket,
-                $mode,
-                $customPrompt
-            );
+            if ($blockedAsOffTopic) {
+                $body = $aiService->offTopicMessage();
+                $knowledgeSources = [];
+            } else {
+                $body = $aiService->generate(
+                    $ticket,
+                    $mode,
+                    $customPrompt
+                );
 
-            $knowledgeSources = $aiService->knowledgeSourcesFor($ticket);
+                $knowledgeSources = $aiService->knowledgeSourcesFor($ticket);
+            }
         } catch (Throwable $e) {
             report($e);
 
@@ -98,9 +104,12 @@ class AiAssistantController extends Controller
             'mode' => $mode,
             'title' => $this->makeAiTitle($mode, $ticket),
             'body' => $body,
+            'reply_body' => $this->cleanAiMessageForReply($body, false),
+            'internal_note_body' => $this->cleanAiMessageForReply($body, true),
             'suggested_priority' => $suggestedPriority,
             'suggested_due_date' => $suggestedDueDate,
-            'used_fallback' => $aiService->usedFallback(),
+            'used_fallback' => $blockedAsOffTopic ? false : $aiService->usedFallback(),
+            'blocked' => $blockedAsOffTopic,
             'knowledge_sources' => $knowledgeSources,
         ];
 
@@ -215,10 +224,17 @@ class AiAssistantController extends Controller
     {
         $user = $request->user();
         $isInternalNote = $request->boolean('is_internal_note');
+        $cleanMessage = $this->cleanAiMessageForReply($message, $isInternalNote);
+
+        if ($cleanMessage === '') {
+            return back()->withErrors([
+                'message' => 'The AI message is empty after cleanup. Please generate a reply again.',
+            ]);
+        }
 
         $reply = $ticket->replies()->create([
             'user_id' => $user->id,
-            'message' => $message,
+            'message' => $cleanMessage,
             'is_internal_note' => $isInternalNote,
         ]);
 
@@ -308,6 +324,91 @@ class AiAssistantController extends Controller
         }
 
         return null;
+    }
+
+    private function cleanAiMessageForReply(string $message, bool $isInternalNote): string
+    {
+        $message = trim($this->removeUiOnlyAiSections($message));
+
+        if ($message === '') {
+            return '';
+        }
+
+        $lines = preg_split('/\r\n|\r|\n/', $message) ?: [];
+        $cleanedLines = [];
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ($line === '') {
+                if (! empty($cleanedLines) && end($cleanedLines) !== '') {
+                    $cleanedLines[] = '';
+                }
+
+                continue;
+            }
+
+            if ($this->isUiOnlyAiLine($line)) {
+                continue;
+            }
+
+            if (! $isInternalNote && $this->isTechnicalMetadataLine($line)) {
+                continue;
+            }
+
+            if (! $isInternalNote) {
+                $line = preg_replace('/^\s*(?:#{1,6}\s*)?(?:Suggested Reply|Customer Reply|Reply|Response)\s*:\s*/i', '', $line) ?? $line;
+                $line = preg_replace('/^\s*[#>`]+\s*/u', '', $line) ?? $line;
+                $line = preg_replace('/^\s*[-*]\s*(?=(Hi|Hello|Dear|Thank you|Thanks|We|I|Our|Your)\b)/iu', '', $line) ?? $line;
+            } else {
+                $line = preg_replace('/^\s*#{1,6}\s*/u', '', $line) ?? $line;
+            }
+
+            $line = trim($line, " \t\n\r\0\x0B*_`");
+
+            if ($line !== '') {
+                $cleanedLines[] = $line;
+            }
+        }
+
+        $cleaned = trim(preg_replace("/\n{3,}/", "\n\n", implode("\n", $cleanedLines)) ?? implode("\n", $cleanedLines));
+
+        return $cleaned !== '' ? $cleaned : trim($message);
+    }
+
+    private function removeUiOnlyAiSections(string $message): string
+    {
+        $patterns = [
+            '/\n?\s*(?:#{1,6}\s*)?\*{0,2}Knowledge Sources Used\*{0,2}\s*:?.*$/isu',
+            '/\n?\s*(?:#{1,6}\s*)?\*{0,2}Knowledge sources used\*{0,2}\s*:?.*$/isu',
+            '/\n?\s*(?:#{1,6}\s*)?\*{0,2}Sources\*{0,2}\s*:?.*$/isu',
+            '/\n?\s*(?:#{1,6}\s*)?(?:المصادر|مصادر المعرفة)\s*:?.*$/isu',
+        ];
+
+        foreach ($patterns as $pattern) {
+            $message = preg_replace($pattern, '', $message) ?? $message;
+        }
+
+        return trim($message);
+    }
+
+    private function isUiOnlyAiLine(string $line): bool
+    {
+        $line = trim($line, " \t\n\r\0\x0B*_`#");
+
+        return (bool) preg_match('/^(Knowledge Sources Used|Knowledge sources used|Sources|المصادر|مصادر المعرفة)\s*:?$/iu', $line);
+    }
+
+    private function isTechnicalMetadataLine(string $line): bool
+    {
+        $line = trim($line);
+        $line = preg_replace('/^\s*(?:[-*]\s*)?\*{0,2}/u', '', $line) ?? $line;
+        $line = trim($line, " \t\n\r\0\x0B*_`");
+
+        return (bool) (
+            preg_match('/^(Priority|Suggested Priority|Due Date|Suggested Due Date|Reason)\s*[:：\-–—]/iu', $line)
+            || preg_match('/^(الأولوية|تاريخ الاستحقاق|تاريخ الاستحقاق المقترح|السبب)\s*[:：\-–—]/u', $line)
+        );
     }
 
     private function formatDateForLog($value): ?string

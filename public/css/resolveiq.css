@@ -1233,6 +1233,9 @@ body:not(.dark) .reply.internal {
 
 .reply-body {
   line-height: 1.7;
+  white-space: normal;
+  unicode-bidi: plaintext;
+  text-align: start;
 }
 
 .empty-replies {
@@ -4037,13 +4040,13 @@ body:not(.dark) .unassigned-table .unassigned-due-date-input {
     }
 }
 /* =========================
-   AI Output unified style
+   AI Output readable style
 ========================= */
 
 .ai-generated-text {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
     margin-top: 14px;
 }
 
@@ -4051,49 +4054,43 @@ body:not(.dark) .unassigned-table .unassigned-due-date-input {
 .ai-output-line-strong {
     width: 100%;
     margin: 0;
-    padding: 15px 17px;
-    border: 1px solid rgba(56, 189, 248, .22);
-    border-radius: 16px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
     color: var(--text);
-    background:
-        linear-gradient(135deg, rgba(6, 182, 212, .16), rgba(14, 165, 233, .10));
-    line-height: 1.8;
+    background: transparent;
+    line-height: 1.85;
     font-size: .96rem;
-    font-weight: 650;
+    font-weight: 550;
     word-break: break-word;
     white-space: pre-wrap;
-}
-
-.ai-output-line-strong {
-    border-color: rgba(56, 189, 248, .32);
-    background:
-        linear-gradient(135deg, rgba(6, 182, 212, .22), rgba(14, 165, 233, .14));
-    box-shadow: inset 0 0 0 1px rgba(56, 189, 248, .06);
-}
-
-.ai-output-line:hover,
-.ai-output-line-strong:hover {
-    border-color: rgba(56, 189, 248, .42);
-    transform: translateY(-1px);
-}
-
-/* Better Arabic / mixed Arabic-English output */
-.ai-generated-text,
-.ai-output-line,
-.ai-output-line-strong {
     unicode-bidi: plaintext;
     text-align: start;
 }
 
-/* Light mode */
+.ai-output-line-strong {
+    position: relative;
+    padding-inline-start: 18px;
+    color: var(--text);
+    font-weight: 750;
+}
+
+.ai-output-line-strong::before {
+    content: "";
+    position: absolute;
+    top: .8em;
+    inset-inline-start: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
 html[data-theme="light"] .ai-output-line,
 html[data-theme="light"] .ai-output-line-strong,
 body:not(.dark) .ai-output-line,
 body:not(.dark) .ai-output-line-strong {
     color: #0f172a;
-    background:
-        linear-gradient(135deg, rgba(14, 165, 233, .12), rgba(99, 102, 241, .08));
-    border-color: rgba(14, 165, 233, .18);
 }
 
 /* Activity details modal */
@@ -10853,4 +10850,237 @@ body:not(.dark) .ai-form-area select {
 .ai-kb-sources li {
     line-height: 1.6;
     word-break: break-word;
+}
+
+/* =========================================================
+   43. AI reply cleanup UI polish
+   Keeps AI output readable without saving UI-only metadata.
+========================================================= */
+
+.ai-generated-text {
+  gap: 8px !important;
+}
+
+.ai-output-line,
+.ai-output-line-strong {
+  margin: 0 !important;
+  padding: 8px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--text) !important;
+  font-weight: 500 !important;
+  line-height: 1.75 !important;
+  transform: none !important;
+}
+
+.ai-output-line-strong {
+  padding: 10px 12px !important;
+  border: 1px solid rgba(99, 102, 241, .18) !important;
+  border-radius: 14px !important;
+  background: rgba(99, 102, 241, .08) !important;
+  font-weight: 750 !important;
+}
+
+.ai-output-line:hover,
+.ai-output-line-strong:hover {
+  transform: none !important;
+}
+
+.ai-kb-sources {
+  overflow: hidden;
+}
+
+.ai-kb-sources strong {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: .92rem;
+  line-height: 1.4;
+}
+
+.ai-kb-sources strong svg {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  max-height: 18px !important;
+  flex: 0 0 18px !important;
+  display: inline-block !important;
+}
+
+.ai-kb-sources ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ai-kb-sources li {
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* =========================================================
+   AI Assistant scope guard notice
+========================================================= */
+.ai-scope-notice {
+    margin: 12px 0 14px;
+    padding: 12px 14px;
+    border: 1px solid rgba(248, 113, 113, .34);
+    border-radius: 14px;
+    color: #fb7185;
+    background: rgba(248, 113, 113, .10);
+    font-size: .9rem;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+html[data-theme="light"] .ai-scope-notice,
+body:not(.dark) .ai-scope-notice {
+    color: #be123c;
+    border-color: rgba(225, 29, 72, .26);
+    background: #fff1f2;
+}
+/* =========================================================
+   AI Output polish - compact readable result
+========================================================= */
+
+.ai-output-card {
+    max-width: 520px;
+}
+
+.ai-output-box.has-output {
+    gap: 14px;
+    padding: 20px;
+}
+
+.ai-generated-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    color: var(--text);
+}
+
+/* Make normal AI lines look like clean text, not huge cards */
+.ai-output-line,
+.ai-output-line-strong {
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    padding: 4px 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--text) !important;
+    font-size: .96rem;
+    font-weight: 600;
+    line-height: 1.9;
+    word-break: break-word;
+    white-space: pre-wrap;
+    transform: none !important;
+    unicode-bidi: plaintext;
+    text-align: start;
+}
+
+.ai-output-line::before,
+.ai-output-line::after,
+.ai-output-line-strong::before,
+.ai-output-line-strong::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Numbered steps: compact highlighted rows */
+.ai-output-line-strong {
+    padding: 10px 12px !important;
+    border: 1px solid rgba(99, 102, 241, .22) !important;
+    border-radius: 14px !important;
+    background: rgba(99, 102, 241, .08) !important;
+    font-weight: 750;
+}
+
+/* Priority / Reason lines: smaller, cleaner */
+.ai-output-line-strong:has(strong),
+.ai-generated-text .ai-output-line-strong {
+    box-shadow: none !important;
+}
+
+/* Better Arabic readability */
+.ai-output-card,
+.ai-output-box,
+.ai-generated-text {
+    direction: auto;
+}
+
+/* Keep headings clear */
+.ai-output-box > strong {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 850;
+    line-height: 1.5;
+}
+
+/* Knowledge Sources compact box */
+.ai-kb-sources {
+    margin-top: 16px;
+    padding: 14px 15px;
+    border: 1px solid rgba(56, 189, 248, .22);
+    border-radius: 16px;
+    background: rgba(56, 189, 248, .07);
+}
+
+.ai-kb-sources strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: var(--text);
+    font-size: .9rem;
+    font-weight: 800;
+}
+
+.ai-kb-sources strong svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    flex: 0 0 18px !important;
+}
+
+.ai-kb-sources ul {
+    margin: 0;
+    padding-inline-start: 20px;
+}
+
+.ai-kb-sources li {
+    margin: 6px 0;
+    color: var(--muted);
+    font-size: .9rem;
+    line-height: 1.6;
+}
+
+/* Mobile spacing */
+@media (max-width: 860px) {
+    .ai-output-card {
+        max-width: 100%;
+    }
+
+    .ai-output-box.has-output {
+        padding: 16px;
+    }
+
+    .ai-output-line,
+    .ai-output-line-strong {
+        font-size: .9rem !important;
+        line-height: 1.75 !important;
+    }
+
+    .ai-output-line-strong {
+        padding: 9px 11px !important;
+        border-radius: 13px !important;
+    }
 }

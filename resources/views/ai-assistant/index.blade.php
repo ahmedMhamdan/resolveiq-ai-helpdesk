@@ -9,7 +9,7 @@
         $selectedTicketId = (string) old('ticket_id', request('ticket_id', $ticketAi['ticket_id'] ?? ''));
         $selectedMode = old('mode', $ticketAi['mode'] ?? 'summary');
         $isAdmin = strtolower(auth()->user()?->role?->name ?? 'user') === 'admin';
-        $showReplyActions = $ticketAi && in_array(($ticketAi['mode'] ?? ''), ['summary', 'reply', 'custom'], true);
+        $showReplyActions = $ticketAi && empty($ticketAi['blocked']) && in_array(($ticketAi['mode'] ?? ''), ['summary', 'reply', 'custom'], true);
         $showPriorityAction = $isAdmin && $ticketAi && ($ticketAi['mode'] ?? '') === 'priority' && ! empty($ticketAi['suggested_priority']);
         $showDueDateAction = $isAdmin && $ticketAi && ($ticketAi['mode'] ?? '') === 'due_date' && ! empty($ticketAi['suggested_due_date']);
         $priorityActionUrl = ! empty($ticketAi['ticket_id'])
@@ -173,6 +173,12 @@
                             </div>
                         @endif
 
+                        @if (! empty($ticketAi['blocked']))
+                            <div class="ai-scope-notice">
+                                This request was blocked because it is outside the ResolveIQ helpdesk scope.
+                            </div>
+                        @endif
+
                         @php
                             $aiLines = collect(preg_split('/\r\n|\r|\n/', trim($ticketAi['body'] ?? '')))
                                 ->filter(fn ($line) => trim($line) !== '');
@@ -256,13 +262,15 @@
                         @csrf
 
                         <input type="hidden" name="ticket_id" id="aiReplyTicketInput" value="{{ $ticketAi['ticket_id'] ?? $selectedTicketId }}">
-                        <textarea name="message" id="aiReplyMessageInput" hidden>{{ $ticketAi['body'] ?? '' }}</textarea>
+                        <textarea name="message" id="aiReplyMessageInput" hidden>{{ $ticketAi['reply_body'] ?? $ticketAi['body'] ?? '' }}</textarea>
+                        <textarea id="aiReplyBodySource" hidden>{{ $ticketAi['reply_body'] ?? $ticketAi['body'] ?? '' }}</textarea>
+                        <textarea id="aiInternalNoteBodySource" hidden>{{ $ticketAi['internal_note_body'] ?? $ticketAi['body'] ?? '' }}</textarea>
                         <input type="hidden" name="is_internal_note" id="aiInternalNoteInput" value="0">
 
                         <button
                             type="submit"
                             class="btn btn-primary"
-                            onclick="document.getElementById('aiInternalNoteInput').value = 0"
+                            onclick="document.getElementById('aiInternalNoteInput').value = 0; document.getElementById('aiReplyMessageInput').value = document.getElementById('aiReplyBodySource').value;"
                         >
                             Use as Reply
                         </button>
@@ -270,7 +278,7 @@
                         <button
                             type="submit"
                             class="btn btn-edit-soft"
-                            onclick="document.getElementById('aiInternalNoteInput').value = 1"
+                            onclick="document.getElementById('aiInternalNoteInput').value = 1; document.getElementById('aiReplyMessageInput').value = document.getElementById('aiInternalNoteBodySource').value;"
                         >
                             Use as Internal Note
                         </button>
@@ -340,6 +348,8 @@
             const useReplyForm = document.getElementById('aiUseReplyForm');
             const replyTicketInput = document.getElementById('aiReplyTicketInput');
             const replyMessageInput = document.getElementById('aiReplyMessageInput');
+            const replyBodySource = document.getElementById('aiReplyBodySource');
+            const internalNoteBodySource = document.getElementById('aiInternalNoteBodySource');
             const applyPriorityForm = document.getElementById('aiApplyPriorityForm');
             const suggestedPriorityInput = document.getElementById('aiSuggestedPriorityInput');
             const priorityButton = applyPriorityForm?.querySelector('[data-priority-button]');
@@ -427,11 +437,16 @@
                     ? '<div class="ai-fallback-notice">The AI provider did not return a valid result after multiple attempts, so ResolveIQ used the local fallback output.</div>'
                     : '';
 
+                const scopeNotice = ticketAi.blocked
+                    ? '<div class="ai-scope-notice">This request was blocked because it is outside the ResolveIQ helpdesk scope.</div>'
+                    : '';
+
                 outputBox.classList.remove('is-loading');
                 outputBox.classList.add('has-output');
                 outputContent.innerHTML = `
                     <strong>${escapeHtml(ticketAi.title || 'AI Result')}</strong>
                     ${fallbackNotice}
+                    ${scopeNotice}
                     <div class="ai-generated-text">
                         ${renderAiText(ticketAi.body || '')}
                     </div>
@@ -442,11 +457,22 @@
                     replyTicketInput.value = ticketAi.ticket_id || '';
                 }
 
+                const cleanReplyBody = ticketAi.reply_body || ticketAi.body || '';
+                const cleanInternalNoteBody = ticketAi.internal_note_body || ticketAi.body || '';
+
                 if (replyMessageInput) {
-                    replyMessageInput.value = ticketAi.body || '';
+                    replyMessageInput.value = cleanReplyBody;
                 }
 
-                const showReplyActions = ['summary', 'reply', 'custom'].includes(ticketAi.mode);
+                if (replyBodySource) {
+                    replyBodySource.value = cleanReplyBody;
+                }
+
+                if (internalNoteBodySource) {
+                    internalNoteBodySource.value = cleanInternalNoteBody;
+                }
+
+                const showReplyActions = !ticketAi.blocked && ['summary', 'reply', 'custom'].includes(ticketAi.mode);
                 const suggestedPriority = ticketAi.suggested_priority || '';
                 const suggestedDueDate = ticketAi.suggested_due_date || '';
                 const showPriorityForm = Boolean(canApplyPriority && ticketAi.mode === 'priority' && suggestedPriority);
