@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Ticket')
+@section('title', __('tickets.title_edit'))
 
 @section('content')
 @php
@@ -10,12 +10,12 @@
 
 <div class="page-head">
     <div>
-        <h1>Edit Ticket</h1>
-        <p>Update assignment, status, priority, and due date.</p>
+        <h1>{{ __('tickets.title_edit') }}</h1>
+        <p>{{ __('tickets.edit_subtitle') }}</p>
     </div>
 
     <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-secondary">
-        Back to Ticket
+        {{ __('tickets.back_to_ticket') }}
     </a>
 </div>
 
@@ -23,7 +23,7 @@
     <div class="card-head">
         <div>
             <h2>{{ $ticket->ticket_number }}</h2>
-            <p>Edit the ticket workflow information below.</p>
+            <p>{{ __('tickets.edit_instructions') }}</p>
         </div>
     </div>
 
@@ -43,7 +43,7 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="title">Ticket Title</label>
+                <label for="title">{{ __('tickets.ticket_title_label') }}</label>
                 <input
                 type="text"
                 class="readonly-field"
@@ -53,9 +53,9 @@
             </div>
 
             <div class="form-group">
-                <label for="department_id">Department</label>
+                <label for="department_id">{{ __('tickets.department_label') }}</label>
                 <select id="department_id" name="department_id" required>
-                    <option value="">Select department</option>
+                    <option value="">{{ __('tickets.select_department') }}</option>
                     @foreach ($departments as $department)
                         <option value="{{ $department->id }}" @selected(old('department_id', $ticket->department_id) == $department->id)>
                             {{ $department->name }}
@@ -66,9 +66,9 @@
 
             @if ($isAdmin)
                 <div class="form-group">
-                    <label for="agent_id">Agent</label>
+                    <label for="agent_id">{{ __('tickets.agent_label') }}</label>
                     <select id="agent_id" name="agent_id">
-                        <option value="">Unassigned</option>
+                        <option value="">{{ __('tickets.unassigned') }}</option>
                         @foreach ($agents as $agent)
                             <option value="{{ $agent->id }}" @selected(old('agent_id', $ticket->agent_id) == $agent->id)>
                                 {{ $agent->name }}
@@ -79,12 +79,12 @@
             @endif
 
             <div class="form-group">
-                <label for="status">Status</label>
+                <label for="status">{{ __('tickets.status_label') }}</label>
                 <select id="status" name="status" required>
-                    <option value="open" @selected(old('status', $ticket->status) === 'open')>Open</option>
-                    <option value="pending" @selected(old('status', $ticket->status) === 'pending')>Pending</option>
-                    <option value="solved" @selected(old('status', $ticket->status) === 'solved')>Solved</option>
-                    <option value="closed" @selected(old('status', $ticket->status) === 'closed')>Closed</option>
+                    <option value="open" @selected(old('status', $ticket->status) === 'open')>{{ __('tickets.open') }}</option>
+                    <option value="pending" @selected(old('status', $ticket->status) === 'pending')>{{ __('tickets.pending') }}</option>
+                    <option value="solved" @selected(old('status', $ticket->status) === 'solved')>{{ __('tickets.solved') }}</option>
+                    <option value="closed" @selected(old('status', $ticket->status) === 'closed')>{{ __('tickets.closed') }}</option>
                 </select>
             </div>
 
@@ -94,18 +94,18 @@
                 @endphp
 
                 <div class="form-group">
-                    <label for="priority">Priority</label>
+                    <label for="priority">{{ __('tickets.priority_label') }}</label>
                     <select name="priority" id="priority">
-                        <option value="" @selected($selectedPriority === null || $selectedPriority === '')>Not set</option>
-                        <option value="low" @selected($selectedPriority === 'low')>Low</option>
-                        <option value="medium" @selected($selectedPriority === 'medium')>Medium</option>
-                        <option value="high" @selected($selectedPriority === 'high')>High</option>
-                        <option value="urgent" @selected($selectedPriority === 'urgent')>Urgent</option>
+                        <option value="" @selected($selectedPriority === null || $selectedPriority === '')>{{ __('tickets.not_set') }}</option>
+                        <option value="low" @selected($selectedPriority === 'low')>{{ __('tickets.low') }}</option>
+                        <option value="medium" @selected($selectedPriority === 'medium')>{{ __('tickets.medium') }}</option>
+                        <option value="high" @selected($selectedPriority === 'high')>{{ __('tickets.high') }}</option>
+                        <option value="urgent" @selected($selectedPriority === 'urgent')>{{ __('tickets.urgent') }}</option>
                     </select>
                 </div>
 
                 <div class="form-group full">
-                    <label for="due_at">Due Date</label>
+                    <label for="due_at">{{ __('tickets.due_date_label') }}</label>
 
                     <div class="date-picker-box" id="duePickerBox">
                         <input
@@ -115,7 +115,7 @@
                             value="{{ old('due_at', optional($ticket->due_at)->format('Y-m-d')) }}"
                         >
 
-                        <span class="date-display" id="dueDateDisplay">Select due date</span>
+                        <span class="date-display" id="dueDateDisplay">{{ __('tickets.select_due_date') }}</span>
 
                         <span class="date-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -128,18 +128,18 @@
             @endif
 
             <div class="form-group full">
-                <label for="description">Description</label>
+                <label for="description">{{ __('tickets.description_label') }}</label>
                 <textarea class="readonly-field" readonly>{{ $ticket->description }}</textarea>
             </div>
         </div>
 
         <div class="form-actions create-actions">
             <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('tickets.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update Ticket
+                {{ __('tickets.update_ticket') }}
             </button>
         </div>
     </form>
@@ -150,10 +150,11 @@
         const dueInput = document.getElementById('due_at');
         const dueBox = document.getElementById('duePickerBox');
         const dueDisplay = document.getElementById('dueDateDisplay');
+        const selectDueDate = @json(__('tickets.select_due_date'));
 
         function formatDate(value) {
             if (!value) {
-                return 'Select due date';
+                return selectDueDate;
             }
 
             const [year, month, day] = value.split('-');

@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Profile')
+@section('title', __('profile.title'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Profile</h1>
-        <p class="page-subtitle">Manage your account information and workspace activity.</p>
+        <h1 class="page-title">{{ __('profile.title') }}</h1>
+        <p class="page-subtitle">{{ __('profile.show_subtitle') }}</p>
     </div>
 
     <a href="{{ route('profile.edit') }}" class="btn btn-edit-soft">
-        Edit Profile
+        {{ __('profile.edit_profile') }}
     </a>
 </div>
 
@@ -43,50 +43,50 @@
                 <p>{{ $user->email }}</p>
 
                 <span class="profile-role">
-                    {{ ucfirst($user->role?->name ?? 'User') }}
+                    {{ ucfirst($user->role?->name ?? __('profile.default_role')) }}
                 </span>
             </div>
         </div>
 
         <div class="profile-stats">
             <div class="profile-stat-box profile-stat-assigned">
-                <span>Assigned Tickets</span>
+                <span>{{ __('profile.assigned_tickets') }}</span>
                 <strong>{{ $assignedTicketsCount }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-replies">
-                <span>Replies</span>
+                <span>{{ __('profile.replies') }}</span>
                 <strong>{{ $repliesCount }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-member">
-                <span>Member Since</span>
+                <span>{{ __('profile.member_since') }}</span>
                 <strong>{{ $user->created_at->format('M Y') }}</strong>
             </div>
         </div>
     </div>
 
     <div class="card profile-info-card">
-        <h2>Account Details</h2>
+        <h2>{{ __('profile.account_details') }}</h2>
 
         <div class="detail-row">
-            <small>Name</small>
+            <small>{{ __('profile.name_label') }}</small>
             <strong>{{ $user->name }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Email</small>
+            <small>{{ __('profile.email_label') }}</small>
             <strong>{{ $user->email }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Role</small>
-            <strong>{{ ucfirst($user->role?->name ?? 'User') }}</strong>
+            <small>{{ __('profile.role') }}</small>
+            <strong>{{ ucfirst($user->role?->name ?? __('profile.default_role')) }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Status</small>
-            <strong>Active</strong>
+            <small>{{ __('profile.status') }}</small>
+            <strong>{{ __('profile.active') }}</strong>
         </div>
     </div>
 </div>
@@ -94,8 +94,8 @@
 <div class="card profile-activity-card">
     <div class="table-head">
         <div>
-            <h2>Latest Replies</h2>
-            <p class="page-subtitle">Recent replies written by this user.</p>
+            <h2>{{ __('profile.latest_replies') }}</h2>
+            <p class="page-subtitle">{{ __('profile.latest_replies_subtitle') }}</p>
         </div>
     </div>
 
@@ -106,14 +106,14 @@
 
                 <div class="activity-content">
                     <strong>
-                        {{ $reply->is_internal_note ? 'Internal note' : 'Reply' }}
+                        {{ $reply->is_internal_note ? __('profile.internal_note') : __('profile.reply') }}
                     </strong>
 
                     <span>
                         @if ($reply->ticket)
                             #{{ $reply->ticket->ticket_number }}
                         @else
-                            Ticket removed
+                            {{ __('common.ticket_removed') }}
                         @endif
                         — {{ Str::limit($reply->message, 90) }}
                     </span>
@@ -123,7 +123,7 @@
             </div>
         @empty
             <div class="empty">
-                No replies yet.
+                {{ __('profile.no_replies') }}
             </div>
         @endforelse
     </div>

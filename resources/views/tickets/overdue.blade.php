@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Overdue Tickets')
+@section('title', __('tickets.overdue_tickets'))
 
 @section('content')
     <div class="page-head">
         <div>
-            <h1>Overdue Tickets</h1>
-            <p class="page-subtitle">
-                Review tickets that passed their due date and still need action.
+            <h1 data-auto-translate>{{ __('tickets.overdue_tickets') }}</h1>
+            <p class="page-subtitle" data-auto-translate>
+                {{ __('tickets.overdue_subtitle') }}
             </p>
         </div>
-        <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back">
-            Back to Tickets
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back" data-auto-translate>
+            {{ __('tickets.back_to_tickets') }}
         </a>
     </div>
 
     <div class="table-card overdue-table-card" id="overdue-ticket-list">
         <div class="table-head">
-            <h2>Needs Attention</h2>
+            <h2 data-auto-translate>{{ __('tickets.needs_attention') }}</h2>
 
             <form
                 method="GET"
@@ -30,15 +30,16 @@
                     type="search"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search overdue ticket..."
+                    placeholder="{{ __('tickets.search_overdue') }}"
+                    data-auto-translate-attribute="placeholder"
                     autocomplete="off"
                     class="js-live-ticket-input"
                 >
 
-                <button type="submit">Search</button>
+                <button type="submit" data-auto-translate>{{ __('common.search') }}</button>
 
-                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden>
-                    Reset
+                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden data-auto-translate>
+                    {{ __('common.reset') }}
                 </button>
             </form>
         </div>
@@ -47,14 +48,14 @@
             <table class="overdue-table">
                 <thead>
                     <tr>
-                        <th>Ticket</th>
-                        <th class="users-center-col">Requester</th>
-                        <th class="users-center-col">Agent</th>
-                        <th class="users-center-col">Department</th>
-                        <th class="users-center-col">Due Date</th>
-                        <th class="users-center-col">Status</th>
-                        <th class="users-center-col">Priority</th>
-                        <th class="users-center-col">Actions</th>
+                        <th data-auto-translate>{{ __('common.ticket') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.requester') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.agent') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.department') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.due_date') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.status') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.priority') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.actions') }}</th>
                     </tr>
                 </thead>
 
@@ -85,16 +86,16 @@
                                 <div class="person">
                                     <span class="mini-avatar">
                                         @if ($requesterAvatarUrl)
-                                            <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? 'Requester' }} avatar">
+                                            <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? __('common.requester') }} avatar">
                                         @else
                                             <span class="avatar-fallback">?</span>
                                         @endif
                                     </span>
 
                                     <div>
-                                        <strong>{{ $requester?->name ?? 'Unknown' }}</strong>
+                                        <strong>{{ $requester?->name ?? __('common.unknown') }}</strong>
                                         <br>
-                                        <small>{{ $requester?->email ?? 'No email' }}</small>
+                                        <small>{{ $requester?->email ?? __('common.no_email') }}</small>
                                     </div>
                                 </div>
                             </td>
@@ -130,14 +131,14 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="role-badge role-user">
-                                        Unassigned
+                                    <span class="role-badge role-user" data-auto-translate>
+                                        {{ __('common.unassigned') }}
                                     </span>
                                 @endif
                             </td>
 
                             <td class="users-center-col">
-                                {{ $ticket->department?->name ?? 'No department' }}
+                                {{ $ticket->department?->name ?? __('common.no_department') }}
                             </td>
 
                             <td class="users-center-col">
@@ -158,36 +159,36 @@
                                         {{ ucfirst($ticket->priority) }}
                                     </span>
                                 @else
-                                    <span class="priority unset">
-                                        Not set
+                                    <span class="priority unset" data-auto-translate>
+                                        {{ __('common.not_set') }}
                                     </span>
                                 @endif
                             </td>
 
                             <td class="users-center-col">
                                 <div class="row-actions users-role-actions">
-                                    <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-sm btn-view-ticket">
-                                        View
+                                    <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-sm btn-view-ticket" data-auto-translate>
+                                        {{ __('tickets.view') }}
                                     </a>
 
-                                    <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-sm">
-                                        Manage
+                                    <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-sm" data-auto-translate>
+                                        {{ __('tickets.manage') }}
                                     </a>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="empty">
-                                No overdue tickets found.
+                            <td colspan="8" class="empty" data-auto-translate>
+                                {{ __('tickets.no_overdue_found') }}
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            <p id="overdue-empty-message" class="live-search-empty" hidden>
-                No matching overdue tickets found.
+            <p id="overdue-empty-message" class="live-search-empty" hidden data-auto-translate>
+                {{ __('tickets.no_matching_overdue') }}
             </p>
         </div>
 

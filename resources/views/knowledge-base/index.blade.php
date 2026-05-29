@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Knowledge Base')
+@section('title', __('knowledge.title'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Knowledge Base</h1>
-        <p class="page-subtitle">Manage reusable support articles and internal help content.</p>
+        <h1 class="page-title" data-auto-translate>{{ __('knowledge.title') }}</h1>
+        <p class="page-subtitle" data-auto-translate>{{ __('knowledge.subtitle') }}</p>
     </div>
 
     <div class="page-actions">
-        <a href="{{ route('knowledge.create') }}" class="btn btn-primary">
-            + New Article
+        <a href="{{ route('knowledge.create') }}" class="btn btn-primary" data-auto-translate>
+            {{ __('knowledge.new_article') }}
         </a>
     </div>
 </div>
@@ -26,19 +26,16 @@
 </div>
 
         <div>
-            <h2>What is the Knowledge Base?</h2>
-            <p class="page-subtitle">
-                The Knowledge Base is a library of ready support solutions that agents and admins can reuse while handling tickets.
+            <h2 data-auto-translate>{{ __('knowledge.what_is') }}</h2>
+            <p class="page-subtitle" data-auto-translate>
+                {{ __('knowledge.what_is_desc') }}
             </p>
         </div>
     </div>
 
     <div class="kb-intro-body">
-        <p>
-            Instead of writing the same answer many times, we save common solutions here,
-            such as password reset steps, login problems, account verification, or troubleshooting instructions.
-            Later, the AI Assistant can use published articles from this library to generate more accurate replies
-            based on real helpdesk content.
+        <p data-auto-translate>
+            {{ __('knowledge.intro') }}
         </p>
 
         <div class="kb-feature-grid">
@@ -51,8 +48,8 @@
                 </svg>
             </div>
                 <div>
-                    <h3>1. Store solutions</h3>
-                    <p>Create short articles for repeated customer problems.</p>
+                    <h3 data-auto-translate>{{ __('knowledge.store_solutions') }}</h3>
+                    <p data-auto-translate>{{ __('knowledge.store_solutions_desc') }}</p>
                 </div>
             </div>
 
@@ -66,8 +63,8 @@
             </svg>
         </div>
                 <div>
-                    <h3>2. Help agents</h3>
-                    <p>Agents can quickly review the correct steps before replying.</p>
+                    <h3 data-auto-translate>{{ __('knowledge.help_agents') }}</h3>
+                    <p data-auto-translate>{{ __('knowledge.help_agents_desc') }}</p>
                 </div>
             </div>
 
@@ -79,8 +76,8 @@
             </svg>
         </div>
                 <div>
-                    <h3>3. Improve AI replies</h3>
-                    <p>Published articles can be sent as extra context to the AI Assistant.</p>
+                    <h3 data-auto-translate>{{ __('knowledge.improve_ai') }}</h3>
+                    <p data-auto-translate>{{ __('knowledge.improve_ai_desc') }}</p>
                 </div>
             </div>
         </div>
@@ -90,22 +87,23 @@
 <div class="table-card kb-articles-card">
     <div class="table-head kb-articles-head">
         <div>
-            <h2>Articles</h2>
-            <p class="page-subtitle">Reusable support content for agents and AI-assisted replies.</p>
+            <h2 data-auto-translate>{{ __('knowledge.articles') }}</h2>
+            <p class="page-subtitle" data-auto-translate>{{ __('knowledge.articles_subtitle') }}</p>
         </div>
 
         <form class="filters kb-search-form" id="kbSearchForm">
             <input
                 type="search"
                 id="kbSearchInput"
-                placeholder="Search articles..."
+                placeholder="{{ __('knowledge.search_placeholder') }}"
+                data-auto-translate-attribute="placeholder"
                 autocomplete="off"
             >
 
-            <button type="submit" class="kb-search-btn">Search</button>
+            <button type="submit" class="kb-search-btn" data-auto-translate>{{ __('knowledge.search') }}</button>
 
-            <button type="button" class="btn btn-secondary kb-search-reset" id="kbSearchReset" hidden>
-                Reset
+            <button type="button" class="btn btn-secondary kb-search-reset" id="kbSearchReset" hidden data-auto-translate>
+                {{ __('knowledge.reset') }}
             </button>
 
             <div class="kb-search-status" id="kbSearchStatus" hidden></div>
@@ -116,11 +114,11 @@
         <table class="kb-articles-table">
             <thead>
                 <tr>
-                    <th>Article</th>
-                    <th>Status</th>
-                    <th>Author</th>
-                    <th>Created</th>
-                    <th>Actions</th>
+                    <th data-auto-translate>{{ __('knowledge.article') }}</th>
+                    <th data-auto-translate>{{ __('knowledge.status') }}</th>
+                    <th data-auto-translate>{{ __('knowledge.author') }}</th>
+                    <th data-auto-translate>{{ __('knowledge.created') }}</th>
+                    <th data-auto-translate>{{ __('knowledge.actions') }}</th>
                 </tr>
             </thead>
 
@@ -131,45 +129,45 @@
                             $article->title . ' ' .
                             strip_tags($article->content) . ' ' .
                             $article->status . ' ' .
-                            ($article->user?->name ?? 'System') . ' ' .
+                            ($article->user?->name ?? __('common.system')) . ' ' .
                             $article->created_at->format('M d, Y')
                         ));
                     @endphp
 
                     <tr class="kb-article-row" data-search="{{ $articleSearchText }}">
-                        <td data-label="Article">
+                        <td data-label="{{ __('knowledge.article') }}">
                             <strong>{{ $article->title }}</strong>
                             <div class="text-muted">
                                 {{ Str::limit($article->content, 80) }}
                             </div>
                         </td>
 
-                        <td data-label="Status">
+                        <td data-label="{{ __('knowledge.status') }}">
                             <span class="badge {{ $article->status === 'published' ? 'solved' : 'pending' }}">
                                 {{ ucfirst($article->status) }}
                             </span>
                         </td>
 
-                        <td data-label="Author">
-                            {{ $article->user?->name ?? 'System' }}
+                        <td data-label="{{ __('knowledge.author') }}">
+                            {{ $article->user?->name ?? __('common.system') }}
                         </td>
 
-                        <td data-label="Created">
+                        <td data-label="{{ __('knowledge.created') }}">
                             {{ $article->created_at->format('M d, Y') }}
                         </td>
 
-                        <td data-label="Actions">
+                        <td data-label="{{ __('knowledge.actions') }}">
                             <div class="row-actions">
-                                <a href="{{ route('knowledge.edit', $article) }}" class="btn btn-sm btn-edit-soft">
-                                    Edit
+                                <a href="{{ route('knowledge.edit', $article) }}" class="btn btn-sm btn-edit-soft" data-auto-translate>
+                                    {{ __('knowledge.edit') }}
                                 </a>
 
-                                <form action="{{ route('knowledge.destroy', $article) }}" method="POST" onsubmit="return confirm('Delete this article?')">
+                                <form action="{{ route('knowledge.destroy', $article) }}" method="POST" onsubmit="return confirm('{{ __('tickets.confirm_delete_article') }}')">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="btn btn-sm btn-danger-soft">
-                                        Delete
+                                    <button type="submit" class="btn btn-sm btn-danger-soft" data-auto-translate>
+                                        {{ __('knowledge.delete') }}
                                     </button>
                                 </form>
                             </div>
@@ -188,8 +186,8 @@
                                     </svg>
                                 </div>
 
-                                <strong>No articles found yet.</strong>
-                                <p>Create your first article to start building the support knowledge library.</p>
+                                <strong data-auto-translate>{{ __('knowledge.no_articles') }}</strong>
+                                <p data-auto-translate>{{ __('knowledge.no_articles_desc') }}</p>
                             </div>
                         </td>
                     </tr>
@@ -197,8 +195,8 @@
             </tbody>
         </table>
 
-        <div class="kb-live-empty" id="kbLiveEmpty" hidden>
-            No articles matched your search.
+        <div class="kb-live-empty" id="kbLiveEmpty" hidden data-auto-translate>
+            {{ __('knowledge.no_matching') }}
         </div>
     </div>
 
@@ -209,6 +207,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const kbMessages = <?php echo json_encode([
+            'no_matching' => __('knowledge.no_matching'),
+            'search_applied' => __('common.search_applied'),
+            'articles_found' => __('knowledge.articles_found'),
+            'no_results' => __('knowledge.no_results_for'),
+        ]); ?>;
+
         const card = document.querySelector('.kb-articles-card');
         const form = document.getElementById('kbSearchForm');
         const input = document.getElementById('kbSearchInput');
@@ -267,9 +272,9 @@
             }
 
             if (matchedCount > 0) {
-                setStatus(`Search applied. ${matchedCount} article${matchedCount === 1 ? '' : 's'} found for "${query}".`, 'is-success');
+                setStatus(`${kbMessages.search_applied} ${matchedCount} ${kbMessages.articles_found}`, 'is-success');
             } else {
-                setStatus(`No results found for "${query}".`, 'is-warning');
+                setStatus(`{{ __('knowledge.no_results_for') }} "${query}".`, 'is-warning');
             }
         };
 

@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Department')
+@section('title', __('departments.title_edit'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Edit Department</h1>
-        <p class="page-subtitle">Update department information.</p>
+        <h1 class="page-title">{{ __('departments.title_edit') }}</h1>
+        <p class="page-subtitle">{{ __('departments.edit_subtitle') }}</p>
     </div>
 
     <a href="{{ route('departments.index') }}" class="btn btn-secondary">
-        Back
+        {{ __('departments.back') }}
     </a>
 </div>
 
@@ -18,7 +18,7 @@
     <div class="table-head">
         <div>
             <h2>{{ $department->name }}</h2>
-            <p class="page-subtitle">Edit this department below.</p>
+            <p class="page-subtitle">{{ __('departments.edit_instructions') }}</p>
         </div>
     </div>
 
@@ -38,7 +38,7 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="name">Department Name</label>
+                <label for="name">{{ __('departments.department_name_label') }}</label>
                 <input
                     type="text"
                     id="name"
@@ -49,7 +49,7 @@
             </div>
 
             <div class="form-group full">
-                <label for="description">Description</label>
+                <label for="description">{{ __('departments.description_label') }}</label>
                 <textarea
                     id="description"
                     name="description"
@@ -60,11 +60,11 @@
 
         <div class="form-actions create-actions">
             <a href="{{ route('departments.index') }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('departments.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update Department
+                {{ __('departments.update_department') }}
             </button>
         </div>
     </form>

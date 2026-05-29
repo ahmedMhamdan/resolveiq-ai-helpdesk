@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit User')
+@section('title', __('users.title_edit'))
 
 @section('content')
 @php
@@ -19,12 +19,12 @@
 
 <div class="page-head">
     <div>
-        <h1 class="page-title">Edit User</h1>
-        <p class="page-subtitle">Update account information and reset password when needed.</p>
+        <h1 class="page-title">{{ __('users.title_edit') }}</h1>
+        <p class="page-subtitle">{{ __('users.edit_subtitle') }}</p>
     </div>
 
     <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary">
-        Back
+        {{ __('users.back') }}
     </a>
 </div>
 
@@ -32,7 +32,7 @@
     <div class="table-head">
         <div>
             <h2>{{ $user->name }}</h2>
-            <p class="page-subtitle">Leave password fields empty to keep the current password.</p>
+            <p class="page-subtitle">{{ __('users.password_keep') }}</p>
         </div>
     </div>
 
@@ -52,7 +52,7 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="avatar">User Avatar</label>
+                <label for="avatar">{{ __('users.user_avatar_label') }}</label>
 
                 <div class="agent-avatar-uploader">
                     <div class="edit-avatar-preview" id="avatarPreview">
@@ -75,17 +75,17 @@
                         >
 
                         <label for="avatar" class="avatar-upload-btn">
-                            Choose Image
+                            {{ __('users.choose_image') }}
                         </label>
 
-                        <span class="avatar-file-name" id="avatarFileName">No image selected</span>
-                        <small class="form-hint">Upload JPG, PNG, or WebP. Max size 2MB.</small>
+                        <span class="avatar-file-name" id="avatarFileName">{{ __('users.no_image_selected') }}</span>
+                        <small class="form-hint">{{ __('users.upload_hint') }}</small>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="name">User Name</label>
+                <label for="name">{{ __('users.user_name_label') }}</label>
                 <input
                     type="text"
                     id="name"
@@ -96,7 +96,7 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">{{ __('users.email_label') }}</label>
                 <input
                     type="email"
                     id="email"
@@ -107,33 +107,33 @@
             </div>
 
             <div class="form-group">
-                <label for="password">New Password</label>
+                <label for="password">{{ __('users.new_password') }}</label>
                 <input
                     type="password"
                     id="password"
                     name="password"
-                    placeholder="Leave empty to keep current password"
+                    placeholder="{{ __('users.password_placeholder') }}"
                 >
             </div>
 
             <div class="form-group">
-                <label for="password_confirmation">Confirm New Password</label>
+                <label for="password_confirmation">{{ __('users.confirm_password') }}</label>
                 <input
                     type="password"
                     id="password_confirmation"
                     name="password_confirmation"
-                    placeholder="Repeat the new password"
+                    placeholder="{{ __('users.password_repeat_placeholder') }}"
                 >
             </div>
         </div>
 
         <div class="form-actions create-actions">
             <a href="{{ url('/users/' . $user->id) }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('users.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update User
+                {{ __('users.update_user') }}
             </button>
         </div>
     </form>
@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const avatarInput = document.getElementById('avatar');
     const fileName = document.getElementById('avatarFileName');
     const previewBox = document.getElementById('avatarPreview');
+    const noImageSelected = @json(__('users.no_image_selected'));
 
     if (!avatarInput || !fileName || !previewBox) return;
 
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const file = event.target.files[0];
 
         if (!file) {
-            fileName.textContent = 'No image selected';
+            fileName.textContent = noImageSelected;
             return;
         }
 
@@ -170,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!existingImage) {
                 existingImage = document.createElement('img');
                 existingImage.id = 'avatarPreviewImage';
-                existingImage.alt = 'Avatar Preview';
+                existingImage.alt = @json(__('common.avatar_preview'));
                 previewBox.innerHTML = '';
                 previewBox.appendChild(existingImage);
             }

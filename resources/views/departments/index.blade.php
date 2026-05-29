@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Departments')
+@section('title', __('departments.title'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Departments</h1>
-        <p class="page-subtitle">Manage support departments used for ticket routing.</p>
+        <h1 class="page-title">{{ __('departments.title') }}</h1>
+        <p class="page-subtitle">{{ __('departments.subtitle') }}</p>
     </div>
 
     <div class="page-actions">
         <a href="{{ route('departments.create') }}" class="btn btn-primary">
-            + New Department
+            {{ __('departments.new_department') }}
         </a>
     </div>
 </div>
@@ -25,8 +25,8 @@
 <div class="table-card">
     <div class="table-head">
         <div>
-            <h2>Departments</h2>
-            <p class="page-subtitle">All available support departments.</p>
+            <h2>{{ __('departments.table_heading') }}</h2>
+            <p class="page-subtitle">{{ __('departments.table_subtitle') }}</p>
         </div>
     </div>
 
@@ -34,11 +34,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Department</th>
-                    <th>Description</th>
-                    <th class="tickets-col">TICKETS</th>
-                    <th>Created</th>
-                    <th>Actions</th>
+                    <th>{{ __('departments.department_th') }}</th>
+                    <th>{{ __('departments.description_th') }}</th>
+                    <th class="tickets-col">{{ __('departments.tickets_th') }}</th>
+                    <th>{{ __('departments.created_th') }}</th>
+                    <th>{{ __('departments.actions_th') }}</th>
                 </tr>
             </thead>
 
@@ -50,7 +50,7 @@
                         </td>
 
                         <td>
-                            {{ $department->description ?? 'No description' }}
+                            {{ $department->description ?? __('departments.no_description') }}
                         </td>
 
                         <td class="tickets-col">
@@ -66,15 +66,15 @@
                         <td>
                             <div class="row-actions">
                                 <a href="{{ route('departments.edit', $department) }}" class="btn btn-sm btn-edit-soft">
-                                    Edit
+                                    {{ __('departments.edit_btn') }}
                                 </a>
 
-                                <form action="{{ route('departments.destroy', $department) }}" method="POST" onsubmit="return confirm('Delete this department?')">
+                                <form action="{{ route('departments.destroy', $department) }}" method="POST" onsubmit="return confirm('{{ __('departments.confirm_delete') }}')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit" class="btn btn-sm btn-danger-soft">
-                                        Delete
+                                        {{ __('departments.delete_btn') }}
                                     </button>
                                 </form>
                             </div>
@@ -82,7 +82,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5">No departments found.</td>
+                        <td colspan="5">{{ __('departments.no_departments') }}</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'User Details')
+@section('title', __('users.title_show'))
 
 @section('content')
 @php
@@ -24,19 +24,19 @@
 
 <div class="page-head">
     <div>
-        <h1 class="page-title">User Details</h1>
-        <p class="page-subtitle">Review account information, ticket activity, and recent actions.</p>
+        <h1 class="page-title">{{ __('users.title_show') }}</h1>
+        <p class="page-subtitle">{{ __('users.show_subtitle') }}</p>
     </div>
 
     <div class="page-actions">
         @if ($roleName !== 'admin')
             <a href="{{ url('/users/' . $user->id . '/edit') }}" class="btn btn-primary">
-                Edit User
+                {{ __('users.edit_user_btn') }}
             </a>
         @endif
 
         <a href="{{ route('users.index') }}" class="btn btn-secondary">
-            Back
+            {{ __('users.back') }}
         </a>
     </div>
 </div>
@@ -75,42 +75,42 @@
 
         <div class="profile-stats">
             <div class="profile-stat-box profile-stat-assigned">
-                <span>Created Tickets</span>
+                <span>{{ __('users.created_tickets_heading') }}</span>
                 <strong>{{ $user->tickets_count ?? 0 }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-replies">
-                <span>Assigned Tickets</span>
+                <span>{{ __('users.assigned_tickets_heading') }}</span>
                 <strong>{{ $user->assigned_tickets_count ?? 0 }}</strong>
             </div>
 
             <div class="profile-stat-box profile-stat-member">
-                <span>Replies</span>
+                <span>{{ __('users.replies') }}</span>
                 <strong>{{ $user->ticket_replies_count ?? 0 }}</strong>
             </div>
         </div>
     </div>
 
     <div class="card profile-info-card">
-        <h2>Account Info</h2>
+        <h2>{{ __('users.account_info') }}</h2>
 
         <div class="detail-row">
-            <small>Role</small>
+            <small>{{ __('users.role') }}</small>
             <strong>{{ ucfirst($roleName) }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Email</small>
+            <small>{{ __('users.email') }}</small>
             <strong>{{ $user->email }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Joined</small>
+            <small>{{ __('users.joined') }}</small>
             <strong>{{ $user->created_at?->format('M d, Y') }}</strong>
         </div>
 
         <div class="detail-row">
-            <small>Last Updated</small>
+            <small>{{ __('users.last_updated') }}</small>
             <strong>{{ $user->updated_at?->diffForHumans() }}</strong>
         </div>
     </div>
@@ -120,8 +120,8 @@
     <div class="table-card">
         <div class="table-head">
             <div>
-                <h2>Created Tickets</h2>
-                <p class="page-subtitle">Latest tickets created by this user.</p>
+                <h2>{{ __('users.created_tickets_heading') }}</h2>
+                <p class="page-subtitle">{{ __('users.show_subtitle') }}</p>
             </div>
         </div>
 
@@ -129,9 +129,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Ticket</th>
-                        <th>Status</th>
-                        <th>Priority</th>
+                        <th>{{ __('users.ticket') }}</th>
+                        <th>{{ __('users.status') }}</th>
+                        <th>{{ __('users.priority') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -144,11 +144,11 @@
                                 </a>
                             </td>
                             <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">{{ ucfirst($ticket->priority ?? 'Not set') }}</span></td>
+                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">{{ ucfirst($ticket->priority ?? __('common.not_set')) }}</span></td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="empty">No created tickets yet.</td>
+                            <td colspan="3" class="empty">{{ __('users.no_created_tickets') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -159,8 +159,8 @@
     <div class="table-card">
         <div class="table-head">
             <div>
-                <h2>Assigned Tickets</h2>
-                <p class="page-subtitle">Latest tickets assigned to this user.</p>
+                <h2>{{ __('users.assigned_tickets_heading') }}</h2>
+                <p class="page-subtitle">{{ __('users.show_subtitle') }}</p>
             </div>
         </div>
 
@@ -168,9 +168,9 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Ticket</th>
-                        <th>Status</th>
-                        <th>Priority</th>
+                        <th>{{ __('users.ticket') }}</th>
+                        <th>{{ __('users.status') }}</th>
+                        <th>{{ __('users.priority') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,11 +183,11 @@
                                 </a>
                             </td>
                             <td><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">{{ ucfirst($ticket->priority ?? 'Not set') }}</span></td>
+                            <td><span class="priority {{ $ticket->priority ?? 'unset' }}">{{ ucfirst($ticket->priority ?? __('common.not_set')) }}</span></td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="empty">No assigned tickets yet.</td>
+                            <td colspan="3" class="empty">{{ __('users.no_assigned_tickets') }}</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -200,8 +200,8 @@
     <div class="table-card">
         <div class="table-head">
             <div>
-                <h2>Recent Replies</h2>
-                <p class="page-subtitle">Latest replies written by this account.</p>
+                <h2>{{ __('users.recent_replies') }}</h2>
+                <p class="page-subtitle">{{ __('users.recent_replies_subtitle') }}</p>
             </div>
         </div>
 
@@ -209,21 +209,21 @@
             <div class="activity-item">
                 <span class="activity-dot"></span>
                 <div class="activity-content">
-                    <strong>{{ $reply->ticket?->ticket_number ?? 'Ticket' }}</strong>
+                    <strong>{{ $reply->ticket?->ticket_number ?? __('users.ticket') }}</strong>
                     <span>{{ str($reply->message)->limit(90) }}</span>
                 </div>
                 <small>{{ $reply->created_at?->diffForHumans() }}</small>
             </div>
         @empty
-            <div class="empty">No replies yet.</div>
+            <div class="empty">{{ __('users.no_replies') }}</div>
         @endforelse
     </div>
 
     <div class="table-card">
         <div class="table-head">
             <div>
-                <h2>Recent Activity</h2>
-                <p class="page-subtitle">Latest system activity for this account.</p>
+                <h2>{{ __('users.recent_activity') }}</h2>
+                <p class="page-subtitle">{{ __('users.recent_activity_subtitle') }}</p>
             </div>
         </div>
 
@@ -232,12 +232,12 @@
                 <span class="activity-dot"></span>
                 <div class="activity-content">
                     <strong>{{ $log->action }}</strong>
-                    <span>{{ $log->ticket?->ticket_number ?? 'No ticket linked' }}</span>
+                    <span>{{ $log->ticket?->ticket_number ?? __('users.no_ticket_linked') }}</span>
                 </div>
                 <small>{{ $log->created_at?->diffForHumans() }}</small>
             </div>
         @empty
-            <div class="empty">No activity yet.</div>
+            <div class="empty">{{ __('users.no_activity') }}</div>
         @endforelse
     </div>
 </div>

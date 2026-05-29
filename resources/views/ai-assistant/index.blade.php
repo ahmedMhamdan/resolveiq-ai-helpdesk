@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'AI Assistant')
+@section('title', __('ai.title'))
 
 @section('content')
 
@@ -23,9 +23,9 @@
 
     <div class="page-head ai-page-head">
         <div>
-            <h1 class="page-title">AI Assistant</h1>
-            <p class="page-subtitle">
-                Use ticket context to summarize issues, draft replies, recommend priority, suggest due dates, or generate a custom response.
+            <h1 class="page-title" data-auto-translate>{{ __('ai.title') }}</h1>
+            <p class="page-subtitle" data-auto-translate>
+                {{ __('ai.subtitle') }}
             </p>
         </div>
     </div>
@@ -44,8 +44,8 @@
         <section class="card ai-workspace-card">
             <div class="ai-section-head">
                 <div>
-                    <h2>Assistant Workspace</h2>
-                    <p>Select a ticket, choose an action, then generate a focused support response.</p>
+                    <h2 data-auto-translate>{{ __('ai.workspace') }}</h2>
+                    <p data-auto-translate>{{ __('ai.workspace_desc') }}</p>
                 </div>
             </div>
 
@@ -60,10 +60,10 @@
                 <input type="hidden" name="mode" id="aiModeInput" value="{{ $selectedMode }}">
 
                 <div class="form-group full">
-                    <label for="ticket_id">Ticket</label>
+                    <label for="ticket_id" data-auto-translate>{{ __('ai.ticket_label') }}</label>
 
                     <select id="ticket_id" name="ticket_id" required>
-                        <option value="">Select ticket</option>
+                        <option value="" data-auto-translate>{{ __('ai.select_ticket') }}</option>
 
                         @foreach ($tickets as $ticket)
                             <option
@@ -83,9 +83,9 @@
                         class="ai-action-card {{ $selectedMode === 'summary' ? 'active' : '' }}"
                         data-mode="summary"
                     >
-                        <span>Summary</span>
-                        <strong>Generate Summary</strong>
-                        <small>Create a structured internal summary for the support team.</small>
+                        <span data-auto-translate>{{ __('ai.summary') }}</span>
+                        <strong data-auto-translate>{{ __('ai.generate_summary') }}</strong>
+                        <small data-auto-translate>{{ __('ai.summary_desc') }}</small>
                     </button>
 
                     <button
@@ -93,9 +93,9 @@
                         class="ai-action-card {{ $selectedMode === 'reply' ? 'active' : '' }}"
                         data-mode="reply"
                     >
-                        <span>Reply</span>
-                        <strong>Suggest Reply</strong>
-                        <small>Draft a clear customer-facing support response.</small>
+                        <span data-auto-translate>{{ __('ai.reply') }}</span>
+                        <strong data-auto-translate>{{ __('ai.suggest_reply') }}</strong>
+                        <small data-auto-translate>{{ __('ai.reply_desc') }}</small>
                     </button>
 
                     <button
@@ -103,9 +103,9 @@
                         class="ai-action-card {{ $selectedMode === 'priority' ? 'active' : '' }}"
                         data-mode="priority"
                     >
-                        <span>Priority</span>
-                        <strong>Suggest Priority</strong>
-                        <small>Recommend the ticket priority with a short reason.</small>
+                        <span data-auto-translate>{{ __('ai.priority') }}</span>
+                        <strong data-auto-translate>{{ __('ai.suggest_priority') }}</strong>
+                        <small data-auto-translate>{{ __('ai.priority_desc') }}</small>
                     </button>
 
                     <button
@@ -113,9 +113,9 @@
                         class="ai-action-card {{ $selectedMode === 'due_date' ? 'active' : '' }}"
                         data-mode="due_date"
                     >
-                        <span>Due Date</span>
-                        <strong>Suggest Due Date</strong>
-                        <small>Recommend an SLA-style due date based on ticket urgency.</small>
+                        <span data-auto-translate>{{ __('ai.due_date') }}</span>
+                        <strong data-auto-translate>{{ __('ai.suggest_due_date') }}</strong>
+                        <small data-auto-translate>{{ __('ai.due_date_desc') }}</small>
                     </button>
 
                     <button
@@ -123,30 +123,31 @@
                         class="ai-action-card {{ $selectedMode === 'custom' ? 'active' : '' }}"
                         data-mode="custom"
                     >
-                        <span>Custom</span>
-                        <strong>Custom Instruction</strong>
-                        <small>Ask anything specific about this ticket using your own instruction.</small>
+                        <span data-auto-translate>{{ __('ai.custom') }}</span>
+                        <strong data-auto-translate>{{ __('ai.custom_instruction') }}</strong>
+                        <small data-auto-translate>{{ __('ai.custom_desc') }}</small>
                     </button>
                 </div>
 
                 <div class="form-group full">
                     <label for="custom_prompt">
-                        Instructions
-                        <span style="color: var(--muted);">(optional, required for Custom)</span>
+                        <span data-auto-translate>{{ __('ai.instructions') }}</span>
+                        <span style="color: var(--muted);" data-auto-translate>{{ __('ai.instructions_hint') }}</span>
                     </label>
 
                     <textarea
                         id="custom_prompt"
                         name="custom_prompt"
                         rows="6"
-                        placeholder="Optional: adjust tone, language, length, or ask a specific question about this ticket..."
+                        placeholder="{{ __('ai.placeholder') }}"
+                        data-auto-translate-attribute="placeholder"
                     >{{ old('custom_prompt') }}</textarea>
                 </div>
 
                 <div class="ai-generate-row">
                     <button type="submit" class="btn btn-primary ai-generate-btn" id="generateAiBtn">
                         <span class="ai-btn-spinner" aria-hidden="true"></span>
-                        <span class="ai-btn-text">Generate</span>
+                        <span class="ai-btn-text">{{ __('ai.generate') }}</span>
                         <span class="ai-btn-dots" aria-hidden="true">
                             <span></span>
                             <span></span>
@@ -160,22 +161,22 @@
         <aside class="card ai-output-card">
             <div class="ai-output-icon">AI</div>
 
-            <h2>AI Output</h2>
+            <h2 data-auto-translate>{{ __('ai.ai_output') }}</h2>
 
             <div class="ai-output-box {{ $ticketAi ? 'has-output' : '' }}" id="aiOutputBox">
                 <div id="aiOutputContent">
                     @if ($ticketAi)
-                        <strong>{{ $ticketAi['title'] ?? 'AI Result' }}</strong>
+                        <strong>{{ $ticketAi['title'] ?? __('ai.ai_result') }}</strong>
 
                         @if (! empty($ticketAi['used_fallback']))
-                            <div class="ai-fallback-notice">
-                                The AI provider did not return a valid result after multiple attempts, so ResolveIQ used the local fallback output.
+                            <div class="ai-fallback-notice" data-auto-translate>
+                                {{ __('ai.fallback_notice') }}
                             </div>
                         @endif
 
                         @if (! empty($ticketAi['blocked']))
-                            <div class="ai-scope-notice">
-                                This request was blocked because it is outside the ResolveIQ helpdesk scope.
+                            <div class="ai-scope-notice" data-auto-translate>
+                                {{ __('ai.scope_notice') }}
                             </div>
                         @endif
 
@@ -199,20 +200,16 @@
 
                         @if (! empty($ticketAi['knowledge_sources']))
                             <div class="ai-kb-sources">
-                                <strong>
-                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M4 19.5V5.75C4 4.78 4.78 4 5.75 4H10C11.1 4 12 4.9 12 6V20C12 18.9 11.1 18 10 18H5.5C4.67 18 4 18.67 4 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M20 19.5V5.75C20 4.78 19.22 4 18.25 4H14C12.9 4 12 4.9 12 6V20C12 18.9 12.9 18 14 18H18.5C19.33 18 20 18.67 20 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    Knowledge sources used
+                                <strong data-auto-translate>
+                                    {{ __('ai.knowledge_sources') }}
                                 </strong>
 
                                 <ul>
                                     @foreach ($ticketAi['knowledge_sources'] as $source)
                                         <li>
-                                            {{ is_array($source) ? ($source['title'] ?? 'Knowledge article') : $source }}
+                                            {{ is_array($source) ? ($source['title'] ?? __('ai.knowledge_article')) : $source }}
                                             @if (is_array($source) && ! empty($source['score']))
-                                                <small>— relevance {{ $source['score'] }}</small>
+                                                <small>— {{ __('ai.relevance') }} {{ $source['score'] }}</small>
                                             @endif
                                         </li>
                                     @endforeach
@@ -238,10 +235,10 @@
                             </svg>
                         </div>
 
-                        <strong>No AI output yet</strong>
+                        <strong data-auto-translate>{{ __('ai.no_output_yet') }}</strong>
 
-                        <span>
-                            Select a ticket, choose an action, then generate.
+                        <span data-auto-translate>
+                            {{ __('ai.no_output_desc') }}
                         </span>
                     </div>
                     @endif
@@ -270,17 +267,19 @@
                         <button
                             type="submit"
                             class="btn btn-primary"
+                            data-auto-translate
                             onclick="document.getElementById('aiInternalNoteInput').value = 0; document.getElementById('aiReplyMessageInput').value = document.getElementById('aiReplyBodySource').value;"
                         >
-                            Use as Reply
+                            {{ __('ai.use_as_reply') }}
                         </button>
 
                         <button
                             type="submit"
                             class="btn btn-edit-soft"
+                            data-auto-translate
                             onclick="document.getElementById('aiInternalNoteInput').value = 1; document.getElementById('aiReplyMessageInput').value = document.getElementById('aiInternalNoteBodySource').value;"
                         >
-                            Use as Internal Note
+                            {{ __('ai.use_as_internal_note') }}
                         </button>
                     </form>
 
@@ -300,9 +299,9 @@
 
                             <button type="submit" class="btn btn-primary" data-priority-button>
                                 @if (! empty($ticketAi['suggested_priority']))
-                                    Apply {{ ucfirst($ticketAi['suggested_priority']) }} Priority
+                                    {{ __('ai.apply_priority') }} {{ ucfirst($ticketAi['suggested_priority']) }}
                                 @else
-                                    Apply Priority
+                                    {{ __('ai.apply_priority') }}
                                 @endif
                             </button>
                         </form>
@@ -322,9 +321,9 @@
 
                             <button type="submit" class="btn btn-primary" data-due-date-button>
                                 @if (! empty($ticketAi['suggested_due_date']))
-                                    Apply Due Date {{ $ticketAi['suggested_due_date'] }}
+                                    {{ __('ai.apply_due_date') }} {{ $ticketAi['suggested_due_date'] }}
                                 @else
-                                    Apply Due Date
+                                    {{ __('ai.apply_due_date') }}
                                 @endif
                             </button>
                         </form>
@@ -336,6 +335,27 @@
 
     <script>
         (() => {
+            const aiMessages = <?php echo json_encode([
+                'summary' => __('ai.summary_placeholder'),
+                'due_date' => __('ai.due_date_placeholder'),
+                'reply' => __('ai.reply_placeholder'),
+                'priority' => __('ai.priority_placeholder'),
+                'custom' => __('ai.custom_placeholder'),
+                'generating' => __('ai.generating'),
+                'generate' => __('ai.generate'),
+                'please_select' => __('ai.please_select_ticket'),
+                'please_write' => __('ai.please_write_instruction'),
+                'could_not_generate' => __('ai.could_not_generate'),
+                'no_content' => __('ai.no_content_returned'),
+                'knowledge_sources' => __('ai.knowledge_sources'),
+                'knowledge_article' => __('ai.knowledge_article'),
+                'relevance' => __('ai.relevance'),
+                'fallback_notice' => __('ai.fallback_notice'),
+                'scope_notice' => __('ai.scope_notice'),
+                'apply_priority' => __('ai.apply_priority'),
+                'apply_due_date' => __('ai.apply_due_date'),
+            ]); ?>;
+
             const aiCards = document.querySelectorAll('.ai-action-card');
             const promptBox = document.getElementById('custom_prompt');
             const ticketSelect = document.getElementById('ticket_id');
@@ -386,7 +406,7 @@
                     .filter(Boolean);
 
                 if (!lines.length) {
-                    return '<p class="ai-output-line">No content returned.</p>';
+                    return `<p class="ai-output-line">${escapeHtml(aiMessages.no_content)}</p>`;
                 }
 
                 return lines.map(line => {
@@ -405,10 +425,10 @@
                 const items = sources.map(source => {
                     const title = typeof source === 'string'
                         ? source
-                        : (source?.title || 'Knowledge article');
+                        : (source?.title || aiMessages.knowledge_article);
 
                     const score = typeof source === 'object' && source?.score
-                        ? ` <small>— relevance ${escapeHtml(source.score)}</small>`
+                        ? ` <small>— ${aiMessages.relevance} ${escapeHtml(source.score)}</small>`
                         : '';
 
                     return `<li>${escapeHtml(title)}${score}</li>`;
@@ -421,7 +441,7 @@
                                 <path d="M4 19.5V5.75C4 4.78 4.78 4 5.75 4H10C11.1 4 12 4.9 12 6V20C12 18.9 11.1 18 10 18H5.5C4.67 18 4 18.67 4 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                                 <path d="M20 19.5V5.75C20 4.78 19.22 4 18.25 4H14C12.9 4 12 4.9 12 6V20C12 18.9 12.9 18 14 18H18.5C19.33 18 20 18.67 20 19.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            Knowledge sources used
+                            ${escapeHtml(aiMessages.knowledge_sources)}
                         </strong>
                         <ul>${items}</ul>
                     </div>
@@ -434,17 +454,17 @@
                 }
 
                 const fallbackNotice = ticketAi.used_fallback
-                    ? '<div class="ai-fallback-notice">The AI provider did not return a valid result after multiple attempts, so ResolveIQ used the local fallback output.</div>'
+                    ? `<div class="ai-fallback-notice">${escapeHtml(aiMessages.fallback_notice)}</div>`
                     : '';
 
                 const scopeNotice = ticketAi.blocked
-                    ? '<div class="ai-scope-notice">This request was blocked because it is outside the ResolveIQ helpdesk scope.</div>'
+                    ? `<div class="ai-scope-notice">${escapeHtml(aiMessages.scope_notice)}</div>`
                     : '';
 
                 outputBox.classList.remove('is-loading');
                 outputBox.classList.add('has-output');
                 outputContent.innerHTML = `
-                    <strong>${escapeHtml(ticketAi.title || 'AI Result')}</strong>
+                    <strong>${escapeHtml(ticketAi.title || aiMessages.knowledge_article)}</strong>
                     ${fallbackNotice}
                     ${scopeNotice}
                     <div class="ai-generated-text">
@@ -499,7 +519,7 @@
                         }
 
                         if (priorityButton) {
-                            priorityButton.textContent = `Apply ${suggestedPriority.charAt(0).toUpperCase() + suggestedPriority.slice(1)} Priority`;
+                            priorityButton.textContent = `${aiMessages.apply_priority} ${suggestedPriority.charAt(0).toUpperCase() + suggestedPriority.slice(1)}`;
                         }
                     }
                 }
@@ -516,7 +536,7 @@
                         }
 
                         if (dueDateButton) {
-                            dueDateButton.textContent = `Apply Due Date ${suggestedDueDate}`;
+                            dueDateButton.textContent = `${aiMessages.apply_due_date} ${suggestedDueDate}`;
                         }
                     }
                 }
@@ -528,11 +548,11 @@
                 }
 
                 const placeholders = {
-                    summary: 'Optional: make the summary shorter, write it in Arabic, or include a specific field like due date...',
-                    due_date: 'Optional: write the due date reason in Arabic, make it urgent, or explain it briefly...',
-                    reply: 'Optional: use a friendly tone, make it shorter, apologize politely, or write in Arabic...',
-                    priority: 'Optional: explain why this should be urgent/high/medium/low...',
-                    custom: 'Required for Custom: ask anything specific, e.g. "Give me troubleshooting steps" or "Write a WhatsApp-style update"...',
+                    summary: aiMessages.summary,
+                    due_date: aiMessages.due_date,
+                    reply: aiMessages.reply,
+                    priority: aiMessages.priority,
+                    custom: aiMessages.custom,
                 };
 
                 promptBox.placeholder = placeholders[selectedMode()] || placeholders.summary;
@@ -557,7 +577,7 @@
                 generateBtn.style.cursor = isLoading ? 'wait' : (hasTicket ? 'pointer' : 'not-allowed');
 
                 if (btnText) {
-                    btnText.textContent = isLoading ? 'Generating' : 'Generate';
+                    btnText.textContent = isLoading ? aiMessages.generating : aiMessages.generate;
                 }
             }
 
@@ -594,12 +614,12 @@
                 const option = selectedOption();
 
                 if (!option || !option.value) {
-                    alert('Please select a ticket first.');
+                    alert(aiMessages.please_select);
                     return;
                 }
 
                 if (selectedMode() === 'custom' && !promptBox?.value.trim()) {
-                    alert('Please write a custom instruction first.');
+                    alert(aiMessages.please_write);
                     return;
                 }
 
@@ -637,12 +657,12 @@
 
                     if (!response.ok) {
                         const errors = data.errors ? Object.values(data.errors).flat().join('\n') : null;
-                        throw new Error(errors || data.message || 'Could not generate AI output.');
+                        throw new Error(errors || data.message || aiMessages.could_not_generate);
                     }
 
                     renderAiOutput(data.ticket_ai);
                 } catch (error) {
-                    alert(error.message || 'Could not generate AI output.');
+                    alert(error.message || aiMessages.could_not_generate);
 
                     if (outputBox) {
                         outputBox.classList.remove('is-loading');

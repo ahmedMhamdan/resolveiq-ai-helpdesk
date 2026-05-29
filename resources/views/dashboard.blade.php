@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', __('dashboard.title'))
 
 @section('content')
     @php
@@ -17,23 +17,23 @@
         $currentUser = auth()->user();
         $role = strtolower($role ?? $currentUser?->role?->name ?? 'user');
 
-        $dashboardTitle = $role === 'agent' ? 'Agent Dashboard' : ($role === 'user' ? 'My Dashboard' : 'Dashboard');
+        $dashboardTitle = $role === 'agent' ? __('dashboard.agent_dashboard') : ($role === 'user' ? __('dashboard.my_dashboard') : __('dashboard.title'));
         $dashboardSubtitle = $role === 'agent'
-            ? 'Overview of your assigned tickets, pending work, and urgent requests.'
+            ? __('dashboard.agent_subtitle')
             : ($role === 'user'
-                ? 'Track your support tickets and recent request updates.'
-                : 'Overview of support performance, ticket volume, and urgent issues.');
+                ? __('dashboard.user_subtitle')
+                : __('dashboard.admin_subtitle'));
 
-        $ticketsTitle = $role === 'agent' ? 'Assigned Tickets' : ($role === 'user' ? 'My Tickets' : 'Latest Tickets');
+        $ticketsTitle = $role === 'agent' ? __('dashboard.assigned_tickets') : ($role === 'user' ? __('dashboard.my_tickets') : __('dashboard.latest_tickets'));
         $ticketsSubtitle = $role === 'agent'
-            ? 'Latest tickets assigned to you.'
+            ? __('dashboard.assigned_tickets_subtitle')
             : ($role === 'user'
-                ? 'Latest support requests created by you.'
-                : 'Newest support requests in the workspace.');
+                ? __('dashboard.my_tickets_subtitle')
+                : __('dashboard.latest_tickets_subtitle'));
 
         $activitySubtitle = $role === 'admin'
-            ? 'Latest ticket updates and workspace actions.'
-            : 'Latest updates related to your tickets.';
+            ? __('dashboard.activity_subtitle_admin')
+            : __('dashboard.activity_subtitle_user');
 
         $avatarUrlFor = function ($person) {
             if (! $person || ! $person->avatar_path) {
@@ -57,44 +57,44 @@
             <p class="page-subtitle">{{ $dashboardSubtitle }}</p>
         </div>
 
-        <a class="btn secondary" href="{{ route('tickets.index') }}">View Tickets</a>
+        <a class="btn secondary" href="{{ route('tickets.index') }}">{{ __('dashboard.view_tickets') }}</a>
     </div>
 
     <section class="grid stats">
         <div class="card stat-card">
             <div class="stat-top">
-                <span>Open Tickets</span>
+                <span data-auto-translate>{{ __('dashboard.open_tickets') }}</span>
                 <span class="stat-icon">O</span>
             </div>
             <div class="stat-number">{{ $stats['open'] ?? 0 }}</div>
-            <div class="stat-trend">Active requests</div>
+            <div class="stat-trend" data-auto-translate>{{ __('dashboard.active_requests') }}</div>
         </div>
 
         <div class="card stat-card">
             <div class="stat-top">
-                <span>Pending</span>
+                <span data-auto-translate>{{ __('dashboard.pending') }}</span>
                 <span class="stat-icon">P</span>
             </div>
             <div class="stat-number">{{ $stats['pending'] ?? 0 }}</div>
-            <div class="stat-trend">Waiting for updates</div>
+            <div class="stat-trend" data-auto-translate>{{ __('dashboard.waiting_for_updates') }}</div>
         </div>
 
         <div class="card stat-card">
             <div class="stat-top">
-                <span>Solved</span>
+                <span data-auto-translate>{{ __('dashboard.solved') }}</span>
                 <span class="stat-icon">S</span>
             </div>
             <div class="stat-number">{{ $stats['solved'] ?? 0 }}</div>
-            <div class="stat-trend">Resolved tickets</div>
+            <div class="stat-trend" data-auto-translate>{{ __('dashboard.resolved_tickets') }}</div>
         </div>
 
         <div class="card stat-card">
             <div class="stat-top">
-                <span>Urgent</span>
+                <span data-auto-translate>{{ __('dashboard.urgent') }}</span>
                 <span class="stat-icon">U</span>
             </div>
             <div class="stat-number">{{ $stats['urgent'] ?? 0 }}</div>
-            <div class="stat-trend">Needs attention</div>
+            <div class="stat-trend" data-auto-translate>{{ __('dashboard.needs_attention') }}</div>
         </div>
     </section>
 
@@ -117,40 +117,41 @@
                         <input
                             type="search"
                             name="search"
-                            placeholder="Search tickets..."
-                            aria-label="Search tickets"
+                            placeholder="{{ __('dashboard.search_placeholder') }}"
+                            aria-label="{{ __('dashboard.search_placeholder') }}"
+                            data-auto-translate-attribute="placeholder"
                         >
 
-                        <button type="submit" class="dashboard-ticket-search-btn">
-                            Search
+                        <button type="submit" class="dashboard-ticket-search-btn" data-auto-translate>
+                            {{ __('dashboard.search') }}
                         </button>
                     </div>
                 </form>
 
-                <a class="btn dashboard-view-all-btn" href="{{ route('tickets.index') }}">View All</a>
+                <a class="btn dashboard-view-all-btn" href="{{ route('tickets.index') }}" data-auto-translate>{{ __('dashboard.view_all') }}</a>
             </div>
         </div>
 
         <table class="dashboard-latest-table dashboard-mobile-cards-table">
             <thead>
                 <tr>
-                    <th>Ticket</th>
+                    <th data-auto-translate>{{ __('common.ticket') }}</th>
 
                     @if ($role !== 'user')
-                        <th>Requester</th>
+                        <th data-auto-translate>{{ __('common.requester') }}</th>
                     @endif
 
-                    <th>Department</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Due Date</th>
-                    <th>Updated</th>
+                    <th data-auto-translate>{{ __('common.department') }}</th>
+                    <th data-auto-translate>{{ __('common.status') }}</th>
+                    <th data-auto-translate>{{ __('common.priority') }}</th>
+                    <th data-auto-translate>{{ __('common.due_date') }}</th>
+                    <th data-auto-translate>{{ __('common.updated') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($latestTickets as $ticket)
                     <tr>
-                        <td data-label="Ticket">
+                        <td data-label="{{ __('common.ticket') }}">
                             <a class="ticket-link" href="{{ route('tickets.show', $ticket) }}">
                                 <strong>#{{ $ticket->ticket_number }}</strong>
                                 <span>{{ $ticket->title }}</span>
@@ -158,7 +159,7 @@
                         </td>
 
                         @if ($role !== 'user')
-                            <td data-label="Requester">
+                            <td data-label="{{ __('common.requester') }}">
                                 @php
                                     $requester = $ticket->user;
                                     $requesterAvatarUrl = $avatarUrlFor($requester);
@@ -169,7 +170,7 @@
                                         @if ($requesterAvatarUrl)
                                             <img
                                                 src="{{ $requesterAvatarUrl }}"
-                                                alt="{{ $requester?->name ?? 'Requester' }} avatar"
+                                                alt="{{ $requester?->name ?? __('common.requester') }} avatar"
                                                 class="mini-avatar-img"
                                             >
                                         @else
@@ -178,18 +179,18 @@
                                     </div>
 
                                     <div>
-                                        <strong>{{ $requester?->name ?? 'Unknown' }}</strong><br>
-                                        <small>Requester</small>
+                                        <strong>{{ $requester?->name ?? __('common.unknown') }}</strong><br>
+                                        <small data-auto-translate>{{ __('common.requester') }}</small>
                                     </div>
                                 </div>
                             </td>
                         @endif
 
-                        <td data-label="Department">{{ $ticket->department?->name ?? 'No department' }}</td>
-                        <td data-label="Status"><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
-                        <td data-label="Priority">
+                        <td data-label="{{ __('common.department') }}">{{ $ticket->department?->name ?? __('common.no_department') }}</td>
+                        <td data-label="{{ __('common.status') }}"><span class="badge {{ $ticket->status }}">{{ ucfirst($ticket->status) }}</span></td>
+                        <td data-label="{{ __('common.priority') }}">
                             <span class="priority {{ $ticket->priority ?? 'unset' }}">
-                                {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                                {{ $ticket->priority ? ucfirst($ticket->priority) : __('common.not_set') }}
                             </span>
                         </td>
 
@@ -199,23 +200,23 @@
                                 && ! in_array($ticket->status, ['solved', 'closed'], true);
                         @endphp
 
-                        <td data-label="Due Date">
+                        <td data-label="{{ __('common.due_date') }}">
                             @if ($ticket->due_at)
                                 <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
                                     <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
-                                    <small>{{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}</small>
+                                    <small>{{ $isOverdue ? __('common.overdue') : $ticket->due_at->diffForHumans() }}</small>
                                 </div>
                             @else
-                                <span class="page-subtitle">Not set</span>
+                                <span class="page-subtitle">{{ __('common.not_set') }}</span>
                             @endif
                         </td>
 
-                        <td data-label="Updated">{{ $ticket->updated_at?->diffForHumans() }}</td>
+                        <td data-label="{{ __('common.updated') }}">{{ $ticket->updated_at?->diffForHumans() }}</td>
                     </tr>
                 @empty
                     <tr>
                         <td colspan="{{ $role === 'user' ? 6 : 7 }}">
-                            <div class="empty">No tickets found.</div>
+                            <div class="empty" data-auto-translate>{{ __('dashboard.no_tickets') }}</div>
                         </td>
                     </tr>
                 @endforelse
@@ -226,7 +227,7 @@
     <section id="recent-activity" class="card table-card dashboard-activity-card">
         <div class="table-head activity-head">
             <div>
-                <h2>Recent Activity</h2>
+                <h2 data-auto-translate>{{ __('dashboard.recent_activity') }}</h2>
                 <p class="page-subtitle">{{ $activitySubtitle }}</p>
             </div>
 
@@ -236,12 +237,13 @@
                     name="activity_search"
                     id="activitySearchInput"
                     value="{{ $activitySearch ?? request('activity_search') }}"
-                    placeholder="Search logs..."
+                    placeholder="{{ __('dashboard.search_logs') }}"
                     autocomplete="off"
+                    data-auto-translate-attribute="placeholder"
                 >
 
-                <button type="submit" class="btn btn-sm btn-primary activity-search-btn" id="activitySearchBtn">
-                    Search
+                <button type="submit" class="btn btn-sm btn-primary activity-search-btn" id="activitySearchBtn" data-auto-translate>
+                    {{ __('dashboard.search') }}
                 </button>
 
                 <button
@@ -249,8 +251,9 @@
                     class="btn btn-sm btn-secondary activity-search-reset"
                     id="activitySearchReset"
                     {{ request('activity_search') ? '' : 'hidden' }}
+                    data-auto-translate
                 >
-                    Reset
+                    {{ __('dashboard.reset') }}
                 </button>
 
                 <div
@@ -259,7 +262,7 @@
                     {{ request('activity_search') ? '' : 'hidden' }}
                 >
                     @if(request('activity_search'))
-                        Search applied. {{ method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count() }} activity log{{ (method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count()) === 1 ? '' : 's' }} found.
+                        {{ __('common.search_applied') }} {{ method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count() }} {{ __('common.activity_logs_found') }}
                     @endif
                 </div>
             </form>
@@ -273,11 +276,11 @@
                     tabindex="0"
                     data-activity-search="{{ e(strtolower(($activity->action ?? '') . ' ' . ($activity->ticket?->ticket_number ?? '') . ' ' . ($activity->ticket?->title ?? '') . ' ' . ($activity->user?->name ?? '') . ' ' . ($activity->old_value ?? '') . ' ' . ($activity->new_value ?? ''))) }}"
                     data-action="{{ e($activity->action) }}"
-                    data-ticket="{{ e($activity->ticket?->ticket_number ?? 'Ticket removed') }}"
-                    data-title="{{ e($activity->ticket?->title ?? 'Deleted or unavailable ticket') }}"
-                    data-user="{{ e($activity->user?->name ?? 'System') }}"
-                    data-old="{{ e($activity->old_value ?? 'Not set') }}"
-                    data-new="{{ e($activity->new_value ?? 'Not set') }}"
+                    data-ticket="{{ e($activity->ticket?->ticket_number ?? __('common.ticket_removed')) }}"
+                    data-title="{{ e($activity->ticket?->title ?? __('common.deleted_or_unavailable')) }}"
+                    data-user="{{ e($activity->user?->name ?? __('common.system')) }}"
+                    data-old="{{ e($activity->old_value ?? __('common.not_set')) }}"
+                    data-new="{{ e($activity->new_value ?? __('common.not_set')) }}"
                     data-time="{{ e($activity->created_at?->format('M d, Y - h:i A') ?? '') }}"
                     data-url="{{ $activity->ticket ? route('tickets.show', $activity->ticket) : '' }}"
                 >
@@ -290,18 +293,20 @@
                             @if($activity->ticket)
                                 #{{ $activity->ticket->ticket_number }}
                             @else
-                                Ticket removed
+                                <span data-auto-translate>{{ __('common.ticket_removed') }}</span>
                             @endif
+                        </span>
 
+                        <span>
                             @if($activity->user)
-                                by {{ $activity->user->name }}
+                                <span data-auto-translate>{{ __('common.by') }}</span> {{ $activity->user->name }}
                             @endif
                         </span>
 
                         @if($activity->old_value || $activity->new_value)
                             <small>
                                 @if($activity->old_value)
-                                    From: {{ \Illuminate\Support\Str::limit($activity->old_value, 90) }}
+                                    <span data-auto-translate>{{ __('common.from') }}:</span> {{ \Illuminate\Support\Str::limit($activity->old_value, 90) }}
                                 @endif
 
                                 @if($activity->old_value && $activity->new_value)
@@ -309,26 +314,26 @@
                                 @endif
 
                                 @if($activity->new_value)
-                                    To: {{ \Illuminate\Support\Str::limit($activity->new_value, 90) }}
+                                    <span data-auto-translate>{{ __('common.to') }}:</span> {{ \Illuminate\Support\Str::limit($activity->new_value, 90) }}
                                 @endif
                             </small>
                         @endif
                     </div>
 
-                    <button type="button" class="activity-view-btn">
-                        View details
+                    <button type="button" class="activity-view-btn" data-auto-translate>
+                        {{ __('common.view_details') }}
                     </button>
 
                     <small>{{ $activity->created_at?->diffForHumans() }}</small>
                 </div>
             @empty
-                <div class="empty">
-                    {{ request('activity_search') ? 'No activity logs matched your search.' : 'No recent activity yet.' }}
+                <div class="empty" data-auto-translate>
+                    {{ request('activity_search') ? __('common.no_activity_logs_found') : __('common.no_recent_activity') }}
                 </div>
             @endforelse
 
-            <div class="empty activity-live-empty" id="activityLiveEmpty" hidden>
-                No activity logs matched your search.
+            <div class="empty activity-live-empty" id="activityLiveEmpty" hidden data-auto-translate>
+                {{ __('common.no_activity_logs_found') }}
             </div>
         </div>
 
@@ -349,8 +354,8 @@
         <div class="activity-modal" role="dialog" aria-modal="true" aria-labelledby="activityModalTitle">
             <div class="activity-modal-head">
                 <div>
-                    <span class="activity-modal-kicker">Activity Details</span>
-                    <h3 id="activityModalTitle">Activity</h3>
+                    <span class="activity-modal-kicker" data-auto-translate>{{ __('common.activity_details') }}</span>
+                    <h3 id="activityModalTitle" data-auto-translate>{{ __('common.activity') }}</h3>
                 </div>
 
                 <button type="button" class="activity-modal-close" id="activityModalClose">
@@ -361,40 +366,40 @@
             <div class="activity-modal-body">
                 <div class="activity-detail-grid">
                     <div>
-                        <small>Ticket</small>
+                        <small data-auto-translate>{{ __('common.ticket') }}</small>
                         <strong id="activityModalTicket">-</strong>
                         <span id="activityModalTicketTitle">-</span>
                     </div>
 
                     <div>
-                        <small>Changed by</small>
+                        <small data-auto-translate>{{ __('common.changed_by') }}</small>
                         <strong id="activityModalUser">-</strong>
                     </div>
 
                     <div>
-                        <small>Time</small>
+                        <small data-auto-translate>{{ __('common.time') }}</small>
                         <strong id="activityModalTime">-</strong>
                     </div>
                 </div>
 
                 <div class="activity-change-box">
-                    <small>Previous value</small>
+                    <small data-auto-translate>{{ __('common.previous_value') }}</small>
                     <pre id="activityModalOld">-</pre>
                 </div>
 
                 <div class="activity-change-box">
-                    <small>New value</small>
+                    <small data-auto-translate>{{ __('common.new_value') }}</small>
                     <pre id="activityModalNew">-</pre>
                 </div>
             </div>
 
             <div class="activity-modal-actions">
-                <a href="#" class="btn btn-primary" id="activityModalTicketLink">
-                    Open Ticket
+                <a href="#" class="btn btn-primary" id="activityModalTicketLink" data-auto-translate>
+                    {{ __('common.open_ticket') }}
                 </a>
 
-                <button type="button" class="btn btn-secondary" id="activityModalCancel">
-                    Close
+                <button type="button" class="btn btn-secondary" id="activityModalCancel" data-auto-translate>
+                    {{ __('common.close') }}
                 </button>
             </div>
         </div>
@@ -459,15 +464,23 @@
                 void activityCard?.offsetWidth;
                 activityCard?.classList.add('search-pulse');
 
+                const activityMsgs = <?php echo json_encode([
+                    'cleared' => __('common.activity_search_cleared'),
+                    'found' => __('common.activity_logs_found'),
+                    'found_one' => __('common.activity_log_found'),
+                    'not_found' => __('common.no_activity_logs_found'),
+                ]); ?>;
+
                 if (query === '') {
-                    setActivityStatus('Search cleared. Showing all activity logs.', 'info');
+                    setActivityStatus(activityMsgs.cleared, 'info');
                     return;
                 }
 
                 if (matchedCount > 0) {
-                    setActivityStatus(`Search applied. ${matchedCount} activity log${matchedCount === 1 ? '' : 's'} found for "${activitySearchInput.value.trim()}".`, 'success');
+                    const label = matchedCount === 1 ? activityMsgs.found_one : activityMsgs.found;
+                    setActivityStatus(`{{ __('common.search_applied') }} ${matchedCount} ${label}`, 'success');
                 } else {
-                    setActivityStatus(`No activity logs found for "${activitySearchInput.value.trim()}".`, 'warning');
+                    setActivityStatus(`{{ __('common.no_activity_logs_found') }}`, 'warning');
                 }
             }
 
@@ -517,13 +530,13 @@
                     return;
                 }
 
-                title.textContent = item.dataset.action || 'Activity';
+                title.textContent = item.dataset.action || @json(__('common.activity'));
                 ticket.textContent = item.dataset.ticket || '-';
                 ticketTitle.textContent = item.dataset.title || '-';
-                user.textContent = item.dataset.user || 'System';
+                user.textContent = item.dataset.user || @json(__('common.system'));
                 time.textContent = item.dataset.time || '-';
-                oldValue.textContent = item.dataset.old || 'Not set';
-                newValue.textContent = item.dataset.new || 'Not set';
+                oldValue.textContent = item.dataset.old || @json(__('common.not_set'));
+                newValue.textContent = item.dataset.new || @json(__('common.not_set'));
 
                 if (item.dataset.url) {
                     ticketLink.href = item.dataset.url;

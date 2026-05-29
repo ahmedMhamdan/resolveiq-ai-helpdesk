@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Deleted Tickets')
+@section('title', __('tickets.deleted_tickets'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1>Deleted Tickets</h1>
-        <p>Restore deleted tickets or permanently remove them.</p>
+        <h1 data-auto-translate>{{ __('tickets.deleted_tickets') }}</h1>
+        <p data-auto-translate>{{ __('tickets.restore_subtitle') }}</p>
     </div>
 
-    <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back">
-        Back to Tickets
+    <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back" data-auto-translate>
+        {{ __('tickets.back_to_tickets') }}
     </a>
 </div>
 
 <div class="table-card deleted-tickets-card" id="deleted-ticket-list">
     <div class="card-head">
         <div>
-            <h2>Deleted Tickets</h2>
-            <p>Tickets moved to archive by soft delete.</p>
+            <h2 data-auto-translate>{{ __('tickets.deleted_tickets') }}</h2>
+            <p data-auto-translate>{{ __('tickets.tickets_moved_to_archive') }}</p>
         </div>
 
         <form
@@ -32,15 +32,16 @@
                 type="search"
                 name="search"
                 value="{{ request('search') }}"
-                placeholder="Search deleted ticket..."
+                placeholder="{{ __('tickets.search_deleted') }}"
+                data-auto-translate-attribute="placeholder"
                 autocomplete="off"
                 class="deleted-ticket-search-input"
             >
 
-            <button type="submit">Search</button>
+            <button type="submit" data-auto-translate>{{ __('common.search') }}</button>
 
-            <button type="button" class="btn btn-secondary deleted-ticket-reset" hidden>
-                Reset
+            <button type="button" class="btn btn-secondary deleted-ticket-reset" hidden data-auto-translate>
+                {{ __('common.reset') }}
             </button>
         </form>
     </div>
@@ -49,15 +50,15 @@
         <table class="deleted-tickets-table">
             <thead>
                 <tr>
-                    <th class="col-ticket">Ticket</th>
-                    <th class="col-person">Requester</th>
-                    <th class="col-person">Agent</th>
-                    <th class="col-department">Department</th>
-                    <th class="col-status">Status</th>
-                    <th class="col-priority">Priority</th>
-                    <th class="col-date">Due Date</th>
-                    <th class="col-date">Deleted At</th>
-                    <th class="col-actions">Actions</th>
+                    <th class="col-ticket" data-auto-translate>{{ __('common.ticket') }}</th>
+                    <th class="col-person" data-auto-translate>{{ __('common.requester') }}</th>
+                    <th class="col-person" data-auto-translate>{{ __('common.agent') }}</th>
+                    <th class="col-department" data-auto-translate>{{ __('common.department') }}</th>
+                    <th class="col-status" data-auto-translate>{{ __('common.status') }}</th>
+                    <th class="col-priority" data-auto-translate>{{ __('common.priority') }}</th>
+                    <th class="col-date" data-auto-translate>{{ __('common.due_date') }}</th>
+                    <th class="col-date" data-auto-translate>{{ __('tickets.deleted_at') }}</th>
+                    <th class="col-actions" data-auto-translate>{{ __('common.actions') }}</th>
                 </tr>
             </thead>
 
@@ -92,29 +93,29 @@
                     @endphp
 
                     <tr class="deleted-ticket-row">
-                        <td class="ticket-cell" data-label="Ticket">
+                        <td class="ticket-cell" data-label="{{ __('common.ticket') }}">
                             <strong class="ticket-number">#{{ $ticket->ticket_number }}</strong>
                             <div class="ticket-title">{{ $ticket->title }}</div>
                         </td>
 
-                        <td data-label="Requester">
+                        <td data-label="{{ __('common.requester') }}">
                             <div class="person ticket-person">
                                 <div class="mini-avatar">
                                     @if ($requesterAvatarUrl)
-                                        <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? 'Requester' }} avatar">
+                                        <img src="{{ $requesterAvatarUrl }}" alt="{{ $requester?->name ?? __('common.requester') }} avatar">
                                     @else
                                         <span class="avatar-fallback">?</span>
                                     @endif
                                 </div>
 
                                 <div class="person-meta">
-                                    <strong>{{ $requester?->name ?? 'Unknown' }}</strong>
-                                    <small>Requester</small>
+                                    <strong>{{ $requester?->name ?? __('common.unknown') }}</strong>
+                                    <small data-auto-translate>{{ __('common.requester') }}</small>
                                 </div>
                             </div>
                         </td>
 
-                        <td data-label="Agent">
+                        <td data-label="{{ __('common.agent') }}">
                             @if ($agent)
                                 <div class="person ticket-person">
                                     <div class="mini-avatar">
@@ -127,61 +128,61 @@
 
                                     <div class="person-meta">
                                         <strong>{{ $agent->name }}</strong>
-                                        <small>Agent</small>
+                                        <small data-auto-translate>{{ __('common.agent') }}</small>
                                     </div>
                                 </div>
                             @else
-                                <span class="page-subtitle">Unassigned</span>
+                                <span class="page-subtitle" data-auto-translate>{{ __('common.unassigned') }}</span>
                             @endif
                         </td>
 
-                        <td class="department-cell" data-label="Department">
-                            {{ $ticket->department?->name ?? 'No department' }}
+                        <td class="department-cell" data-label="{{ __('common.department') }}">
+                            {{ $ticket->department?->name ?? __('common.no_department') }}
                         </td>
 
-                        <td data-label="Status">
+                        <td data-label="{{ __('common.status') }}">
                             <span class="badge {{ $ticket->status }}">
                                 {{ ucfirst($ticket->status) }}
                             </span>
                         </td>
 
-                        <td data-label="Priority">
+                        <td data-label="{{ __('common.priority') }}">
                             <span class="priority {{ $ticket->priority ?? 'unset' }}">
-                                {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                                {{ $ticket->priority ? ucfirst($ticket->priority) : __('common.not_set') }}
                             </span>
                         </td>
 
-                        <td class="date-cell" data-label="Due Date">
+                        <td class="date-cell" data-label="{{ __('common.due_date') }}">
                             @if ($ticket->due_at)
                                 <div class="due-date-info {{ $isOverdue ? 'overdue' : '' }}">
                                     <strong>{{ $ticket->due_at->format('M d, Y') }}</strong>
-                                    <small>{{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}</small>
+                                    <small>{{ $isOverdue ? __('common.overdue') : $ticket->due_at->diffForHumans() }}</small>
                                 </div>
                             @else
-                                <span class="page-subtitle">Not set</span>
+                                <span class="page-subtitle" data-auto-translate>{{ __('common.not_set') }}</span>
                             @endif
                         </td>
 
-                        <td class="date-cell" data-label="Deleted At">
+                        <td class="date-cell" data-label="{{ __('tickets.deleted_at') }}">
                             {{ $ticket->deleted_at?->diffForHumans() }}
                         </td>
 
-                        <td data-label="Actions">
+                        <td data-label="{{ __('common.actions') }}">
                             <div class="deleted-ticket-actions">
                                 <form action="{{ route('tickets.restore', $ticket->id) }}" method="POST">
                                     @csrf
 
-                                    <button type="submit" class="btn btn-sm btn-restore-soft">
-                                        Restore
+                                    <button type="submit" class="btn btn-sm btn-restore-soft" data-auto-translate>
+                                        {{ __('tickets.restore') }}
                                     </button>
                                 </form>
 
-                                <form action="{{ route('tickets.forceDelete', $ticket->id) }}" method="POST" onsubmit="return confirm('This will permanently delete the ticket. Continue?')">
+                                <form action="{{ route('tickets.forceDelete', $ticket->id) }}" method="POST" onsubmit="return confirm('{{ __('tickets.confirm_force_delete') }}')">
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="btn btn-danger-soft btn-sm">
-                                        Delete Forever
+                                    <button type="submit" class="btn btn-danger-soft btn-sm" data-auto-translate>
+                                        {{ __('tickets.delete_forever') }}
                                     </button>
                                 </form>
                             </div>
@@ -189,16 +190,16 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9">
-                            No deleted tickets found.
+                        <td colspan="9" data-auto-translate>
+                            {{ __('tickets.no_deleted_found') }}
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <p id="deleted-empty-message" class="live-search-empty" hidden>
-            No matching deleted tickets found.
+        <p id="deleted-empty-message" class="live-search-empty" hidden data-auto-translate>
+            {{ __('tickets.no_matching_deleted') }}
         </p>
     </div>
 

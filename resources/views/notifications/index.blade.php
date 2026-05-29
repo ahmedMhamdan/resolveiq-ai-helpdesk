@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Notifications')
+@section('title', __('notifications.title'))
 
 @section('content')
     @php
@@ -14,8 +14,8 @@
 
     <div class="page-head notifications-page-head">
         <div>
-            <h1>Notifications</h1>
-            <p class="page-subtitle">Track ticket updates, assignments, replies, and due date changes.</p>
+            <h1>{{ __('notifications.title') }}</h1>
+            <p class="page-subtitle">{{ __('notifications.subtitle') }}</p>
         </div>
 
         <div class="notifications-page-actions">
@@ -25,7 +25,7 @@
                     @method('PATCH')
 
                     <button type="submit" class="btn btn-primary">
-                        Mark all as read
+                        {{ __('notifications.mark_all_read') }}
                     </button>
                 </form>
             @endif
@@ -34,13 +34,13 @@
                 <form
                     action="{{ route('notifications.deleteRead') }}"
                     method="POST"
-                    onsubmit="return confirm('Delete all read notifications?')"
+                    onsubmit="return confirm('{{ __('notifications.confirm_delete_read') }}')"
                 >
                     @csrf
                     @method('DELETE')
 
                     <button type="submit" class="btn btn-secondary">
-                        Delete read
+                        {{ __('notifications.delete_read') }}
                     </button>
                 </form>
             @endif
@@ -49,13 +49,13 @@
                 <form
                     action="{{ route('notifications.deleteAll') }}"
                     method="POST"
-                    onsubmit="return confirm('Delete all notifications? This action cannot be undone.')"
+                    onsubmit="return confirm('{{ __('notifications.confirm_delete_all') }}')"
                 >
                     @csrf
                     @method('DELETE')
 
                     <button type="submit" class="btn btn-danger-soft">
-                        Delete all
+                        {{ __('notifications.delete_all') }}
                     </button>
                 </form>
             @endif
@@ -67,7 +67,7 @@
             href="{{ route('notifications.index', ['filter' => 'all']) }}"
             class="notification-summary-card {{ $activeFilter === 'all' ? 'active' : '' }}"
         >
-            <span>All</span>
+            <span>{{ __('notifications.all') }}</span>
             <strong>{{ $totalNotifications }}</strong>
         </a>
 
@@ -75,7 +75,7 @@
             href="{{ route('notifications.index', ['filter' => 'unread']) }}"
             class="notification-summary-card {{ $activeFilter === 'unread' ? 'active' : '' }}"
         >
-            <span>Unread</span>
+            <span>{{ __('notifications.unread') }}</span>
             <strong>{{ $unreadNotifications }}</strong>
         </a>
 
@@ -83,7 +83,7 @@
             href="{{ route('notifications.index', ['filter' => 'read']) }}"
             class="notification-summary-card {{ $activeFilter === 'read' ? 'active' : '' }}"
         >
-            <span>Read</span>
+            <span>{{ __('notifications.read') }}</span>
             <strong>{{ $readNotifications }}</strong>
         </a>
     </div>
@@ -103,19 +103,19 @@
 
                 <div class="notification-content">
                     <div class="notification-head">
-                        <strong>{{ $data['title'] ?? 'Notification' }}</strong>
+                        <strong>{{ $data['title'] ?? __('notifications.notification') }}</strong>
 
                         @if ($isUnread)
-                            <span class="notification-badge">New</span>
+                            <span class="notification-badge">{{ __('notifications.new') }}</span>
                         @else
-                            <span class="notification-badge read">Read</span>
+                            <span class="notification-badge read">{{ __('notifications.read') }}</span>
                         @endif
                     </div>
 
                     <p>{{ $data['message'] ?? '' }}</p>
 
                     <small>
-                        {{ $data['actor_name'] ?? 'System' }}
+                        {{ $data['actor_name'] ?? __('notifications.system') }}
                         ·
                         {{ $notification->created_at?->diffForHumans() }}
                     </small>
@@ -127,34 +127,34 @@
                         @method('PATCH')
 
                         <button type="submit" class="btn btn-sm btn-primary">
-                            Open
+                            {{ __('notifications.open') }}
                         </button>
                     </form>
 
                     <form
                         action="{{ route('notifications.destroy', $notification) }}"
                         method="POST"
-                        onsubmit="return confirm('Delete this notification?')"
+                        onsubmit="return confirm('{{ __('notifications.confirm_delete_one') }}')"
                     >
                         @csrf
                         @method('DELETE')
 
                         <button type="submit" class="btn btn-sm btn-danger-soft">
-                            Delete
+                            {{ __('notifications.delete') }}
                         </button>
                     </form>
                 </div>
             </div>
         @empty
             <div class="empty notification-empty-state">
-                <strong>No notifications found.</strong>
+                <strong>{{ __('notifications.no_notifications') }}</strong>
                 <span>
                     @if ($activeFilter === 'unread')
-                        You have no unread notifications.
+                        {{ __('notifications.no_unread') }}
                     @elseif ($activeFilter === 'read')
-                        You have no read notifications.
+                        {{ __('notifications.no_read') }}
                     @else
-                        Ticket updates will appear here once the system sends notifications.
+                        {{ __('notifications.no_notifications_desc') }}
                     @endif
                 </span>
             </div>

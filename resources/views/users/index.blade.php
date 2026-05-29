@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Users Management')
+@section('title', __('users.title'))
 
 @section('content')
     <div class="page-head">
         <div>
-            <h1>Users Management</h1>
-            <p class="page-subtitle">
-                Manage customer accounts, review user activity, and promote users to agents when needed.
+            <h1 data-auto-translate>{{ __('users.title') }}</h1>
+            <p class="page-subtitle" data-auto-translate>
+                {{ __('users.subtitle') }}
             </p>
         </div>
     </div>
@@ -27,9 +27,9 @@
     <div class="table-card">
         <div class="table-head users-table-head">
             <div>
-                <h2>Accounts</h2>
-                <p class="page-subtitle">
-                    Promote normal users to agents. Agents are managed from the Agents page.
+                <h2 data-auto-translate>{{ __('users.accounts') }}</h2>
+                <p class="page-subtitle" data-auto-translate>
+                    {{ __('users.accounts_subtitle') }}
                 </p>
             </div>
 
@@ -38,14 +38,15 @@
                     type="text"
                     name="search"
                     value="{{ $search ?? '' }}"
-                    placeholder="Search name or email..."
+                    placeholder="{{ __('users.search_placeholder') }}"
+                    data-auto-translate-attribute="placeholder"
                 >
 
-                <button type="submit">Search</button>
+                <button type="submit" data-auto-translate>{{ __('users.search') }}</button>
 
                 @if (!empty($search))
-                    <a href="{{ route('users.index') }}" class="btn btn-secondary users-search-reset">
-                        Reset
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary users-search-reset" data-auto-translate>
+                        {{ __('users.reset') }}
                     </a>
                 @endif
 
@@ -56,9 +57,9 @@
 
                     <div class="users-search-status {{ $usersCount > 0 ? 'is-success' : 'is-warning' }}">
                         @if ($usersCount > 0)
-                            Search applied. {{ $usersCount }} user{{ $usersCount === 1 ? '' : 's' }} found for "{{ $search }}".
+                            {{ __('users.search_applied') }} {{ $usersCount }} {{ __('users.users_found') }} "{{ $search }}".
                         @else
-                            No users found for "{{ $search }}".
+                            {{ __('users.no_users_for') }} "{{ $search }}".
                         @endif
                     </div>
                 @endif
@@ -69,11 +70,11 @@
             <table class="users-management-table users-mobile-table">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th class="users-center-col">Role</th>
-                        <th class="users-center-col">Created Tickets</th>
-                        <th class="users-center-col">Change Role</th>
-                        <th class="users-center-col">Actions</th>
+                        <th data-auto-translate>{{ __('users.user') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('users.role') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('users.created_tickets') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('users.change_role') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('users.actions') }}</th>
                     </tr>
                 </thead>
 
@@ -95,7 +96,7 @@
                         @endphp
 
                         <tr>
-                            <td data-label="User">
+                            <td data-label="{{ __('users.user') }}">
                                 <div class="user-person">
                                     <span class="mini-avatar user-list-avatar">
                                         @if ($avatarUrl)
@@ -112,26 +113,26 @@
                                 </div>
                             </td>
 
-                            <td class="users-center-col" data-label="Role">
+                            <td class="users-center-col" data-label="{{ __('users.role') }}">
                                 <span class="role-badge role-{{ $roleName }}">
-                                    {{ ucfirst($roleName) }}
+                                    {{ __(ucfirst($roleName)) }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col" data-label="Created Tickets">
+                            <td class="users-center-col" data-label="{{ __('users.created_tickets') }}">
                                 <span class="ticket-count-badge">
                                     {{ $user->tickets_count ?? 0 }}
                                 </span>
                             </td>
 
-                            <td class="users-center-col" data-label="Change Role">
+                            <td class="users-center-col" data-label="{{ __('users.change_role') }}">
                                 @if ($roleName === 'admin')
-                                    <span class="role-badge role-admin">
-                                        Protected Admin
+                                    <span class="role-badge role-admin" data-auto-translate>
+                                        {{ __('users.protected_admin') }}
                                     </span>
                                 @elseif ($isCurrentUser)
-                                    <span class="role-badge role-user">
-                                        Current Account
+                                    <span class="role-badge role-user" data-auto-translate>
+                                        {{ __('users.current_account') }}
                                     </span>
                                 @else
                                     <form
@@ -143,30 +144,30 @@
                                         @method('PATCH')
 
                                         <select name="role" class="role-select">
-                                            <option value="user" @selected($roleName === 'user')>
-                                                User
+                                            <option value="user" @selected($roleName === 'user') data-auto-translate>
+                                                {{ __('users.user_role') }}
                                             </option>
-                                            <option value="agent" @selected($roleName === 'agent')>
-                                                Agent
+                                            <option value="agent" @selected($roleName === 'agent') data-auto-translate>
+                                                {{ __('users.agent_role') }}
                                             </option>
                                         </select>
 
-                                        <button type="submit" class="btn btn-sm">
-                                            Update
+                                        <button type="submit" class="btn btn-sm" data-auto-translate>
+                                            {{ __('users.update') }}
                                         </button>
                                     </form>
                                 @endif
                             </td>
 
-                            <td class="users-center-col" data-label="Actions">
+                            <td class="users-center-col" data-label="{{ __('users.actions') }}">
                                 <div class="users-role-actions">
-                                    <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary btn-sm">
-                                        View
+                                    <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary btn-sm" data-auto-translate>
+                                        {{ __('users.view') }}
                                     </a>
 
                                     @if ($roleName !== 'admin')
-                                        <a href="{{ url('/users/' . $user->id . '/edit') }}" class="btn btn-edit-soft btn-sm">
-                                            Edit
+                                        <a href="{{ url('/users/' . $user->id . '/edit') }}" class="btn btn-edit-soft btn-sm" data-auto-translate>
+                                            {{ __('users.edit') }}
                                         </a>
                                     @endif
                                 </div>
@@ -176,8 +177,8 @@
                         <tr>
                             <td colspan="5">
                                 <div class="compact-empty-state">
-                                    <strong>No users found.</strong>
-                                    <span>Agents are hidden from this page and managed from the Agents page.</span>
+                                    <strong data-auto-translate>{{ __('users.no_users') }}</strong>
+                                    <span data-auto-translate>{{ __('users.agents_hidden') }}</span>
                                 </div>
                             </td>
                         </tr>

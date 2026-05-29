@@ -1,31 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Article')
+@section('title', __('knowledge.title_edit'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Edit Article</h1>
-        <p class="page-subtitle">Update support knowledge content used by agents and AI-assisted replies.</p>
+        <h1 class="page-title">{{ __('knowledge.title_edit') }}</h1>
+        <p class="page-subtitle">{{ __('knowledge.edit_subtitle') }}</p>
     </div>
 
     <a href="{{ route('knowledge.index') }}" class="btn btn-secondary">
-        Back
+        {{ __('knowledge.back') }}
     </a>
 </div>
 
 <div class="table-card kb-form-note-card">
     <div class="table-head">
         <div>
-            <h2>Before updating</h2>
-            <p class="page-subtitle">Make sure the article is accurate before publishing it.</p>
+            <h2>{{ __('knowledge.edit_note_heading') }}</h2>
+            <p class="page-subtitle">{{ __('knowledge.edit_note_subtitle') }}</p>
         </div>
     </div>
 
     <div class="kb-form-note-body">
         <p class="text-muted">
-            Published articles may be used later as extra context for the AI Assistant. Keep the steps clear and avoid
-            outdated instructions. Use Draft if the article still needs review.
+            {{ __('knowledge.edit_note_text') }}
         </p>
     </div>
 </div>
@@ -34,7 +33,7 @@
     <div class="table-head">
         <div>
             <h2>{{ $article->title }}</h2>
-            <p class="page-subtitle">Edit this article below.</p>
+            <p class="page-subtitle">{{ __('knowledge.edit_instructions') }}</p>
         </div>
     </div>
 
@@ -54,7 +53,7 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="title">Article Title</label>
+                <label for="title">{{ __('knowledge.article_title_label') }}</label>
                 <input
                     type="text"
                     id="title"
@@ -65,15 +64,15 @@
             </div>
 
             <div class="form-group">
-                <label for="status">Status</label>
+                <label for="status">{{ __('knowledge.status_label') }}</label>
                 <select id="status" name="status" required>
-                    <option value="published" @selected(old('status', $article->status) === 'published')>Published</option>
-                    <option value="draft" @selected(old('status', $article->status) === 'draft')>Draft</option>
+                    <option value="published" @selected(old('status', $article->status) === 'published')>{{ __('knowledge.published_option') }}</option>
+                    <option value="draft" @selected(old('status', $article->status) === 'draft')>{{ __('knowledge.draft_option') }}</option>
                 </select>
             </div>
 
             <div class="form-group full">
-                <label for="content">Content</label>
+                <label for="content">{{ __('knowledge.content_label') }}</label>
                 <textarea
                     id="content"
                     name="content"
@@ -85,11 +84,11 @@
 
         <div class="form-actions create-actions">
             <a href="{{ route('knowledge.index') }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('knowledge.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update Article
+                {{ __('knowledge.update_article') }}
             </button>
         </div>
     </form>

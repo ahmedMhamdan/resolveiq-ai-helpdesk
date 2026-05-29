@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'New Department')
+@section('title', __('departments.title_create'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">New Department</h1>
-        <p class="page-subtitle">Create a department for ticket routing.</p>
+        <h1 class="page-title">{{ __('departments.title_create') }}</h1>
+        <p class="page-subtitle">{{ __('departments.create_subtitle') }}</p>
     </div>
 
     <a href="{{ route('departments.index') }}" class="btn btn-secondary">
-        Back
+        {{ __('departments.back') }}
     </a>
 </div>
 
 <div class="table-card ticket-create-card">
     <div class="table-head">
         <div>
-            <h2>Create Department</h2>
-            <p class="page-subtitle">Fill in department information.</p>
+            <h2>{{ __('departments.create_heading') }}</h2>
+            <p class="page-subtitle">{{ __('departments.create_details') }}</p>
         </div>
     </div>
 
@@ -37,35 +37,35 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="name">Department Name</label>
+                <label for="name">{{ __('departments.department_name_label') }}</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
                     value="{{ old('name') }}"
-                    placeholder="Example: Technical Support"
+                    placeholder="{{ __('departments.department_name_placeholder') }}"
                     required
                 >
             </div>
 
             <div class="form-group full">
-                <label for="description">Description</label>
+                <label for="description">{{ __('departments.description_label') }}</label>
                 <textarea
                     id="description"
                     name="description"
                     rows="6"
-                    placeholder="Short description about this department..."
+                    placeholder="{{ __('departments.description_placeholder') }}"
                 >{{ old('description') }}</textarea>
             </div>
         </div>
 
         <div class="form-actions create-actions">
             <a href="{{ route('departments.index') }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('departments.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Create Department
+                {{ __('departments.create_department') }}
             </button>
         </div>
     </form>

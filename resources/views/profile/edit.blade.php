@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Profile')
+@section('title', __('profile.title_edit'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Edit Profile</h1>
-        <p class="page-subtitle">Update your account information and profile picture.</p>
+        <h1 class="page-title">{{ __('profile.title_edit') }}</h1>
+        <p class="page-subtitle">{{ __('profile.edit_subtitle') }}</p>
     </div>
 
     <a href="{{ route('profile.show') }}" class="btn btn-secondary">
-        Back
+        {{ __('profile.back') }}
     </a>
 </div>
 
 <div class="table-card ticket-create-card profile-edit-card">
     <div class="table-head">
         <div>
-            <h2>Account Information</h2>
-            <p class="page-subtitle">Change your profile name, email address, and avatar.</p>
+            <h2>{{ __('profile.account_info') }}</h2>
+            <p class="page-subtitle">{{ __('profile.account_info_subtitle') }}</p>
         </div>
     </div>
 
@@ -42,7 +42,7 @@
 
         <div class="form-grid">
             <div class="form-group full">
-                <label for="avatar">Profile picture</label>
+                <label for="avatar">{{ __('profile.profile_picture') }}</label>
 
                 <div class="agent-avatar-uploader profile-avatar-uploader">
                     <div class="edit-avatar-preview" id="avatarPreview">
@@ -69,12 +69,12 @@
                         >
 
                         <label for="avatar" class="avatar-upload-btn">
-                            Choose Image
+                            {{ __('profile.choose_image') }}
                         </label>
 
-                        <span class="avatar-file-name" id="avatarFileName">No image selected</span>
+                        <span class="avatar-file-name" id="avatarFileName">{{ __('profile.no_image_selected') }}</span>
 
-                        <small class="form-hint">Upload JPG, PNG, or WebP. Max size 2MB.</small>
+                        <small class="form-hint">{{ __('profile.upload_hint') }}</small>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
             </div>
 
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name">{{ __('profile.name_label') }}</label>
                 <input
                     type="text"
                     id="name"
@@ -95,7 +95,7 @@
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="email">{{ __('profile.email_label') }}</label>
                 <input
                     type="email"
                     id="email"
@@ -108,11 +108,11 @@
 
         <div class="form-actions create-actions">
             <a href="{{ route('profile.show') }}" class="btn btn-danger-soft">
-                Cancel
+                {{ __('profile.cancel') }}
             </a>
 
             <button type="submit" class="btn btn-primary">
-                Update Profile
+                {{ __('profile.update_profile') }}
             </button>
         </div>
     </form>
@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const avatarInput = document.getElementById('avatar');
     const fileName = document.getElementById('avatarFileName');
     const previewBox = document.getElementById('avatarPreview');
+    const noImageSelected = @json(__('profile.no_image_selected'));
 
     if (!avatarInput || !fileName || !previewBox) return;
 
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const file = event.target.files[0];
 
         if (!file) {
-            fileName.textContent = 'No image selected';
+            fileName.textContent = noImageSelected;
             return;
         }
 
@@ -149,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!existingImage) {
                 existingImage = document.createElement('img');
                 existingImage.id = 'avatarPreviewImage';
-                existingImage.alt = 'Avatar Preview';
+                existingImage.alt = @json(__('common.avatar_preview'));
                 previewBox.innerHTML = '';
                 previewBox.appendChild(existingImage);
             }

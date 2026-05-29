@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Agents')
+@section('title', __('agents.title'))
 
 @section('content')
 <div class="page-head">
     <div>
-        <h1 class="page-title">Agents</h1>
-        <p class="page-subtitle">Manage support agents who handle tickets.</p>
+        <h1 class="page-title">{{ __('agents.title') }}</h1>
+        <p class="page-subtitle">{{ __('agents.subtitle') }}</p>
     </div>
 
     <div class="page-actions">
         <a href="{{ route('agents.create') }}" class="btn btn-primary">
-            + New Agent
+            {{ __('agents.new_agent') }}
         </a>
     </div>
 </div>
@@ -19,8 +19,8 @@
 <div class="table-card agents-table-card">
     <div class="table-head">
         <div>
-            <h2>Agents</h2>
-            <p class="page-subtitle">All support agents in the workspace.</p>
+            <h2>{{ __('agents.table_heading') }}</h2>
+            <p class="page-subtitle">{{ __('agents.table_subtitle') }}</p>
         </div>
     </div>
 
@@ -28,13 +28,13 @@
         <table class="agents-table">
             <thead>
                 <tr>
-                    <th>Agent</th>
-                    <th>Email</th>
-                    <th class="tickets-col">Assigned Tickets</th>
-                    <th class="tickets-col">Replies</th>
-                    <th>Created</th>
-                    <th class="users-center-col">Change Role</th>
-                    <th class="users-center-col">Actions</th>
+                    <th>{{ __('agents.agent_th') }}</th>
+                    <th>{{ __('agents.email_th') }}</th>
+                    <th class="tickets-col">{{ __('agents.assigned_tickets') }}</th>
+                    <th class="tickets-col">{{ __('agents.replies') }}</th>
+                    <th>{{ __('agents.created') }}</th>
+                    <th class="users-center-col">{{ __('agents.change_role') }}</th>
+                    <th class="users-center-col">{{ __('agents.actions') }}</th>
                 </tr>
             </thead>
 
@@ -54,7 +54,7 @@
                     @endphp
 
                     <tr>
-                        <td data-label="Agent">
+                        <td data-label="{{ __('agents.agent_th') }}">
                             <div class="person agent-person">
                                 <span class="mini-avatar agent-avatar">
                                     @if ($agentAvatar)
@@ -66,65 +66,65 @@
 
                                 <div class="person-meta">
                                     <strong>{{ $agent->name }}</strong>
-                                    <small>Support Agent</small>
+                                    <small>{{ __('agents.support_role') }}</small>
                                 </div>
                             </div>
                         </td>
 
-                        <td data-label="Email">
+                        <td data-label="{{ __('agents.email_th') }}">
                             <span class="agent-email">{{ $agent->email }}</span>
                         </td>
 
-                        <td class="tickets-col" data-label="Assigned Tickets">
+                        <td class="tickets-col" data-label="{{ __('agents.assigned_tickets') }}">
                             <span class="badge open ticket-count-badge">
                                 {{ $agent->assigned_tickets_count }}
                             </span>
                         </td>
 
-                        <td class="tickets-col" data-label="Replies">
+                        <td class="tickets-col" data-label="{{ __('agents.replies') }}">
                             <span class="badge pending ticket-count-badge">
                                 {{ $agent->ticket_replies_count }}
                             </span>
                         </td>
 
-                        <td data-label="Created">
+                        <td data-label="{{ __('agents.created') }}">
                             {{ $agent->created_at->format('M d, Y') }}
                         </td>
 
-                        <td class="users-center-col" data-label="Change Role">
+                        <td class="users-center-col" data-label="{{ __('agents.change_role') }}">
                             @if ($isCurrentUser)
                                 <span class="role-badge role-user">
-                                    Current Account
+                                    {{ __('agents.current_account') }}
                                 </span>
                             @else
                                 <form
                                     method="POST"
                                     action="{{ route('agents.makeUser', $agent) }}"
                                     class="users-role-form agents-downgrade-form"
-                                    onsubmit="return confirm('Move this agent back to users? Assigned tickets will become unassigned.')"
+                                    onsubmit="return confirm('{{ __('agents.confirm_make_user') }}')"
                                 >
                                     @csrf
                                     @method('PATCH')
 
                                     <button type="submit" class="btn btn-sm btn-downgrade-user">
-                                        Make User
+                                        {{ __('agents.make_user') }}
                                     </button>
                                 </form>
                             @endif
                         </td>
 
-                        <td class="users-center-col" data-label="Actions">
+                        <td class="users-center-col" data-label="{{ __('agents.actions') }}">
                             <div class="row-actions agents-row-actions">
                                 <a href="{{ route('agents.edit', $agent) }}" class="btn btn-sm btn-edit-soft">
-                                    Edit
+                                    {{ __('agents.edit_btn') }}
                                 </a>
 
-                                <form action="{{ route('agents.destroy', $agent) }}" method="POST" onsubmit="return confirm('Delete this agent?')">
+                                <form action="{{ route('agents.destroy', $agent) }}" method="POST" onsubmit="return confirm('{{ __('agents.confirm_delete') }}')">
                                     @csrf
                                     @method('DELETE')
 
                                     <button type="submit" class="btn btn-sm btn-danger-soft">
-                                        Delete
+                                        {{ __('agents.delete_btn') }}
                                     </button>
                                 </form>
                             </div>
@@ -134,8 +134,8 @@
                     <tr>
                         <td colspan="7">
                             <div class="empty-state compact-empty-state">
-                                <strong>No agents found.</strong>
-                                <span>Create your first support agent to start assigning tickets.</span>
+                                <strong>{{ __('agents.no_agents') }}</strong>
+                                <span>{{ __('agents.no_agents_desc') }}</span>
                             </div>
                         </td>
                     </tr>

@@ -44,13 +44,13 @@
         </div>
 
         <div class="page-actions">
-            <a href="{{ route('tickets.index') }}" class="btn btn-secondary">
-                Back
+            <a href="{{ route('tickets.index') }}" class="btn btn-secondary" data-auto-translate>
+                {{ __('common.back') }}
             </a>
 
             @if ($canManageTicket)
-                <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-edit-soft">
-                    Edit Ticket
+                <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-edit-soft" data-auto-translate>
+                    {{ __('tickets.edit_ticket') }}
                 </a>
             @endif
 
@@ -58,13 +58,13 @@
                 <form
                     action="{{ route('tickets.close', $ticket) }}"
                     method="POST"
-                    onsubmit="return confirm('Close this ticket?')"
+                    onsubmit="return confirm('{{ __('tickets.confirm_close') }}')"
                 >
                     @csrf
                     @method('PATCH')
 
-                    <button type="submit" class="btn btn-close-ticket">
-                        Close Ticket
+                    <button type="submit" class="btn btn-close-ticket" data-auto-translate>
+                        {{ __('tickets.close_ticket') }}
                     </button>
                 </form>
             @endif
@@ -73,13 +73,13 @@
                 <form
                     action="{{ route('tickets.reopen', $ticket) }}"
                     method="POST"
-                    onsubmit="return confirm('Reopen this ticket?')"
+                    onsubmit="return confirm('{{ __('tickets.confirm_reopen') }}')"
                 >
                     @csrf
                     @method('PATCH')
 
-                    <button type="submit" class="btn btn-reopen-ticket">
-                        Reopen Ticket
+                    <button type="submit" class="btn btn-reopen-ticket" data-auto-translate>
+                        {{ __('tickets.reopen_ticket') }}
                     </button>
                 </form>
             @endif
@@ -88,13 +88,13 @@
                 <form
                     action="{{ route('tickets.destroy', $ticket) }}"
                     method="POST"
-                    onsubmit="return confirm('Move this ticket to deleted tickets?')"
+                    onsubmit="return confirm('{{ __('tickets.confirm_delete') }}')"
                 >
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-danger-soft">
-                        Delete
+                    <button type="submit" class="btn btn-danger-soft" data-auto-translate>
+                        {{ __('tickets.delete_ticket') }}
                     </button>
                 </form>
             @endif
@@ -115,43 +115,43 @@
                     </div>
 
                     <span class="priority {{ $ticket->priority ?? 'unset' }}">
-                        {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                        {{ $ticket->priority ? ucfirst($ticket->priority) : __('common.not_set') }}
                     </span>
                 </div>
 
                 <div class="ticket-meta-grid">
                     @if (! $isUser)
                         <div class="meta-box meta-requester">
-                            <small>Requester</small>
-                            <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                            <small data-auto-translate>{{ __('common.requester') }}</small>
+                            <strong>{{ $ticket->user?->name ?? __('common.unknown') }}</strong>
                         </div>
                     @endif
 
                     <div class="meta-box meta-agent">
-                        <small>Agent</small>
-                        <strong>{{ $ticket->agent?->name ?? 'Unassigned' }}</strong>
+                        <small data-auto-translate>{{ __('common.agent') }}</small>
+                        <strong>{{ $ticket->agent?->name ?? __('common.unassigned') }}</strong>
                     </div>
 
                     <div class="meta-box meta-department">
-                        <small>Department</small>
-                        <strong>{{ $ticket->department?->name ?? 'No department' }}</strong>
+                        <small data-auto-translate>{{ __('common.department') }}</small>
+                        <strong>{{ $ticket->department?->name ?? __('common.no_department') }}</strong>
                     </div>
 
                     <div class="meta-box meta-created">
-                        <small>Created</small>
+                        <small data-auto-translate>{{ __('common.created') }}</small>
                         <strong>{{ $ticket->created_at?->format('M d, Y') }}</strong>
                     </div>
 
                     <div class="meta-box meta-due {{ $isOverdue ? 'meta-overdue' : '' }}">
-                        <small>Due Date</small>
+                        <small data-auto-translate>{{ __('common.due_date') }}</small>
 
                         <strong>
-                            {{ $ticket->due_at ? $ticket->due_at->format('M d, Y') : 'Not set' }}
+                            {{ $ticket->due_at ? $ticket->due_at->format('M d, Y') : __('common.not_set') }}
                         </strong>
 
                         @if ($ticket->due_at)
                             <span class="{{ $isOverdue ? 'meta-warning' : 'meta-muted-note' }}">
-                                {{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}
+                                {{ $isOverdue ? __('common.overdue') : $ticket->due_at->diffForHumans() }}
                             </span>
                         @endif
                     </div>
@@ -167,7 +167,7 @@
                     @php
                         $replyUser = $reply->user;
                         $replyAvatarUrl = $avatarUrl($replyUser);
-                        $replyUserName = $replyUser?->name ?? 'Unknown user';
+                        $replyUserName = $replyUser?->name ?? __('common.unknown');
                     @endphp
 
                     <div class="reply {{ $reply->is_internal_note ? 'internal' : '' }}">
@@ -192,7 +192,7 @@
                                         </span>
 
                                         @if ($reply->is_internal_note && ($isAdmin || $isAgent))
-                                            <span class="internal-label">Internal note</span>
+                                            <span class="internal-label" data-auto-translate>{{ __('ai.internal_note') }}</span>
                                         @endif
                                     </div>
 
@@ -219,7 +219,7 @@
                                                     <form
                                                         action="{{ route('tickets.attachments.destroy', [$ticket, $attachment]) }}"
                                                         method="POST"
-                                                        onsubmit="return confirm('Delete this attachment?')"
+                                                        onsubmit="return confirm('{{ __('tickets.confirm_delete_attachment') }}')"
                                                     >
                                                         @csrf
                                                         @method('DELETE')
@@ -239,13 +239,13 @@
                                         action="{{ route('tickets.replies.destroy', [$ticket, $reply]) }}"
                                         method="POST"
                                         class="reply-delete-form"
-                                        onsubmit="return confirm('Delete this reply?')"
+                                        onsubmit="return confirm('{{ __('tickets.confirm_delete_reply') }}')"
                                     >
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit" class="reply-delete-btn">
-                                            Delete
+                                        <button type="submit" class="reply-delete-btn" data-auto-translate>
+                                            {{ __('common.delete') }}
                                         </button>
                                     </form>
                                 @endif
@@ -253,8 +253,8 @@
                         </div>
                     </div>
                 @empty
-                    <div class="empty-replies">
-                        No replies yet.
+                    <div class="empty-replies" data-auto-translate>
+                        {{ __('common.no_replies_yet') }}
                     </div>
                 @endforelse
             </div>
@@ -263,13 +263,14 @@
                 <form action="{{ route('tickets.replies.store', $ticket) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <label for="message">Add Reply</label>
+                    <label for="message" data-auto-translate>{{ __('tickets.add_reply') }}</label>
 
                     <textarea
                         id="message"
                         name="message"
                         rows="5"
-                        placeholder="Write a reply..."
+                        placeholder="{{ __('tickets.write_reply') }}"
+                        data-auto-translate-attribute="placeholder"
                         required
                     >{{ old('message') }}</textarea>
 
@@ -277,24 +278,24 @@
                         @if ($isAdmin || $isAgent)
                             <label class="check-row">
                                 <input type="checkbox" name="is_internal_note" value="1">
-                                <span>Internal note</span>
+                                <span data-auto-translate>{{ __('ai.internal_note') }}</span>
                             </label>
                         @endif
 
-                        <button type="submit" class="btn btn-primary">
-                            Send Reply
+                        <button type="submit" class="btn btn-primary" data-auto-translate>
+                            {{ __('tickets.send_reply') }}
                         </button>
                     </div>
 
                     <div class="reply-attachments-field">
-                        <label for="attachments">Attachments</label>
+                        <label for="attachments" data-auto-translate>{{ __('tickets.attachments') }}</label>
 
                         <label for="attachments" class="upload-box" id="uploadBox">
                             <div class="upload-box-icon">+</div>
 
                             <div class="upload-box-content">
-                                <strong>Add attachments</strong>
-                                <span id="uploadHint">PNG, JPG, PDF, DOCX — up to 5MB each</span>
+                                <strong data-auto-translate>{{ __('tickets.add_attachments') }}</strong>
+                                <span id="uploadHint" data-auto-translate>{{ __('tickets.upload_hint') }}</span>
                             </div>
                         </label>
 
@@ -314,24 +315,24 @@
 
         <aside>
             <div class="card side-card">
-                <h3>Ticket Details</h3>
+                <h3 data-auto-translate>{{ __('tickets.ticket_details') }}</h3>
 
                 <div class="detail-row">
-                    <small>Status</small>
+                    <small data-auto-translate>{{ __('common.status') }}</small>
                     <span class="badge {{ $ticket->status }}">
                         {{ ucfirst($ticket->status) }}
                     </span>
                 </div>
 
                 <div class="detail-row">
-                    <small>Priority</small>
+                    <small data-auto-translate>{{ __('common.priority') }}</small>
                     <span class="priority {{ $ticket->priority ?? 'unset' }}">
-                        {{ $ticket->priority ? ucfirst($ticket->priority) : 'Not set' }}
+                        {{ $ticket->priority ? ucfirst($ticket->priority) : __('common.not_set') }}
                     </span>
                 </div>
 
                 <div class="detail-row">
-                    <small>Due Date</small>
+                    <small data-auto-translate>{{ __('common.due_date') }}</small>
 
                     @if ($ticket->due_at)
                         <strong class="{{ $isOverdue ? 'due-overdue-text' : '' }}">
@@ -339,76 +340,76 @@
                         </strong>
 
                         <span class="page-subtitle">
-                            {{ $isOverdue ? 'Overdue' : $ticket->due_at->diffForHumans() }}
+                            {{ $isOverdue ? __('common.overdue') : $ticket->due_at->diffForHumans() }}
                         </span>
                     @else
-                        <strong>Not set</strong>
+                        <strong data-auto-translate>{{ __('common.not_set') }}</strong>
                     @endif
                 </div>
 
                 @if (! $isUser)
                     <div class="detail-row">
-                        <small>Requester</small>
-                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                        <small data-auto-translate>{{ __('common.requester') }}</small>
+                        <strong>{{ $ticket->user?->name ?? __('common.unknown') }}</strong>
                     </div>
                 @endif
 
                 <div class="detail-row">
-                    <small>Assigned Agent</small>
-                    <strong>{{ $ticket->agent?->name ?? 'Unassigned' }}</strong>
+                    <small data-auto-translate>{{ __('tickets.assigned_agent') }}</small>
+                    <strong>{{ $ticket->agent?->name ?? __('common.unassigned') }}</strong>
                 </div>
 
                 <div class="detail-row">
-                    <small>Department</small>
-                    <strong>{{ $ticket->department?->name ?? 'No department' }}</strong>
+                    <small data-auto-translate>{{ __('common.department') }}</small>
+                    <strong>{{ $ticket->department?->name ?? __('common.no_department') }}</strong>
                 </div>
 
                 <div class="detail-row">
-                    <small>First Response</small>
+                    <small data-auto-translate>{{ __('tickets.first_response') }}</small>
                     <strong>
-                        {{ $ticket->first_response_at ? $ticket->first_response_at->format('M d, Y - h:i A') : 'Not yet' }}
+                        {{ $ticket->first_response_at ? $ticket->first_response_at->format('M d, Y - h:i A') : __('tickets.not_yet') }}
                     </strong>
                 </div>
 
                 <div class="detail-row">
-                    <small>Resolved At</small>
+                    <small data-auto-translate>{{ __('tickets.resolved_at') }}</small>
                     <strong>
-                        {{ $ticket->resolved_at ? $ticket->resolved_at->format('M d, Y - h:i A') : 'Not resolved' }}
+                        {{ $ticket->resolved_at ? $ticket->resolved_at->format('M d, Y - h:i A') : __('tickets.not_resolved') }}
                     </strong>
                 </div>
 
                 <div class="detail-row">
-                    <small>Closed At</small>
+                    <small data-auto-translate>{{ __('tickets.closed_at') }}</small>
                     <strong>
-                        {{ $ticket->closed_at ? $ticket->closed_at->format('M d, Y - h:i A') : 'Not closed' }}
+                        {{ $ticket->closed_at ? $ticket->closed_at->format('M d, Y - h:i A') : __('tickets.not_closed') }}
                     </strong>
                 </div>
             </div>
 
             @if ($isAdmin || $isAgent)
                 <div class="card side-card ai-card ticket-ai-mini-card">
-                    <h3>AI Assistant</h3>
-                    <p>
-                        Generate AI summary, reply, or priority suggestion for this ticket.
+                    <h3 data-auto-translate>{{ __('common.ai_assistant') }}</h3>
+                    <p data-auto-translate>
+                        {{ __('tickets.ai_generate') }}
                     </p>
 
-                    <a href="{{ route('ai.index', ['ticket_id' => $ticket->id]) }}" class="btn btn-ai-workspace">
-                        Open AI Assistant
+                    <a href="{{ route('ai.index', ['ticket_id' => $ticket->id]) }}" class="btn btn-ai-workspace" data-auto-translate>
+                        {{ __('tickets.open_ai_assistant') }}
                     </a>
                 </div>
 
                 <div class="card side-card">
-                    <h3>Activity Log</h3>
+                    <h3 data-auto-translate>{{ __('tickets.activity_log') }}</h3>
 
                     @forelse ($ticket->activityLogs as $log)
                         <div class="log-item">
                             <strong>{{ $log->action }}</strong>
                             <span class="page-subtitle">
-                                {{ $log->user?->name ?? 'System' }} · {{ $log->created_at?->diffForHumans() }}
+                                {{ $log->user?->name ?? __('common.system') }} · {{ $log->created_at?->diffForHumans() }}
                             </span>
                         </div>
                     @empty
-                        <p class="page-subtitle">No activity yet.</p>
+                        <p class="page-subtitle" data-auto-translate>{{ __('common.no_activity_yet') }}</p>
                     @endforelse
                 </div>
             @endif
@@ -417,9 +418,14 @@
 
     <script>
         (() => {
-            const attachmentsInput = document.getElementById('attachments');
-            const selectedFilesList = document.getElementById('selectedFilesList');
             const uploadHint = document.getElementById('uploadHint');
+            const selectedFilesList = document.getElementById('selectedFilesList');
+            const attachmentsInput = document.getElementById('attachments');
+            const uploadMessages = <?php echo json_encode([
+                'hint' => __('tickets.upload_hint'),
+                'files_selected' => __('tickets.files_selected'),
+                'remove' => __('tickets.remove_file'),
+            ]); ?>;
 
             if (!attachmentsInput || !selectedFilesList || !uploadHint) {
                 return;
@@ -441,11 +447,11 @@
                 selectedFilesList.innerHTML = '';
 
                 if (!selectedFiles.length) {
-                    uploadHint.textContent = 'PNG, JPG, PDF, DOCX — up to 5MB each';
+                    uploadHint.textContent = uploadMessages.hint;
                     return;
                 }
 
-                uploadHint.textContent = `${selectedFiles.length} file(s) selected`;
+                uploadHint.textContent = `${selectedFiles.length} ${uploadMessages.files_selected}`;
 
                 selectedFiles.forEach((file, index) => {
                     const chip = document.createElement('div');
@@ -459,7 +465,7 @@
                     removeButton.type = 'button';
                     removeButton.className = 'remove-selected-file';
                     removeButton.textContent = '×';
-                    removeButton.setAttribute('aria-label', `Remove ${file.name}`);
+                    removeButton.setAttribute('aria-label', `${uploadMessages.remove} ${file.name}`);
 
                     removeButton.addEventListener('click', () => {
                         selectedFiles.splice(index, 1);
@@ -480,4 +486,5 @@
             });
         })();
     </script>
+
 @endsection

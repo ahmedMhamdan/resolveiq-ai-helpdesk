@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Unassigned Tickets')
+@section('title', __('tickets.unassigned_tickets'))
 
 @section('content')
     <div class="page-head">
         <div>
-            <h1>Unassigned Tickets</h1>
-            <p class="page-subtitle">
-                Review new tickets and assign them to support agents.
+            <h1 data-auto-translate>{{ __('tickets.unassigned_tickets') }}</h1>
+            <p class="page-subtitle" data-auto-translate>
+                {{ __('tickets.unassigned_subtitle') }}
             </p>
         </div>
 
-        <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back">
-            Back to Tickets
+        <a href="{{ route('tickets.index') }}" class="btn btn-secondary btn-page-back" data-auto-translate>
+            {{ __('tickets.back_to_tickets') }}
         </a>
     </div>
 
@@ -28,7 +28,7 @@
 
     <div class="table-card unassigned-table-card" id="unassigned-ticket-list">
         <div class="table-head">
-            <h2>Waiting for Assignment</h2>
+            <h2 data-auto-translate>{{ __('tickets.waiting_for_assignment') }}</h2>
 
             <form
                 method="GET"
@@ -41,15 +41,16 @@
                     type="search"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Search ticket..."
+                    placeholder="{{ __('tickets.search_unassigned') }}"
+                    data-auto-translate-attribute="placeholder"
                     autocomplete="off"
                     class="js-live-ticket-input"
                 >
 
-                <button type="submit">Search</button>
+                <button type="submit" data-auto-translate>{{ __('common.search') }}</button>
 
-                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden>
-                    Reset
+                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden data-auto-translate>
+                    {{ __('common.reset') }}
                 </button>
             </form>
         </div>
@@ -58,13 +59,13 @@
             <table class="unassigned-table">
                 <thead>
                     <tr>
-                        <th>Ticket</th>
-                        <th>Requester</th>
-                        <th class="users-center-col">Department</th>
-                        <th class="users-center-col">Status</th>
-                        <th class="users-center-col">Priority</th>
-                        <th class="users-center-col">Due Date</th>
-                        <th class="users-center-col">Assign Agent</th>
+                        <th data-auto-translate>{{ __('common.ticket') }}</th>
+                        <th data-auto-translate>{{ __('common.requester') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.department') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.status') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.priority') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('common.due_date') }}</th>
+                        <th class="users-center-col" data-auto-translate>{{ __('tickets.assign_agent') }}</th>
                     </tr>
                 </thead>
 
@@ -92,15 +93,15 @@
                                     </span>
 
                                     <div>
-                                        <strong>{{ $ticket->user?->name ?? 'Unknown' }}</strong>
+                                        <strong>{{ $ticket->user?->name ?? __('common.unknown') }}</strong>
                                         <br>
-                                        <small>{{ $ticket->user?->email ?? 'No email' }}</small>
+                                        <small>{{ $ticket->user?->email ?? __('common.no_email') }}</small>
                                     </div>
                                 </div>
                             </td>
 
                             <td class="users-center-col">
-                                {{ $ticket->department?->name ?? 'No department' }}
+                                {{ $ticket->department?->name ?? __('common.no_department') }}
                             </td>
 
                             <td class="users-center-col">
@@ -115,21 +116,13 @@
                                     form="assign-ticket-{{ $ticket->id }}"
                                     class="role-select priority-assign-select"
                                 >
-                                    <option value="" @selected($ticket->priority === null)>
-                                        Not set
+                                    <option value="" @selected($ticket->priority === null) data-auto-translate>
+                                        {{ __('common.not_set') }}
                                     </option>
-                                    <option value="low" @selected($ticket->priority === 'low')>
-                                        Low
-                                    </option>
-                                    <option value="medium" @selected($ticket->priority === 'medium')>
-                                        Medium
-                                    </option>
-                                    <option value="high" @selected($ticket->priority === 'high')>
-                                        High
-                                    </option>
-                                    <option value="urgent" @selected($ticket->priority === 'urgent')>
-                                        Urgent
-                                    </option>
+                                    <option value="low" @selected($ticket->priority === 'low') data-auto-translate>{{ __('tickets.low') }}</option>
+                                    <option value="medium" @selected($ticket->priority === 'medium') data-auto-translate>{{ __('tickets.medium') }}</option>
+                                    <option value="high" @selected($ticket->priority === 'high') data-auto-translate>{{ __('tickets.high') }}</option>
+                                    <option value="urgent" @selected($ticket->priority === 'urgent') data-auto-translate>{{ __('tickets.urgent') }}</option>
                                 </select>
                             </td>
 
@@ -154,7 +147,7 @@
                                     @method('PATCH')
 
                                     <select name="agent_id" class="role-select" required>
-                                        <option value="">Select agent</option>
+                                        <option value="" data-auto-translate>{{ __('tickets.select_agent') }}</option>
 
                                         @foreach ($agents as $agent)
                                             <option value="{{ $agent->id }}">
@@ -163,24 +156,24 @@
                                         @endforeach
                                     </select>
 
-                                    <button type="submit" class="btn btn-sm btn-assign-agent">
-                                        Assign
+                                    <button type="submit" class="btn btn-sm btn-assign-agent" data-auto-translate>
+                                        {{ __('tickets.assign') }}
                                     </button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty">
-                                No unassigned tickets found.
+                            <td colspan="7" class="empty" data-auto-translate>
+                                {{ __('tickets.no_unassigned_found') }}
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            <p id="unassigned-empty-message" class="live-search-empty" hidden>
-                No matching unassigned tickets found.
+            <p id="unassigned-empty-message" class="live-search-empty" hidden data-auto-translate>
+                {{ __('tickets.no_matching_unassigned') }}
             </p>
         </div>
 
