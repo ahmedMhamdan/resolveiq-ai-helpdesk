@@ -11084,3 +11084,479 @@ body:not(.dark) .ai-scope-notice {
         border-radius: 13px !important;
     }
 }
+
+
+/* =========================================================
+   43. Automatic language switch and RTL polish
+========================================================= */
+.language-switch-form,
+.mobile-language-form {
+  margin: 0;
+}
+
+.language-switch {
+  width: 58px;
+  height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 20px;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 35% 20%, rgba(56, 189, 248, .22), transparent 44%),
+    radial-gradient(circle at 75% 70%, rgba(124, 92, 255, .2), transparent 44%),
+    var(--panel);
+  box-shadow: var(--shadow-soft);
+  transition:
+    transform var(--motion-fast) var(--ease-out),
+    border-color var(--motion-normal) var(--ease-out),
+    box-shadow var(--motion-normal) var(--ease-out),
+    background-color var(--motion-normal) var(--ease-out);
+}
+
+.language-switch:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, .42);
+  box-shadow: 0 18px 42px rgba(14, 165, 233, .2);
+}
+
+.language-toggle-svg {
+  width: 34px;
+  height: 34px;
+  display: block;
+}
+
+.language-switch-code {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid rgba(34, 211, 238, .72);
+  border-radius: 11px;
+  color: #e0faff;
+  background: linear-gradient(135deg, rgba(8, 47, 73, .96), rgba(30, 41, 59, .96));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .06),
+    0 8px 20px rgba(6, 182, 212, .18);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  direction: ltr;
+  text-align: center;
+  user-select: none;
+}
+
+.language-toggle-bg {
+  fill: rgba(9, 16, 32, .86);
+  stroke: rgba(34, 211, 238, .9);
+  stroke-width: 1.8;
+}
+
+.language-toggle-corner {
+  fill: none;
+  stroke: rgba(125, 211, 252, .66);
+  stroke-width: 1.55;
+  stroke-linecap: round;
+}
+
+.language-toggle-text {
+  fill: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  letter-spacing: 0;
+  paint-order: stroke;
+  stroke: rgba(9, 16, 32, .92);
+  stroke-width: 2px;
+}
+
+.mobile-language-form {
+  min-width: 0;
+}
+
+.mobile-language-pill {
+  width: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+  justify-content: center !important;
+  border-color: rgba(99, 102, 241, .26) !important;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, .12), transparent 44%),
+    var(--panel) !important;
+}
+
+.mobile-language-pill .language-toggle-svg {
+  width: 31px;
+  height: 31px;
+}
+
+.mobile-language-pill .language-switch-code {
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+/* Arabic mode keeps the product layout polished while making text natural. */
+html[dir="rtl"] body {
+  text-align: right;
+}
+
+html[dir="rtl"] .app {
+  direction: rtl;
+}
+
+html[dir="rtl"] .main,
+html[dir="rtl"] .content,
+html[dir="rtl"] .page-content,
+html[dir="rtl"] .card,
+html[dir="rtl"] .table-card {
+  direction: rtl;
+}
+
+html[dir="rtl"] .sidebar {
+  border-right: 0;
+  border-left: 1px solid var(--border);
+}
+
+html[dir="rtl"] .brand,
+html[dir="rtl"] .nav a,
+html[dir="rtl"] .nav .disabled,
+html[dir="rtl"] .nav-link,
+html[dir="rtl"] .sidebar-link,
+html[dir="rtl"] .top-actions,
+html[dir="rtl"] .user-box,
+html[dir="rtl"] .person,
+html[dir="rtl"] .agent-person,
+html[dir="rtl"] .user-person,
+html[dir="rtl"] .ticket-person {
+  direction: rtl;
+}
+
+html[dir="rtl"] .nav a:hover,
+html[dir="rtl"] .nav-link:hover,
+html[dir="rtl"] .sidebar-link:hover {
+  transform: translateX(-4px);
+}
+
+html[dir="rtl"] .search {
+  padding: 16px 56px 16px 20px;
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .search-icon {
+  right: 20px;
+  left: auto;
+}
+
+html[dir="rtl"] .shortcut {
+  right: auto;
+  left: 14px;
+}
+
+html[dir="rtl"] th,
+html[dir="rtl"] td {
+  text-align: right;
+}
+
+html[dir="rtl"] .notifications-menu {
+  right: auto;
+  left: 0;
+  transform-origin: top left;
+}
+
+html[dir="rtl"] .notification-mini-item button {
+  text-align: right;
+}
+
+html[dir="rtl"] .notification-mini-content small {
+  direction: rtl;
+}
+
+html[dir="rtl"] .mobile-action-pill {
+  direction: rtl;
+}
+
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="url"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] input[name*="email"],
+html[dir="rtl"] code,
+html[dir="rtl"] pre,
+html[dir="rtl"] .ticket-number,
+html[dir="rtl"] .mono,
+html[dir="rtl"] [data-direction="ltr"],
+html[dir="rtl"] [data-no-auto-translate] {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="rtl"] .language-switch,
+html[dir="rtl"] .mobile-language-pill,
+html[dir="rtl"] .theme-switch {
+  direction: ltr;
+}
+
+html[dir="rtl"] .topbar {
+  direction: rtl;
+}
+
+html[dir="rtl"] .topbar-search-form {
+  direction: rtl;
+}
+
+html[dir="rtl"] .row-actions,
+html[dir="rtl"] .page-actions,
+html[dir="rtl"] .ticket-actions,
+html[dir="rtl"] .users-role-actions {
+  direction: rtl;
+}
+
+html[dir="rtl"] .flash-message {
+  text-align: right;
+}
+
+html[dir="rtl"]:not(.ui-translated) [data-auto-translate],
+html[dir="rtl"]:not(.ui-translated) [data-auto-translate-attribute] {
+  opacity: .72;
+}
+
+@media (max-width: 860px) {
+  html[dir="rtl"] .sidebar {
+    inset: 0 0 0 auto !important;
+    border-left: 0 !important;
+    border-right: 1px solid var(--border) !important;
+    transform: translateX(105%);
+  }
+
+  html[dir="rtl"] body.sidebar-open .sidebar {
+    transform: translateX(0);
+    box-shadow: -24px 0 70px rgba(0, 0, 0, .34);
+  }
+
+  html[dir="rtl"] .search {
+    padding: 0 40px 0 12px !important;
+    direction: rtl;
+    text-align: right;
+  }
+
+  html[dir="rtl"] .search-icon {
+    right: 14px;
+    left: auto;
+  }
+
+  html[dir="rtl"] .notifications-menu {
+    right: 14px !important;
+    left: 14px !important;
+  }
+
+html[dir="rtl"] .mobile-quick-actions {
+    direction: rtl;
+  }
+}
+
+/* =========================================================
+   44. Stable topbar action sizing
+========================================================= */
+@media (min-width: 861px) {
+  .topbar {
+    grid-template-columns: minmax(320px, 1fr) max-content !important;
+  }
+
+  .top-actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    min-width: 0;
+  }
+
+  .topbar .new-ticket-btn {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
+    height: 54px !important;
+    padding: 0 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: clamp(14px, 0.95vw, 20px) !important;
+    line-height: 1 !important;
+  }
+
+  .topbar .new-ticket-btn span {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+  }
+
+  html[dir="rtl"] .topbar .new-ticket-btn {
+    font-size: 17px !important;
+  }
+
+  .language-switch-form {
+    flex: 0 0 54px !important;
+    width: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+  }
+
+  .language-switch {
+    width: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    height: 54px !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .language-switch .language-toggle-svg {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
+  }
+}
+
+@media (max-width: 860px) {
+  .mobile-language-form {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+  }
+
+  .mobile-quick-actions .mobile-language-pill {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    height: 38px !important;
+    padding: 0 !important;
+  }
+
+  .mobile-quick-actions .mobile-action-primary {
+    max-width: 116px !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-quick-actions .mobile-action-primary span {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================================
+   45. Mobile topbar cleanup after language switch
+   Keep one language control on mobile and prevent action-row crowding.
+========================================================= */
+@media (max-width: 860px) {
+  .top-actions .language-switch-form {
+    display: none !important;
+  }
+
+  .top-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    min-width: 44px !important;
+  }
+
+  .mobile-quick-actions {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(74px, 1fr) minmax(88px, 1.25fr) 40px 40px minmax(64px, .85fr) !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 10px 0 18px !important;
+    direction: ltr !important;
+  }
+
+  html[dir="rtl"] .mobile-quick-actions {
+    direction: rtl !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    width: 100% !important;
+    height: 38px !important;
+    min-width: 0 !important;
+    padding: 0 9px !important;
+    border-radius: 14px !important;
+    font-size: .74rem !important;
+    line-height: 1 !important;
+  }
+
+  .mobile-quick-actions .mobile-action-primary,
+  .mobile-quick-actions .mobile-profile-pill,
+  .mobile-quick-actions .mobile-logout-pill {
+    max-width: none !important;
+    overflow: hidden !important;
+  }
+
+  .mobile-quick-actions .mobile-action-primary span,
+  .mobile-quick-actions .mobile-profile-pill > span:last-child,
+  .mobile-quick-actions .mobile-logout-pill span {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .mobile-quick-actions .mobile-theme-pill,
+  .mobile-quick-actions .mobile-language-pill {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    padding: 0 !important;
+  }
+
+  .mobile-language-form {
+    width: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+  }
+
+  .mobile-language-pill .language-switch-code {
+    width: 27px !important;
+    height: 27px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-quick-actions {
+    grid-template-columns: minmax(60px, .85fr) minmax(78px, 1fr) 38px 38px minmax(56px, .75fr) !important;
+    gap: 6px !important;
+  }
+
+  .mobile-quick-actions .mobile-action-pill {
+    height: 36px !important;
+    padding: 0 7px !important;
+    font-size: .68rem !important;
+  }
+
+  .mobile-quick-actions .mobile-theme-pill,
+  .mobile-quick-actions .mobile-language-pill,
+  .mobile-language-form {
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+  }
+}

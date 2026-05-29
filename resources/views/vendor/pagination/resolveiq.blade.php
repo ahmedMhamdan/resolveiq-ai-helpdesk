@@ -1,13 +1,13 @@
 @if ($paginator->hasPages())
     <nav class="riq-pagination" role="navigation" aria-label="Pagination Navigation">
         <div class="riq-pagination-info">
-            Showing
+            <span data-auto-translate>Showing</span>
             <strong>{{ $paginator->firstItem() }}</strong>
-            to
+            <span data-auto-translate>to</span>
             <strong>{{ $paginator->lastItem() }}</strong>
-            of
+            <span data-auto-translate>of</span>
             <strong>{{ $paginator->total() }}</strong>
-            results
+            <span data-auto-translate>results</span>
         </div>
 
         <div class="riq-pagination-links">

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketAttachmentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
+use App\Http\Controllers\AutoTranslationController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,18 @@ Route::get('/email/verify/{id}/{hash}', [PublicEmailVerificationController::clas
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
+
+    Route::post('/language/{locale}', [AutoTranslationController::class, 'switch'])
+        ->where('locale', 'en|ar')
+        ->name('translations.switch');
+
+    Route::get('/language/{locale}', [AutoTranslationController::class, 'switch'])
+        ->where('locale', 'en|ar')
+        ->name('translations.switch.get');
+
+    Route::post('/translations/ui', [AutoTranslationController::class, 'translate'])
+        ->middleware('throttle:30,1')
+        ->name('translations.ui');
 
     Route::get('/email/verify', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
