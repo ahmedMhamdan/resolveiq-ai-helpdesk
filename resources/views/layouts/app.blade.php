@@ -229,7 +229,7 @@
                         aria-label="{{ $isArabicLocale ? 'Switch to English' : 'Switch to Arabic' }}"
                         title="{{ $isArabicLocale ? 'Switch to English' : 'Switch to Arabic' }}"
                     >
-                        <span class="language-switch-code">{{ strtoupper($nextLocale) }}</span>
+                        <span class="language-switch-code" data-no-auto-translate>{{ strtoupper($nextLocale) }}</span>
                     </button>
                 </form>
 
@@ -328,7 +328,7 @@
                             aria-label="{{ $isArabicLocale ? 'Switch to English' : 'Switch to Arabic' }}"
                             title="{{ $isArabicLocale ? 'Switch to English' : 'Switch to Arabic' }}"
                         >
-                            <span class="language-switch-code">{{ strtoupper($nextLocale) }}</span>
+                            <span class="language-switch-code" data-no-auto-translate>{{ strtoupper($nextLocale) }}</span>
                         </button>
                     </form>
 
@@ -737,7 +737,158 @@
                 'results': 'نتيجة',
             };
 
-            Object.assign(builtinArabicTranslations, builtinArabicInstantTranslations);
+            const builtinArabicCoverageTranslations = {
+                'Agent': 'الوكيل',
+                'Agent picture': 'صورة الوكيل',
+                'Agents are hidden from this page and managed from the Agents page.': 'الوكلاء مخفيون من هذه الصفحة وتتم إدارتهم من صفحة الوكلاء.',
+                'Agents can quickly review the correct steps before replying.': 'يمكن للوكلاء مراجعة الخطوات الصحيحة بسرعة قبل الرد.',
+                'All': 'الكل',
+                'Apply Due Date': 'تطبيق تاريخ الاستحقاق',
+                'Apply Priority': 'تطبيق الأولوية',
+                'Assigned Agent': 'الوكيل المعين',
+                'Attachment deleted successfully.': 'تم حذف المرفق بنجاح.',
+                'Attachments': 'المرفقات',
+                'Back to Agents': 'العودة إلى الوكلاء',
+                'Back to Dashboard': 'العودة إلى لوحة التحكم',
+                'Before updating': 'قبل التحديث',
+                'Change the agent name, email, password, or avatar.': 'غيّر اسم الوكيل أو بريده الإلكتروني أو كلمة المرور أو الصورة.',
+                'Change your profile name, email address, and avatar.': 'غيّر اسم ملفك الشخصي وبريدك الإلكتروني والصورة.',
+                'Choose Image': 'اختيار صورة',
+                'Closed At': 'تاريخ الإغلاق',
+                'Confirm New Password': 'تأكيد كلمة المرور الجديدة',
+                'Content': 'المحتوى',
+                'Could not generate AI output.': 'تعذر إنشاء نتيجة الذكاء الاصطناعي.',
+                'Delete all': 'حذف الكل',
+                'Delete read': 'حذف المقروء',
+                'Describe the issue clearly...': 'صف المشكلة بوضوح...',
+                'Draft': 'مسودة',
+                'Edit the ticket workflow information below.': 'عدّل معلومات سير عمل التذكرة أدناه.',
+                'Edit this article below.': 'عدّل هذا المقال أدناه.',
+                'Edit this department below.': 'عدّل هذا القسم أدناه.',
+                'Edit Ticket': 'تعديل التذكرة',
+                'Email address': 'البريد الإلكتروني',
+                'Empty': 'فارغ',
+                'Enter new password': 'أدخل كلمة المرور الجديدة',
+                'Enter your name': 'أدخل اسمك',
+                'Enter your password': 'أدخل كلمة المرور',
+                'Example: Unable to login to account': 'مثال: تعذر تسجيل الدخول إلى الحساب',
+                'Fill in agent account details.': 'أدخل تفاصيل حساب الوكيل.',
+                'Fill in department information.': 'أدخل معلومات القسم.',
+                'Fill in the ticket details below.': 'أدخل تفاصيل التذكرة أدناه.',
+                'First Response': 'أول رد',
+                'Generating': 'جار الإنشاء',
+                'Internal note': 'ملاحظة داخلية',
+                'Joined': 'تاريخ الانضمام',
+                'Keep the article clear, practical, and easy to reuse inside tickets.': 'اجعل المقال واضحا وعمليا وسهل الاستخدام داخل التذاكر.',
+                'Knowledge article': 'مقال معرفة',
+                'Knowledge sources used': 'مصادر المعرفة المستخدمة',
+                'Manage your account information and workspace activity.': 'أدر معلومات حسابك ونشاط مساحة العمل.',
+                'Mark all as read': 'تحديد الكل كمقروء',
+                'Minimum 6 characters': '6 أحرف على الأقل',
+                'Mobile quick actions': 'إجراءات الجوال السريعة',
+                'Name': 'الاسم',
+                'New': 'جديد',
+                'New Article': 'مقال جديد',
+                'New Password': 'كلمة مرور جديدة',
+                'New Ticket': 'تذكرة جديدة',
+                'New value': 'القيمة الجديدة',
+                'No activity yet.': 'لا يوجد نشاط بعد.',
+                'No articles found yet.': 'لا توجد مقالات بعد.',
+                'No articles matched your search.': 'لا توجد مقالات مطابقة للبحث.',
+                'No content returned.': 'لم يتم إرجاع محتوى.',
+                'No image selected': 'لم يتم اختيار صورة',
+                'No notifications found.': 'لا توجد إشعارات.',
+                'No replies yet.': 'لا توجد ردود بعد.',
+                'Not closed': 'لم تغلق',
+                'Not resolved': 'لم يتم الحل',
+                'Not yet': 'ليس بعد',
+                'Open menu': 'فتح القائمة',
+                'Pagination Navigation': 'تنقل الصفحات',
+                'Password': 'كلمة المرور',
+                'Please select a ticket first.': 'يرجى اختيار تذكرة أولا.',
+                'Please write a custom instruction first.': 'يرجى كتابة تعليمات مخصصة أولا.',
+                'PNG, JPG, PDF, DOCX — up to 5MB each': 'PNG وJPG وPDF وDOCX — حتى 5 ميغابايت لكل ملف',
+                'Previous page': 'الصفحة السابقة',
+                'Published': 'منشور',
+                'Published articles may be used later as extra context for the AI Assistant. Keep the steps clear and avoid outdated instructions. Use Draft if the article still needs review.': 'يمكن استخدام المقالات المنشورة لاحقا كسياق إضافي للمساعد الذكي. اجعل الخطوات واضحة وتجنب التعليمات القديمة. استخدم مسودة إذا كان المقال يحتاج مراجعة.',
+                'Read': 'مقروءة',
+                'Recommend an SLA-style due date based on ticket urgency.': 'اقترح تاريخ استحقاق بأسلوب SLA بناء على إلحاح التذكرة.',
+                'Recommend the ticket priority with a short reason.': 'اقترح أولوية التذكرة مع سبب قصير.',
+                'Reopen Ticket': 'إعادة فتح التذكرة',
+                'Review account information, ticket activity, and recent actions.': 'راجع معلومات الحساب ونشاط التذاكر والإجراءات الأخيرة.',
+                'Role': 'الدور',
+                'Search tickets': 'بحث في التذاكر',
+                'Select department': 'اختر القسم',
+                'Select a ticket, choose an action, then generate a focused support response.': 'اختر تذكرة، ثم اختر إجراء، وأنشئ ردا مركزا للدعم.',
+                'Show password': 'إظهار كلمة المرور',
+                'The AI message is empty after cleanup. Please generate a reply again.': 'رسالة الذكاء الاصطناعي فارغة بعد التنظيف. يرجى إنشاء رد مرة أخرى.',
+                'The AI provider did not return a valid result after multiple attempts, so ResolveIQ used the local fallback output.': 'لم يرجع مزود الذكاء الاصطناعي نتيجة صالحة بعد عدة محاولات، لذلك استخدم ResolveIQ النتيجة الاحتياطية المحلية.',
+                'The Knowledge Base is a library of ready support solutions that agents and admins can reuse while handling tickets.': 'قاعدة المعرفة هي مكتبة حلول دعم جاهزة يمكن للوكلاء والمديرين إعادة استخدامها أثناء معالجة التذاكر.',
+                'This request was blocked because it is outside the ResolveIQ helpdesk scope.': 'تم حظر هذا الطلب لأنه خارج نطاق مكتب دعم ResolveIQ.',
+                'Ticket Details': 'تفاصيل التذكرة',
+                'Ticket Title': 'عنوان التذكرة',
+                'Ticket updates will appear here once the system sends notifications.': 'ستظهر تحديثات التذاكر هنا عندما يرسل النظام إشعارات.',
+                'Track ticket updates, assignments, replies, and due date changes.': 'تابع تحديثات التذاكر والتعيينات والردود وتغييرات تاريخ الاستحقاق.',
+                'Update Agent': 'تحديث الوكيل',
+                'Update Article': 'تحديث المقال',
+                'Update Department': 'تحديث القسم',
+                'Upload JPG, PNG, or WebP. Max size 2MB.': 'ارفع JPG أو PNG أو WebP. الحد الأقصى 2 ميغابايت.',
+                'Use as Internal Note': 'استخدام كملاحظة داخلية',
+                'Use as Reply': 'استخدام كرد',
+                'Use ticket context to summarize issues, draft replies, recommend priority, suggest due dates, or generate a custom response.': 'استخدم سياق التذكرة لتلخيص المشكلات، أو صياغة ردود، أو اقتراح الأولوية، أو اقتراح تواريخ الاستحقاق، أو إنشاء رد مخصص.',
+                'You have no read notifications.': 'لا توجد لديك إشعارات مقروءة.',
+                'You have no unread notifications.': 'لا توجد لديك إشعارات غير مقروءة.',
+                'open': 'مفتوحة',
+                'pending': 'قيد الانتظار',
+                'solved': 'تم الحل',
+                'closed': 'مغلقة',
+                'low': 'منخفضة',
+                'medium': 'متوسطة',
+                'high': 'عالية',
+                'urgent': 'عاجلة',
+                'not set': 'غير محددة',
+                'Agent created successfully.': 'تم إنشاء الوكيل بنجاح.',
+                'Agent updated successfully.': 'تم تحديث الوكيل بنجاح.',
+                'Agent deleted successfully.': 'تم حذف الوكيل بنجاح.',
+                'Article created successfully.': 'تم إنشاء المقال بنجاح.',
+                'Article updated successfully.': 'تم تحديث المقال بنجاح.',
+                'Article deleted successfully.': 'تم حذف المقال بنجاح.',
+                'Department created successfully.': 'تم إنشاء القسم بنجاح.',
+                'Department updated successfully.': 'تم تحديث القسم بنجاح.',
+                'Department deleted successfully.': 'تم حذف القسم بنجاح.',
+                'Notification deleted.': 'تم حذف الإشعار.',
+                'All notifications marked as read.': 'تم تحديد كل الإشعارات كمقروءة.',
+                'Read notifications deleted successfully.': 'تم حذف الإشعارات المقروءة بنجاح.',
+                'All notifications deleted successfully.': 'تم حذف كل الإشعارات بنجاح.',
+                'Profile updated successfully.': 'تم تحديث الملف الشخصي بنجاح.',
+                'Ticket created successfully.': 'تم إنشاء التذكرة بنجاح.',
+                'Ticket updated successfully.': 'تم تحديث التذكرة بنجاح.',
+                'Ticket assigned successfully.': 'تم تعيين التذكرة بنجاح.',
+                'Ticket reopened successfully.': 'تمت إعادة فتح التذكرة بنجاح.',
+                'Ticket closed successfully.': 'تم إغلاق التذكرة بنجاح.',
+                'Ticket moved to deleted tickets.': 'تم نقل التذكرة إلى التذاكر المحذوفة.',
+                'Ticket restored successfully.': 'تمت استعادة التذكرة بنجاح.',
+                'Ticket permanently deleted.': 'تم حذف التذكرة نهائيا.',
+                'Reply added successfully.': 'تمت إضافة الرد بنجاح.',
+                'Reply deleted successfully.': 'تم حذف الرد بنجاح.',
+                'AI suggestion generated successfully.': 'تم إنشاء اقتراح الذكاء الاصطناعي بنجاح.',
+                'AI suggested priority applied successfully.': 'تم تطبيق أولوية الذكاء الاصطناعي المقترحة بنجاح.',
+                'AI suggested due date applied successfully.': 'تم تطبيق تاريخ الاستحقاق المقترح بنجاح.',
+                'AI internal note added successfully.': 'تمت إضافة ملاحظة الذكاء الاصطناعي الداخلية بنجاح.',
+                'AI reply added successfully.': 'تمت إضافة رد الذكاء الاصطناعي بنجاح.',
+                'Only solved or closed tickets can be reopened.': 'يمكن إعادة فتح التذاكر المحلولة أو المغلقة فقط.',
+                'Ticket is already closed.': 'التذكرة مغلقة بالفعل.',
+                'Protected admin account cannot be edited from Users Management.': 'لا يمكن تعديل حساب المدير المحمي من إدارة المستخدمين.',
+                'Agents are managed from the Agents page.': 'تتم إدارة الوكلاء من صفحة الوكلاء.',
+                'Admin accounts are protected.': 'حسابات المديرين محمية.',
+                'User updated successfully.': 'تم تحديث المستخدم بنجاح.',
+                'User role updated successfully.': 'تم تحديث دور المستخدم بنجاح.',
+                'You cannot change your own role.': 'لا يمكنك تغيير دورك أنت.',
+                'Cannot delete a department that has tickets.': 'لا يمكن حذف قسم يحتوي على تذاكر.',
+                'Cannot delete an agent assigned to tickets or replies.': 'لا يمكن حذف وكيل معين لتذاكر أو ردود.',
+            };
+
+            Object.assign(builtinArabicTranslations, builtinArabicInstantTranslations, builtinArabicCoverageTranslations);
 
             function builtinArabicTranslation(text) {
                 const normalized = (text || '').replace(/\s+/g, ' ').trim();
@@ -748,6 +899,128 @@
 
                 if (builtinArabicTranslations[normalized]) {
                     return builtinArabicTranslations[normalized];
+                }
+
+                const priorityTranslations = {
+                    low: 'منخفضة',
+                    medium: 'متوسطة',
+                    high: 'عالية',
+                    urgent: 'عاجلة',
+                    'not set': 'غير محددة',
+                };
+
+                const statusTranslations = {
+                    open: 'مفتوحة',
+                    pending: 'قيد الانتظار',
+                    solved: 'تم الحل',
+                    closed: 'مغلقة',
+                };
+
+                const lowerNormalized = normalized.toLowerCase();
+
+                if (priorityTranslations[lowerNormalized]) {
+                    return priorityTranslations[lowerNormalized];
+                }
+
+                if (statusTranslations[lowerNormalized]) {
+                    return statusTranslations[lowerNormalized];
+                }
+
+                const applyPriorityMatch = normalized.match(/^Apply (Low|Medium|High|Urgent) Priority$/i);
+
+                if (applyPriorityMatch) {
+                    return `تطبيق أولوية ${priorityTranslations[applyPriorityMatch[1].toLowerCase()] || applyPriorityMatch[1]}`;
+                }
+
+                const applyDueDateMatch = normalized.match(/^Apply Due Date(?:\s+(.+))?$/i);
+
+                if (applyDueDateMatch) {
+                    return applyDueDateMatch[1]
+                        ? `تطبيق تاريخ الاستحقاق ${applyDueDateMatch[1]}`
+                        : 'تطبيق تاريخ الاستحقاق';
+                }
+
+                const selectedFilesMatch = normalized.match(/^(\d+) file\(s\) selected$/i);
+
+                if (selectedFilesMatch) {
+                    return `${selectedFilesMatch[1]} ملف محدد`;
+                }
+
+                const removeFileMatch = normalized.match(/^Remove (.+)$/i);
+
+                if (removeFileMatch) {
+                    return `إزالة ${removeFileMatch[1]}`;
+                }
+
+                const ticketUpdatedTitleMatch = normalized.match(/^Ticket (.+) updated$/i);
+
+                if (ticketUpdatedTitleMatch) {
+                    return `تم تحديث التذكرة ${ticketUpdatedTitleMatch[1]}`;
+                }
+
+                const ticketDueTitleMatch = normalized.match(/^Ticket (.+) due date updated$/i);
+
+                if (ticketDueTitleMatch) {
+                    return `تم تحديث تاريخ استحقاق التذكرة ${ticketDueTitleMatch[1]}`;
+                }
+
+                const ticketStatusMatch = normalized.match(/^Ticket (.+) status changed from (.+) to (.+)\.$/i);
+
+                if (ticketStatusMatch) {
+                    const fromStatus = statusTranslations[ticketStatusMatch[2].toLowerCase()] || ticketStatusMatch[2];
+                    const toStatus = statusTranslations[ticketStatusMatch[3].toLowerCase()] || ticketStatusMatch[3];
+
+                    return `تغيرت حالة التذكرة ${ticketStatusMatch[1]} من ${fromStatus} إلى ${toStatus}.`;
+                }
+
+                const ticketPriorityMatch = normalized.match(/^Ticket (.+) priority is now (.+)\.$/i);
+
+                if (ticketPriorityMatch) {
+                    const priority = priorityTranslations[ticketPriorityMatch[2].toLowerCase()] || ticketPriorityMatch[2];
+
+                    return `أصبحت أولوية التذكرة ${ticketPriorityMatch[1]} الآن ${priority}.`;
+                }
+
+                const ticketAssignedMatch = normalized.match(/^Ticket (.+) was assigned to you\.$/i);
+
+                if (ticketAssignedMatch) {
+                    return `تم تعيين التذكرة ${ticketAssignedMatch[1]} لك.`;
+                }
+
+                const youAssignedMatch = normalized.match(/^You were assigned to ticket (.+)\.$/i);
+
+                if (youAssignedMatch) {
+                    return `تم تعيينك على التذكرة ${youAssignedMatch[1]}.`;
+                }
+
+                const ticketClosedMatch = normalized.match(/^Ticket (.+) has been closed\.$/i);
+
+                if (ticketClosedMatch) {
+                    return `تم إغلاق التذكرة ${ticketClosedMatch[1]}.`;
+                }
+
+                const ticketReopenedMatch = normalized.match(/^Ticket (.+) has been reopened\.$/i);
+
+                if (ticketReopenedMatch) {
+                    return `تمت إعادة فتح التذكرة ${ticketReopenedMatch[1]}.`;
+                }
+
+                const ticketCreatedMatch = normalized.match(/^(.+) created ticket (.+)\.$/i);
+
+                if (ticketCreatedMatch) {
+                    return `${ticketCreatedMatch[1]} أنشأ التذكرة ${ticketCreatedMatch[2]}.`;
+                }
+
+                const repliedMatch = normalized.match(/^(.+) replied to this ticket\.\s+"([\s\S]*)"$/i);
+
+                if (repliedMatch) {
+                    return `${repliedMatch[1]} رد على هذه التذكرة. "${repliedMatch[2]}"`;
+                }
+
+                const dueDateChangeMatch = normalized.match(/^The due date changed from (.+) to (.+)\.$/i);
+
+                if (dueDateChangeMatch) {
+                    return `تغير تاريخ الاستحقاق من ${dueDateChangeMatch[1]} إلى ${dueDateChangeMatch[2]}.`;
                 }
 
                 const daysAgoMatch = normalized.match(/^(\d+)\s+days?\s+ago$/i);
@@ -766,6 +1039,47 @@
 
                 if (minutesAgoMatch) {
                     return `منذ ${minutesAgoMatch[1]} دقائق`;
+                }
+
+                const secondsAgoMatch = normalized.match(/^(\d+)\s+seconds?\s+ago$/i);
+
+                if (secondsAgoMatch) {
+                    return `منذ ${secondsAgoMatch[1]} ثوان`;
+                }
+
+                const weeksAgoMatch = normalized.match(/^(\d+)\s+weeks?\s+ago$/i);
+
+                if (weeksAgoMatch) {
+                    return `منذ ${weeksAgoMatch[1]} أسابيع`;
+                }
+
+                const monthsAgoMatch = normalized.match(/^(\d+)\s+months?\s+ago$/i);
+
+                if (monthsAgoMatch) {
+                    return `منذ ${monthsAgoMatch[1]} أشهر`;
+                }
+
+                const yearsAgoMatch = normalized.match(/^(\d+)\s+years?\s+ago$/i);
+
+                if (yearsAgoMatch) {
+                    return `منذ ${yearsAgoMatch[1]} سنوات`;
+                }
+
+                if (/^just now$/i.test(normalized)) {
+                    return 'الآن';
+                }
+
+                if (/^yesterday$/i.test(normalized)) {
+                    return 'أمس';
+                }
+
+                const actorTimeMatch = normalized.match(/^(.+?)\s*(?:·|•|آ·)\s*(.+)$/);
+
+                if (actorTimeMatch) {
+                    const actor = builtinArabicTranslation(actorTimeMatch[1]) || actorTimeMatch[1];
+                    const time = builtinArabicTranslation(actorTimeMatch[2]) || actorTimeMatch[2];
+
+                    return `${actor} · ${time}`;
                 }
 
                 const dateMatch = normalized.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2}),\s+(\d{4})$/i);
@@ -892,9 +1206,15 @@
                     return element.closest([
                         '[data-no-auto-translate]',
                         '.user-box',
-                        '.notification-mini-content',
                         '.agent-email',
                         '.ticket-number',
+                        '.notification-mini-icon',
+                        '.notification-icon',
+                        '.nav-icon',
+                        '.ai-output-icon',
+                        '.language-switch',
+                        '.language-switch-code',
+                        '.mobile-language-pill',
                         '.brand-text',
                         '.brand-mark',
                         '.avatar',
@@ -1045,6 +1365,10 @@
                 });
 
                 document.querySelectorAll('[placeholder], [title], [aria-label], [data-label]').forEach(element => {
+                    if (shouldSkipElement(element)) {
+                        return;
+                    }
+
                     ['placeholder', 'title', 'aria-label', 'data-label'].forEach(attribute => {
                         if (! element.hasAttribute(attribute)) {
                             return;
@@ -1078,10 +1402,12 @@
 
                 const targets = collectTranslationTargets();
                 const uniqueTexts = [...new Set(targets.map(target => target.original))];
-                const storageKey = `resolveiq-ui-translations:v6:${currentLocale}`;
+                const storageKey = `resolveiq-ui-translations:v8:${currentLocale}`;
                 const cachedTranslations = JSON.parse(localStorage.getItem(storageKey) || '{}');
                 const missingTexts = uniqueTexts.filter(text => {
-                    if (cachedTranslations[text]) {
+                    const cachedTranslation = cachedTranslations[text];
+
+                    if (cachedTranslation && cachedTranslation !== text) {
                         return false;
                     }
 
@@ -1111,7 +1437,11 @@
                         if (target.type === 'attribute') {
                             target.element.setAttribute(target.attribute, translated);
                         } else if (target.type === 'textNode') {
-                            target.node.textContent = target.node.textContent.replace(target.original, translated);
+                            const rawText = target.node.textContent || '';
+                            const leadingWhitespace = rawText.match(/^\s*/)?.[0] || '';
+                            const trailingWhitespace = rawText.match(/\s*$/)?.[0] || '';
+
+                            target.node.textContent = `${leadingWhitespace}${translated}${trailingWhitespace}`;
                         } else {
                             target.element.textContent = translated;
                         }
@@ -1150,12 +1480,30 @@
                         }
 
                         const data = await response.json();
+                        const freshTranslations = Object.fromEntries(
+                            Object.entries(data.translations || {})
+                                .filter(([original, translated]) => (
+                                    typeof translated === 'string' &&
+                                    translated.trim() !== '' &&
+                                    translated !== original
+                                ))
+                        );
+
                         translations = {
                             ...translations,
-                            ...(data.translations || {}),
+                            ...freshTranslations,
                         };
 
-                        localStorage.setItem(storageKey, JSON.stringify(translations));
+                        const storableTranslations = Object.fromEntries(
+                            Object.entries(translations)
+                                .filter(([original, translated]) => (
+                                    typeof translated === 'string' &&
+                                    translated.trim() !== '' &&
+                                    translated !== original
+                                ))
+                        );
+
+                        localStorage.setItem(storageKey, JSON.stringify(storableTranslations));
                         applyTranslations(translations);
                     }
                 } catch (error) {
