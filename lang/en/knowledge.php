@@ -28,6 +28,8 @@ return [
     'no_articles' => 'No articles found yet.',
     'no_articles_desc' => 'Create your first article to start building the support knowledge library.',
     'no_matching' => 'No articles matched your search.',
+    'articles_found' => 'article(s) found for',
+    'no_results_for' => 'No results for',
     'published' => 'Published',
     'draft' => 'Draft',
     'title_create' => 'New Article',

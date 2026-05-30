@@ -144,7 +144,7 @@
 
                         <td data-label="{{ __('knowledge.status') }}">
                             <span class="badge {{ $article->status === 'published' ? 'solved' : 'pending' }}">
-                                {{ ucfirst($article->status) }}
+                                {{ __('knowledge.' . $article->status) }}
                             </span>
                         </td>
 

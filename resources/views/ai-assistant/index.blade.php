@@ -164,6 +164,7 @@
             <h2 data-auto-translate>{{ __('ai.ai_output') }}</h2>
 
             <div class="ai-output-box {{ $ticketAi ? 'has-output' : '' }}" id="aiOutputBox">
+                <div class="ai-loading-text" data-auto-translate>{{ __('ai.generating') }}</div>
                 <div id="aiOutputContent">
                     @if ($ticketAi)
                         <strong>{{ $ticketAi['title'] ?? __('ai.ai_result') }}</strong>

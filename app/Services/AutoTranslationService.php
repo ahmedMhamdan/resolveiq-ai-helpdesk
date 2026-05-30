@@ -129,7 +129,6 @@ class AutoTranslationService
             'Status' => 'الحالة',
             'Ticket' => 'التذكرة',
             'Tickets' => 'التذاكر',
-            'Unable to login to account' => 'تعذر تسجيل الدخول إلى الحساب',
             'Unread' => 'غير مقروءة',
             'unread' => 'غير مقروءة',
             'Updated' => 'آخر تحديث',

@@ -3218,12 +3218,14 @@ body:not(.dark) .users-role-actions .role-select:hover {
     opacity: .75;
 }
 
-.ai-output-box.is-loading::after {
-    content: "Generating AI response...";
-    display: block;
+.ai-loading-text {
+    display: none;
     margin-top: 12px;
     color: var(--muted);
     font-size: .9rem;
+}
+.ai-output-box.is-loading .ai-loading-text {
+    display: block;
 }
 .ai-generate-btn {
     display: inline-flex;

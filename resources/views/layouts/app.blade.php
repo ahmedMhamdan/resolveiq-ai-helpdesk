@@ -1208,6 +1208,7 @@
                         '.user-box',
                         '.agent-email',
                         '.ticket-number',
+                        '.ticket-link',
                         '.notification-mini-icon',
                         '.notification-icon',
                         '.nav-icon',
@@ -1289,8 +1290,8 @@
                 document.querySelectorAll(uiTextSelectors).forEach(element => {
                     if (
                         shouldSkipElement(element) ||
-                        element.matches('.agent-email, .ticket-number, .brand-text, .brand-mark') ||
-                        element.closest('.agent-email, .ticket-number, .brand-text, .brand-mark') ||
+                        element.matches('.agent-email, .ticket-number, .brand-text, .brand-mark, .ticket-link') ||
+                        element.closest('.agent-email, .ticket-number, .brand-text, .brand-mark, .ticket-link') ||
                         element.children.length > 0
                     ) {
                         return;
