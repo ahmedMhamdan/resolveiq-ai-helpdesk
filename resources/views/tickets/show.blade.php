@@ -463,7 +463,7 @@
 
                     const removeButton = document.createElement('button');
                     removeButton.type = 'button';
-                    removeButton.className = 'remove-selected-file';
+                    removeButton.className = 'selected-file-remove';
                     removeButton.textContent = '×';
                     removeButton.setAttribute('aria-label', `${uploadMessages.remove} ${file.name}`);
 
