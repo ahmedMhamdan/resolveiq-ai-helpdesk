@@ -2,6 +2,10 @@
 
 ResolveIQ is a Laravel-based helpdesk ticket system built as a portfolio project. It simulates a real support workflow with users, agents, admins, tickets, notifications, email verification, and AI-assisted ticket handling.
 
+## Project Status
+
+ResolveIQ is feature-complete as a Laravel + cybersecurity portfolio project. The current version focuses on a practical helpdesk workflow, AI-assisted ticket operations, bilingual UI support, responsive dashboard polish, and deployment readiness.
+
 ## Live Demo
 
 https://resolveiq-ai-helpdesk.onrender.com
@@ -23,7 +27,9 @@ https://resolveiq-ai-helpdesk.onrender.com
 - Deleted tickets with restore and force delete
 - Notifications and activity logs
 - AI assistant for suggested replies, summaries, internal notes, priority suggestions, and due date suggestions
-- Responsive UI with dark/light mode
+- Arabic/English UI support with RTL layout handling
+- Responsive UI with dark/light mode, mobile-friendly action bars, and touch-sized controls
+- Accessibility improvements for keyboard navigation, focus states, and icon-only action labels
 - API authentication using Laravel Sanctum
 - Docker deployment on Render
 - PostgreSQL database on Neon
@@ -177,6 +183,17 @@ Main API areas:
 ## Screenshots
 
 Screenshots will be added later.
+
+## Portfolio Notes
+
+ResolveIQ was built to demonstrate practical Laravel backend development with real product concerns:
+
+- Authentication, authorization, verified accounts, and role-specific dashboards
+- Ticket lifecycle management with replies, notes, attachments, activity history, and notifications
+- Admin workflows for users, agents, departments, deleted tickets, overdue tickets, and unassigned work
+- AI assistance layered into the support workflow without replacing the agent's final decision
+- Production deployment using Docker, Render, and Neon PostgreSQL
+- Bilingual interface polish for English and Arabic users
 
 ## Author
 
