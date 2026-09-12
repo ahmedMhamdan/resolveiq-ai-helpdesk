@@ -180,10 +180,6 @@ Main API areas:
 - Ticket replies
 - Email verification
 
-## Screenshots
-
-Screenshots will be added later.
-
 ## Portfolio Notes
 
 ResolveIQ was built to demonstrate practical Laravel backend development with real product concerns:
