@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('css/resolveiq.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login-demos.css') }}">
 </head>
 <body>
     <header class="auth-app-navbar">
@@ -39,6 +40,7 @@
         </div>
     </header>
     <main class="auth-page auth-with-navbar">
+        <div class="auth-login-layout">
         <section class="auth-card">
             <div class="auth-head">
                 <h1>Welcome back</h1>
@@ -123,10 +125,49 @@
                 @endguest
             </form>
         </section>
+        <aside class="auth-card demo-panel" aria-labelledby="demo-heading">
+            <span class="demo-label">Explore ResolveIQ</span>
+            <h2 id="demo-heading">Free demo accounts</h2>
+            <p class="demo-intro">Choose an account to sign in and try the app.</p>
+            <p class="demo-password">Password for all accounts: <code>password</code></p>
+
+            <div class="demo-accounts">
+                @foreach ([
+                    'Admin' => 'admin@resolveiq.test',
+                    'Agent' => 'agent@resolveiq.test',
+                    'Second Agent' => 'agent2@resolveiq.test',
+                    'User' => 'user@resolveiq.test',
+                    'Customer' => 'omar@resolveiq.test',
+                ] as $demoRole => $demoEmail)
+                    <form action="{{ route('login') }}" method="POST" class="demo-account-form">
+                        @csrf
+                        <input type="hidden" name="email" value="{{ $demoEmail }}">
+                        <input type="hidden" name="password" value="password">
+                        <button type="submit" class="demo-account" aria-label="Sign in as {{ $demoRole }}">
+                            <span class="demo-account-details">
+                                <strong>{{ $demoRole }}</strong>
+                                <span class="demo-email">{{ $demoEmail }}</span>
+                            </span>
+                            <span class="demo-action">Sign in <span aria-hidden="true">&rarr;</span></span>
+                        </button>
+                    </form>
+                @endforeach
+            </div>
+        </aside>
+        </div>
     </main>
 
     <script>
         (() => {
+            document.querySelectorAll('.demo-account-form').forEach((form) => {
+                form.addEventListener('submit', () => {
+                    const button = form.querySelector('button');
+                    button.disabled = true;
+                    button.setAttribute('aria-busy', 'true');
+                    button.querySelector('.demo-action').textContent = 'Signing in...';
+                });
+            });
+
             const root = document.documentElement;
             const toggle = document.getElementById('themeToggle');
             const savedTheme = localStorage.getItem('resolveiq-theme') || 'light';
