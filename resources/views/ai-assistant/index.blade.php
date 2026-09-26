@@ -70,12 +70,18 @@
                                 value="{{ $ticket->id }}"
                                 @selected($selectedTicketId === (string) $ticket->id)
                                 data-generate-url="{{ route('tickets.ai.generate', $ticket) }}"
+                                data-description="{{ $ticket->description }}"
                             >
                                 #{{ $ticket->ticket_number }} — {{ $ticket->title }}
                             </option>
                         @endforeach
                     </select>
                 </div>
+
+                <section class="ai-ticket-preview" id="aiTicketPreview" aria-labelledby="aiTicketPreviewHeading" hidden>
+                    <h3 id="aiTicketPreviewHeading">{{ __('ai.ticket_description') }}</h3>
+                    <p id="aiTicketDescription" dir="auto" aria-live="polite"></p>
+                </section>
 
                 <div class="ai-action-grid ai-action-grid-five">
                     <button
@@ -360,6 +366,9 @@
             const aiCards = document.querySelectorAll('.ai-action-card');
             const promptBox = document.getElementById('custom_prompt');
             const ticketSelect = document.getElementById('ticket_id');
+            const ticketPreview = document.getElementById('aiTicketPreview');
+            const ticketDescription = document.getElementById('aiTicketDescription');
+            const noDescription = @json(__('ai.no_description'));
             const generateForm = document.getElementById('aiGenerateForm');
             const generateBtn = document.getElementById('generateAiBtn');
             const modeInput = document.getElementById('aiModeInput');
@@ -566,6 +575,7 @@
             function setLoading(isLoading) {
                 const option = selectedOption();
                 const hasTicket = option && option.value;
+
                 const btnText = generateBtn?.querySelector('.ai-btn-text');
 
                 if (!generateBtn) {
@@ -585,6 +595,11 @@
             function syncGenerateForm() {
                 const option = selectedOption();
                 const hasTicket = option && option.value;
+
+                ticketPreview.hidden = !hasTicket;
+                ticketDescription.textContent = hasTicket
+                    ? (option.dataset.description?.trim() || noDescription)
+                    : '';
 
                 if (generateForm) {
                     generateForm.action = hasTicket ? option.dataset.generateUrl : '';

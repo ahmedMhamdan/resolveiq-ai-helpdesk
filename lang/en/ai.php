@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'ticket_description' => 'Ticket description',
+    'no_description' => 'No description provided for this ticket.',
     'title' => 'AI Assistant',
     'subtitle' => 'Use ticket context to summarize issues, draft replies, recommend priority, suggest due dates, or generate a custom response.',
     'workspace' => 'Assistant Workspace',

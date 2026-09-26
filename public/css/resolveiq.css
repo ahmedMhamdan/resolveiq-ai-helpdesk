@@ -1686,6 +1686,28 @@ body:not(.dark) .reply-delete-btn:hover {
   padding: 26px;
 }
 
+.ai-ticket-preview {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel-soft);
+  color: var(--text);
+  min-width: 0;
+}
+
+.ai-ticket-preview h3 {
+  margin: 0 0 10px;
+  font-size: .95rem;
+}
+
+.ai-ticket-preview p {
+  margin: 0;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .ai-action-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
