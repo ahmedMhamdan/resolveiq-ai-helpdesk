@@ -9,6 +9,8 @@ class TicketAttachment extends Model
 {
     use HasFactory;
 
+    public const DISK = 'local';
+
     protected $fillable = [
         'ticket_id',
         'ticket_reply_id',

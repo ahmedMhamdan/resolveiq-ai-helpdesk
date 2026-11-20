@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
     })->name('api.verification.notice');
 
     Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-        ->middleware(['signed', 'throttle:6,1'])
+        ->middleware('throttle:6,1')
         ->name('api.verification.verify');
 
     Route::post('/register', [AuthController::class, 'register'])

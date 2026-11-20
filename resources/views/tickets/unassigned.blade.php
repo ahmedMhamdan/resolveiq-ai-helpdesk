@@ -3,6 +3,9 @@
 @section('title', __('tickets.unassigned_tickets'))
 
 @section('content')
+@php
+    $searchActive = request()->string('search', strict: true)->trim()->isNotEmpty();
+@endphp
     <div class="page-head">
         <div>
             <h1 data-auto-translate>{{ __('tickets.unassigned_tickets') }}</h1>
@@ -33,25 +36,24 @@
             <form
                 method="GET"
                 action="{{ route('tickets.unassigned') }}#unassigned-ticket-list"
-                class="filters js-live-ticket-search"
-                data-live-table=".unassigned-table"
-                data-live-empty="#unassigned-empty-message"
+                class="filters"
             >
                 <input
                     type="search"
                     name="search"
-                    value="{{ request('search') }}"
+                    value="{{ request()->string('search', strict: true) }}"
                     placeholder="{{ __('tickets.search_unassigned') }}"
                     data-auto-translate-attribute="placeholder"
                     autocomplete="off"
-                    class="js-live-ticket-input"
                 >
 
                 <button type="submit" data-auto-translate>{{ __('common.search') }}</button>
 
-                <button type="button" class="btn btn-secondary js-live-ticket-reset" hidden data-auto-translate>
+                @if ($searchActive)
+                    <a href="{{ route('tickets.unassigned') }}" class="btn btn-secondary js-live-ticket-reset" data-auto-translate>
                     {{ __('common.reset') }}
-                </button>
+                </a>
+                @endif
             </form>
         </div>
 
@@ -71,7 +73,7 @@
 
                 <tbody>
                     @forelse ($tickets as $ticket)
-                        <tr class="live-ticket-row">
+                        <tr>
                             <td>
                                 <a href="{{ route('tickets.show', $ticket) }}" class="ticket-link">
                                     <strong>{{ $ticket->ticket_number }}</strong>
@@ -165,86 +167,15 @@
                     @empty
                         <tr>
                             <td colspan="7" class="empty" data-auto-translate>
-                                {{ __('tickets.no_unassigned_found') }}
+                                {{ __($searchActive ? 'tickets.no_matching_unassigned' : 'tickets.no_unassigned_found') }}
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-
-            <p id="unassigned-empty-message" class="live-search-empty" hidden data-auto-translate>
-                {{ __('tickets.no_matching_unassigned') }}
-            </p>
         </div>
 
         {{ $tickets->links('vendor.pagination.resolveiq') }}
     </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.js-live-ticket-search').forEach(function (form) {
-            const input = form.querySelector('.js-live-ticket-input');
-            const reset = form.querySelector('.js-live-ticket-reset');
-            const table = document.querySelector(form.dataset.liveTable);
-            const empty = document.querySelector(form.dataset.liveEmpty);
-
-            if (!input || !table) {
-                return;
-            }
-
-            const rows = Array.from(table.querySelectorAll('tbody tr.live-ticket-row'));
-
-            function getCleanText(row) {
-                const clone = row.cloneNode(true);
-
-                clone.querySelectorAll('select, input, textarea, button, form').forEach(function (element) {
-                    element.remove();
-                });
-
-                return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
-            }
-
-            function filterRows() {
-                const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
-                let visibleCount = 0;
-
-                rows.forEach(function (row) {
-                    const isVisible = !term || getCleanText(row).includes(term);
-                    row.classList.toggle('is-hidden', !isVisible);
-
-                    if (isVisible) {
-                        visibleCount++;
-                    }
-                });
-
-                if (reset) {
-                    reset.hidden = !term;
-                }
-
-                if (empty) {
-                    empty.hidden = visibleCount > 0;
-                }
-            }
-
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                filterRows();
-                input.focus();
-            });
-
-            input.addEventListener('input', filterRows);
-
-            if (reset) {
-                reset.addEventListener('click', function () {
-                    input.value = '';
-                    filterRows();
-                    input.focus();
-                });
-            }
-
-            filterRows();
-        });
-    });
-</script>
 
 @endsection

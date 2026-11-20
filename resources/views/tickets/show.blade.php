@@ -208,8 +208,7 @@
                                         @foreach ($reply->attachments as $attachment)
                                             <div class="attachment-chip">
                                                 <a
-                                                    href="{{ asset('storage/' . $attachment->file_path) }}"
-                                                    target="_blank"
+                                                    href="{{ route('tickets.attachments.download', [$ticket, $attachment]) }}"
                                                     class="attachment-link"
                                                 >
                                                     {{ $attachment->file_name }}

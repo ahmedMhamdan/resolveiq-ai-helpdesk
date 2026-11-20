@@ -10,7 +10,7 @@
   </defs>
   <rect width="160" height="160" rx="42" fill="url(#bg)"/>
   <circle cx="80" cy="66" r="31" fill="#f0b38d" filter="url(#shadow)"/>
-  <path d="M47 139c6-29 21-45 33-45s27 16 33 45H47Z" fill="#22c55e" filter="url(#shadow)"/>
+  <path d="M47 139c6-29 21-45 33-45s27 16 33 45H47Z" fill="#5622c5" filter="url(#shadow)"/>
   <path d="M52 61c3-25 23-39 44-28 10 5 16 14 15 28-17-12-36-12-59 0Z" fill="#111827"/>
   <circle cx="68" cy="70" r="4" fill="#111827"/>
   <circle cx="92" cy="70" r="4" fill="#111827"/>

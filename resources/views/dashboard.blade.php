@@ -35,36 +35,23 @@
             ? __('dashboard.activity_subtitle_admin')
             : __('dashboard.activity_subtitle_user');
 
-        $avatarUrlFor = function ($person) {
-            if (! $person || ! $person->avatar_path) {
-                return '';
-            }
-
-            if (method_exists($person, 'avatarUrl')) {
-                return $person->avatarUrl();
-            }
-
-            return str_starts_with($person->avatar_path, 'images/')
-                ? asset($person->avatar_path)
-                : asset('storage/' . $person->avatar_path);
-        };
+        $avatarUrlFor = fn ($person) => $person?->avatarUrl();
 
     @endphp
 
-    <div class="page-head">
+    <div class="page-head dashboard-heading">
         <div>
             <h1 class="page-title">{{ $dashboardTitle }}</h1>
             <p class="page-subtitle">{{ $dashboardSubtitle }}</p>
         </div>
 
-        <a class="btn secondary" href="{{ route('tickets.index') }}">{{ __('dashboard.view_tickets') }}</a>
     </div>
 
     <section class="grid stats">
         <div class="card stat-card">
             <div class="stat-top">
                 <span data-auto-translate>{{ __('dashboard.open_tickets') }}</span>
-                <span class="stat-icon">O</span>
+                <x-icon name="inbox" class="stat-icon" />
             </div>
             <div class="stat-number">{{ $stats['open'] ?? 0 }}</div>
             <div class="stat-trend" data-auto-translate>{{ __('dashboard.active_requests') }}</div>
@@ -73,7 +60,7 @@
         <div class="card stat-card">
             <div class="stat-top">
                 <span data-auto-translate>{{ __('dashboard.pending') }}</span>
-                <span class="stat-icon">P</span>
+                <x-icon name="clock" class="stat-icon" />
             </div>
             <div class="stat-number">{{ $stats['pending'] ?? 0 }}</div>
             <div class="stat-trend" data-auto-translate>{{ __('dashboard.waiting_for_updates') }}</div>
@@ -82,7 +69,7 @@
         <div class="card stat-card">
             <div class="stat-top">
                 <span data-auto-translate>{{ __('dashboard.solved') }}</span>
-                <span class="stat-icon">S</span>
+                <x-icon name="check" class="stat-icon" />
             </div>
             <div class="stat-number">{{ $stats['solved'] ?? 0 }}</div>
             <div class="stat-trend" data-auto-translate>{{ __('dashboard.resolved_tickets') }}</div>
@@ -91,7 +78,7 @@
         <div class="card stat-card">
             <div class="stat-top">
                 <span data-auto-translate>{{ __('dashboard.urgent') }}</span>
-                <span class="stat-icon">U</span>
+                <x-icon name="flag" class="stat-icon" />
             </div>
             <div class="stat-number">{{ $stats['urgent'] ?? 0 }}</div>
             <div class="stat-trend" data-auto-translate>{{ __('dashboard.needs_attention') }}</div>
@@ -246,22 +233,18 @@
                     {{ __('dashboard.search') }}
                 </button>
 
-                <button
-                    type="button"
-                    class="btn btn-sm btn-secondary activity-search-reset"
-                    id="activitySearchReset"
-                    {{ request('activity_search') ? '' : 'hidden' }}
-                    data-auto-translate
-                >
-                    {{ __('dashboard.reset') }}
-                </button>
+                @if ($activitySearch !== '')
+                    <a href="{{ route('dashboard') }}#recent-activity" class="btn btn-sm btn-secondary activity-search-reset">
+                        {{ __('common.reset') }}
+                    </a>
+                @endif
 
                 <div
                     class="activity-search-status"
                     id="activitySearchStatus"
-                    {{ request('activity_search') ? '' : 'hidden' }}
+                    {{ $activitySearch !== '' ? '' : 'hidden' }}
                 >
-                    @if(request('activity_search'))
+                    @if ($activitySearch !== '')
                         {{ __('common.search_applied') }} {{ method_exists($latestActivities, 'total') ? $latestActivities->total() : $latestActivities->count() }} {{ __('common.activity_logs_found') }}
                     @endif
                 </div>
@@ -274,7 +257,6 @@
                     class="activity-item activity-openable"
                     role="button"
                     tabindex="0"
-                    data-activity-search="{{ e(strtolower(($activity->action ?? '') . ' ' . ($activity->ticket?->ticket_number ?? '') . ' ' . ($activity->ticket?->title ?? '') . ' ' . ($activity->user?->name ?? '') . ' ' . ($activity->old_value ?? '') . ' ' . ($activity->new_value ?? ''))) }}"
                     data-action="{{ e($activity->action) }}"
                     data-ticket="{{ e($activity->ticket?->ticket_number ?? __('common.ticket_removed')) }}"
                     data-title="{{ e($activity->ticket?->title ?? __('common.deleted_or_unavailable')) }}"
@@ -328,13 +310,9 @@
                 </div>
             @empty
                 <div class="empty" data-auto-translate>
-                    {{ request('activity_search') ? __('common.no_activity_logs_found') : __('common.no_recent_activity') }}
+                    {{ $activitySearch !== '' ? __('common.no_activity_logs_found') : __('common.no_recent_activity') }}
                 </div>
             @endforelse
-
-            <div class="empty activity-live-empty" id="activityLiveEmpty" hidden data-auto-translate>
-                {{ __('common.no_activity_logs_found') }}
-            </div>
         </div>
 
         @if (method_exists($latestActivities, 'hasPages') && $latestActivities->hasPages())
@@ -407,108 +385,7 @@
 
     <script>
         (() => {
-            const activitySearchForm = document.getElementById('activitySearchForm');
-            const activitySearchInput = document.getElementById('activitySearchInput');
-            const activitySearchBtn = document.getElementById('activitySearchBtn');
-            const activitySearchReset = document.getElementById('activitySearchReset');
-            const activitySearchStatus = document.getElementById('activitySearchStatus');
-            const activityLiveEmpty = document.getElementById('activityLiveEmpty');
-            const activityCard = document.getElementById('recent-activity');
-            const activityItems = Array.from(document.querySelectorAll('.activity-openable'));
-
-            function setActivityStatus(message, type = 'info') {
-                if (!activitySearchStatus) {
-                    return;
-                }
-
-                activitySearchStatus.textContent = message;
-                activitySearchStatus.hidden = false;
-                activitySearchStatus.classList.remove('is-success', 'is-warning', 'is-info', 'is-visible');
-                activitySearchStatus.classList.add(`is-${type}`);
-
-                window.requestAnimationFrame(() => {
-                    activitySearchStatus.classList.add('is-visible');
-                });
-            }
-
-            function runActivitySearch() {
-                if (!activitySearchInput) {
-                    return;
-                }
-
-                const query = activitySearchInput.value.trim().toLowerCase();
-                let matchedCount = 0;
-
-                activityItems.forEach(item => {
-                    const haystack = (item.dataset.activitySearch || item.textContent || '').toLowerCase();
-                    const isMatch = query === '' || haystack.includes(query);
-
-                    item.hidden = !isMatch;
-                    item.classList.toggle('is-hidden', !isMatch);
-                    item.classList.toggle('is-search-match', query !== '' && isMatch);
-
-                    if (isMatch) {
-                        matchedCount += 1;
-                    }
-                });
-
-                if (activityLiveEmpty) {
-                    activityLiveEmpty.hidden = query === '' || matchedCount > 0;
-                }
-
-                if (activitySearchReset) {
-                    activitySearchReset.hidden = query === '';
-                }
-
-                activityCard?.classList.remove('search-pulse');
-                void activityCard?.offsetWidth;
-                activityCard?.classList.add('search-pulse');
-
-                const activityMsgs = <?php echo json_encode([
-                    'cleared' => __('common.activity_search_cleared'),
-                    'found' => __('common.activity_logs_found'),
-                    'found_one' => __('common.activity_log_found'),
-                    'not_found' => __('common.no_activity_logs_found'),
-                ]); ?>;
-
-                if (query === '') {
-                    setActivityStatus(activityMsgs.cleared, 'info');
-                    return;
-                }
-
-                if (matchedCount > 0) {
-                    const label = matchedCount === 1 ? activityMsgs.found_one : activityMsgs.found;
-                    setActivityStatus(`{{ __('common.search_applied') }} ${matchedCount} ${label}`, 'success');
-                } else {
-                    setActivityStatus(`{{ __('common.no_activity_logs_found') }}`, 'warning');
-                }
-            }
-
-            activitySearchForm?.addEventListener('submit', event => {
-                event.preventDefault();
-
-                activitySearchBtn?.classList.add('is-loading');
-
-                window.setTimeout(() => {
-                    runActivitySearch();
-                    activitySearchBtn?.classList.remove('is-loading');
-                }, 160);
-            });
-
-            activitySearchReset?.addEventListener('click', () => {
-                if (!activitySearchInput) {
-                    return;
-                }
-
-                activitySearchInput.value = '';
-                runActivitySearch();
-                activitySearchInput.focus();
-            });
-
-            if (activitySearchInput && activitySearchInput.value.trim() !== '') {
-                runActivitySearch();
-            }
-
+            const activityItems = document.querySelectorAll('.activity-openable');
             const modalBackdrop = document.getElementById('activityModalBackdrop');
             if (modalBackdrop && modalBackdrop.parentElement !== document.body) {
                 document.body.appendChild(modalBackdrop);

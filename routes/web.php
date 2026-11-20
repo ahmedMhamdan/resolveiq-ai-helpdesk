@@ -21,7 +21,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/email/verify/{id}/{hash}', [PublicEmailVerificationController::class, 'verify'])
-    ->middleware(['signed', 'throttle:6,1'])
+    ->middleware('throttle:6,1')
     ->name('verification.verify');
 
 Route::middleware('auth')->group(function () {
@@ -128,6 +128,9 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/tickets/{ticket}/attachments/{attachment}', [TicketAttachmentController::class, 'destroy'])
             ->name('tickets.attachments.destroy');
+
+        Route::get('/tickets/{ticket}/attachments/{attachment}', [TicketAttachmentController::class, 'download'])
+            ->name('tickets.attachments.download');
 
         Route::resource('tickets', TicketController::class);
 

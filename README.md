@@ -104,6 +104,10 @@ php artisan serve
 npm run dev
 ```
 
+With WAMP or Apache, run `npm run build` to serve the compiled assets without the Vite development server. Use Node.js 24 LTS.
+
+Run `php artisan migrate` when updating an existing installation. The attachment migration moves existing ticket files into private storage while keeping their ticket records and download links available from the ticket page.
+
 ## Important Environment Variables
 
 Example local configuration:

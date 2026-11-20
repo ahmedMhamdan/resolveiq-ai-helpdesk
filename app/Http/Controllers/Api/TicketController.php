@@ -14,20 +14,13 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $role = $this->roleName($user);
-
-        $tickets = $this->ticketQueryFor($role, $user)
+        $tickets = Ticket::visibleTo($user)
             ->with(['user', 'agent', 'department'])
-            ->when($request->query('search'), function (Builder $query, string $search) {
-                $query->where(function (Builder $query) use ($search) {
-                    $query->where('ticket_number', 'like', "%{$search}%")
-                        ->orWhere('title', 'like', "%{$search}%");
-                });
-            })
-            ->when($request->query('status'), function (Builder $query, string $status) {
+            ->matchingSearch($request->string('search', strict: true)->trim()->toString())
+            ->when($request->string('status', strict: true)->toString(), function (Builder $query, string $status) {
                 $query->where('status', $status);
             })
-            ->when($request->query('priority'), function (Builder $query, string $priority) {
+            ->when($request->string('priority', strict: true)->toString(), function (Builder $query, string $priority) {
                 $query->where('priority', $priority);
             })
             ->latest()
@@ -54,11 +47,10 @@ class TicketController extends Controller
         $data = $request->validate([
             'title' => ['required', 'string', 'max:180'],
             'description' => ['required', 'string', 'max:5000'],
-            'department_id' => ['required', 'exists:departments,id'],
+            'department_id' => ['required', 'integer', 'exists:departments,id'],
         ]);
 
-        $ticket = Ticket::create([
-            'ticket_number' => $this->makeTicketNumber(),
+        $ticket = Ticket::createWithNumber($this->makeTicketNumber(...), [
             'user_id' => $user->id,
             'agent_id' => null,
             'department_id' => $data['department_id'],
@@ -67,14 +59,7 @@ class TicketController extends Controller
             'status' => 'open',
             'priority' => null,
             'due_at' => null,
-        ]);
-
-        $ticket->activityLogs()->create([
-            'user_id' => $user->id,
-            'action' => 'Ticket created via API',
-            'old_value' => null,
-            'new_value' => 'open',
-        ]);
+        ], 'Ticket created via API');
 
         $ticket->load(['user', 'agent', 'department']);
 
@@ -88,7 +73,7 @@ class TicketController extends Controller
     {
         $user = $request->user();
 
-        if (! $this->canViewTicket($user, $ticket)) {
+        if (! $user->can('view', $ticket)) {
             return response()->json([
                 'message' => 'You are not allowed to view this ticket.',
             ], 403);
@@ -98,8 +83,8 @@ class TicketController extends Controller
             'user',
             'agent',
             'department',
-            'replies.user.role',
-            'activityLogs.user',
+            'replies' => fn ($replies) => $replies->visibleTo($user)->with('user.role'),
+            'activityLogs' => fn ($logs) => $logs->visibleTo($user)->with('user'),
         ]);
 
         return response()->json([
@@ -107,42 +92,11 @@ class TicketController extends Controller
         ]);
     }
 
-    private function ticketQueryFor(string $role, User $user): Builder
-    {
-        return Ticket::query()
-            ->when($role === 'user', function (Builder $query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->when($role === 'agent', function (Builder $query) use ($user) {
-                $query->where('agent_id', $user->id);
-            });
-    }
-
-    private function canViewTicket(User $user, Ticket $ticket): bool
-    {
-        $role = $this->roleName($user);
-
-        if ($role === 'admin') {
-            return true;
-        }
-
-        if ($role === 'agent') {
-            return (int) $ticket->agent_id === (int) $user->id;
-        }
-
-        return (int) $ticket->user_id === (int) $user->id;
-    }
-
-    private function roleName(User $user): string
-    {
-        return strtolower($user->role?->name ?? 'user');
-    }
-
     private function makeTicketNumber(): string
     {
         do {
             $number = 'RIQ-' . now()->format('ymd') . '-' . strtoupper(Str::random(5));
-        } while (Ticket::query()->where(['ticket_number' => $number])->exists());
+        } while (Ticket::withTrashed()->where('ticket_number', $number)->exists());
 
         return $number;
     }

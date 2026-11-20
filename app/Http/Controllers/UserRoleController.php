@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SaveUserProfile;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserRoleController extends Controller
@@ -96,7 +95,7 @@ class UserRoleController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, SaveUserProfile $saveProfile)
     {
         $roleName = strtolower($user->role?->name ?? 'user');
 
@@ -119,38 +118,11 @@ class UserRoleController extends Controller
             'password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ]);
 
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $directory = public_path('images/avatars/uploads');
-
-            if (! File::exists($directory)) {
-                File::makeDirectory($directory, 0755, true);
-            }
-
-            if ($user->avatar_path && str_starts_with($user->avatar_path, 'images/avatars/uploads/')) {
-                $oldAvatarPath = public_path($user->avatar_path);
-
-                if (File::exists($oldAvatarPath)) {
-                    File::delete($oldAvatarPath);
-                }
-            }
-
-            $fileName = 'user-' . $user->id . '-' . time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move($directory, $fileName);
-
-            $data['avatar_path'] = 'images/avatars/uploads/' . $fileName;
-        }
-
-        unset($data['avatar']);
-
-        if (! empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
+        if (empty($data['password'])) {
             unset($data['password']);
         }
 
-        $user->fill($data);
-        $user->save();
+        $saveProfile($user, $data);
 
         return redirect()
             ->route('users.show', $user)

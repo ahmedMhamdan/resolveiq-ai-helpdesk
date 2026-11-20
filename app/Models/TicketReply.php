@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,6 +23,14 @@ class TicketReply extends Model
         return [
             'is_internal_note' => 'boolean',
         ];
+    }
+
+    #[Scope]
+    protected function visibleTo(Builder $query, User $user): void
+    {
+        if (! $user->isSupportStaff()) {
+            $query->where('is_internal_note', false);
+        }
     }
 
     public function ticket()

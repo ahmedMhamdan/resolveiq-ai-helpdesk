@@ -11,18 +11,10 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $role = strtolower($user->role?->name ?? 'user');
-        $activitySearch = $request->query('activity_search');
+        $role = $user->roleName();
+        $activitySearch = $request->string('activity_search', strict: true)->trim()->toString();
 
-        $ticketQuery = Ticket::query();
-
-        if ($role === 'agent') {
-            $ticketQuery->where('agent_id', $user->id);
-        }
-
-        if ($role === 'user') {
-            $ticketQuery->where('user_id', $user->id);
-        }
+        $ticketQuery = Ticket::visibleTo($user);
 
         $stats = [
             'open' => (clone $ticketQuery)
@@ -39,30 +31,21 @@ class DashboardController extends Controller
 
             'urgent' => (clone $ticketQuery)
                 ->where('priority', 'urgent')
-                ->whereNotIn('status', ['solved', 'closed'], 'and')
+                ->whereNotIn('status', ['solved', 'closed'])
                 ->count('*'),
         ];
 
         $latestTickets = (clone $ticketQuery)
             ->with(['user', 'agent', 'department'])
             ->latest()
+            ->orderByDesc('id')
             ->take(6)
             ->get();
 
-        $activityQuery = TicketActivityLog::query()
-            ->with(['ticket', 'user']);
-
-        if ($role === 'agent') {
-            $activityQuery->whereHas('ticket', function ($query) use ($user) {
-                $query->where('agent_id', $user->id);
-            });
-        }
-
-        if ($role === 'user') {
-            $activityQuery->whereHas('ticket', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            });
-        }
+        $activityQuery = TicketActivityLog::visibleTo($user)
+            ->with(['ticket', 'user'])
+            ->when($role !== 'admin', fn ($query) => $query
+                ->whereHas('ticket', fn ($ticket) => $ticket->visibleTo($user)));
 
         $activityQuery->when($activitySearch, function ($query, string $activitySearch) {
             $query->where(function ($query) use ($activitySearch) {

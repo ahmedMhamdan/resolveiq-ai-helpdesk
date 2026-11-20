@@ -1,0 +1,300 @@
+.home-body {
+    --home-ink: #21182e;
+    --home-muted: #625770;
+    --home-paper: #f7f4fa;
+    --home-line: #e1d8e9;
+    --home-panel: #fdfbff;
+    --home-accent: #6841a9;
+    --home-button: #533293;
+    background: var(--home-paper);
+    color: var(--home-ink);
+}
+
+html[data-theme="dark"] .home-body {
+    --home-ink: #f1e9f9;
+    --home-muted: #bcb0cd;
+    --home-paper: #181323;
+    --home-line: #4b3a60;
+    --home-panel: #251e33;
+    --home-accent: #d9bfff;
+    --home-button: #6844ac;
+}
+
+.home-shell {
+    width: min(100% - 64px, 1280px);
+    margin-inline: auto;
+}
+
+.home-header,
+.home-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.home-header {
+    min-height: 84px;
+    border-bottom: 1px solid var(--home-line);
+}
+
+.home-header .brand,
+.home-footer .brand {
+    margin: 0;
+}
+
+.home-links,
+.home-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.home-links,
+.home-sign-in,
+.home-text-link {
+    color: var(--home-muted);
+    font-size: .925rem;
+    font-weight: 650;
+}
+
+.home-header a:hover,
+.home-text-link:hover,
+.home-footer a:hover {
+    color: var(--home-accent);
+}
+
+.home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    align-items: center;
+    gap: clamp(38px, 7vw, 100px);
+    padding-block: clamp(64px, 9vw, 132px);
+}
+
+.home-intro h1 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(3.5rem, 6.1vw, 5.8rem);
+    font-weight: 400;
+    letter-spacing: -.04em;
+    line-height: .99;
+}
+
+.home-intro em {
+    color: var(--home-accent);
+    font-weight: inherit;
+}
+
+.home-intro > p {
+    max-width: 44ch;
+    margin: 26px 0;
+    color: var(--home-muted);
+    font-size: 1.055rem;
+    line-height: 1.65;
+}
+
+.home-button,
+.home-text-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+.home-button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--home-button);
+    color: #fff;
+    font-size: .925rem;
+    font-weight: 700;
+}
+
+.home-header .home-button:hover,
+.home-button:hover {
+    background: #7148bb;
+    color: #fff;
+}
+
+.home-button svg,
+.home-text-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.home-preview {
+    overflow: hidden;
+    border: 1px solid #564570;
+    border-radius: 14px;
+    background: #281d3f;
+    color: #f5efff;
+}
+
+.home-preview-toolbar,
+.home-preview-row,
+.home-preview-draft-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.home-preview-toolbar {
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 14px 19px;
+    border-bottom: 1px solid #564570;
+}
+
+.home-preview-toolbar > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 650;
+}
+
+.home-preview small {
+    color: #cbbce3;
+    font-size: .775rem;
+}
+
+.home-preview-content {
+    display: grid;
+    gap: 13px;
+    padding: 13px;
+}
+
+.home-preview-queue {
+    padding: 17px 18px 4px;
+    border: 1px solid var(--home-line);
+    border-radius: 9px;
+    background: var(--home-panel);
+    color: var(--home-ink);
+}
+
+.home-preview-queue h2 {
+    margin: 0 0 8px;
+    font-size: 1.075rem;
+}
+
+.home-preview-row {
+    justify-content: space-between;
+    padding-block: 13px;
+    border-top: 1px solid var(--home-line);
+    font-size: .915rem;
+}
+
+.home-preview-row small {
+    display: block;
+    margin-top: 3px;
+    color: var(--home-muted);
+}
+
+.home-preview-status {
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.home-preview-status.is-urgent { color: #8a303a; background: #f8e5e6; }
+.home-preview-status.is-pending { color: #754d19; background: #f5edda; }
+.home-preview-status.is-solved { color: #593d83; background: #ebe1fa; }
+
+.home-preview-draft {
+    padding: 13px 16px;
+    border: 1px solid #564570;
+    border-radius: 8px;
+    background: #35264e;
+}
+
+.home-preview-draft-head {
+    font-size: .925rem;
+    font-weight: 700;
+}
+
+.home-preview-draft-head svg { color: #e0c7ff; }
+.home-preview-draft p { margin: 8px 0; color: #e8dff4; font-size: .9rem; line-height: 1.5; }
+
+.home-section {
+    padding-block: clamp(42px, 6vw, 80px);
+    border-top: 1px solid var(--home-line);
+    scroll-margin-top: 16px;
+}
+
+.home-section > h2 {
+    margin: 0 0 32px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(2.15rem, 4vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -.03em;
+    line-height: 1.13;
+}
+
+.home-features,
+.home-workflow ol,
+.home-roles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin: 0;
+}
+
+.home-features article,
+.home-workflow li,
+.home-roles > div {
+    padding-top: 16px;
+    border-top: 1px solid var(--home-line);
+}
+
+.home-features svg { color: var(--home-accent); }
+
+.home-section h3,
+.home-roles dt {
+    margin: 8px 0 5px;
+    font-size: 1.08rem;
+    font-weight: 750;
+}
+
+.home-section p,
+.home-roles dd {
+    max-width: 45ch;
+    margin: 0;
+    color: var(--home-muted);
+    line-height: 1.6;
+}
+
+.home-workflow ol { padding-inline-start: 1.4rem; }
+.home-workflow li::marker { color: var(--home-accent); font-weight: 750; }
+
+.home-footer {
+    padding-block: 28px;
+    border-top: 1px solid var(--home-line);
+    color: var(--home-muted);
+    font-size: .88rem;
+}
+
+@media (max-width: 980px) {
+    .home-hero { gap: 34px; }
+    .home-intro h1 { font-size: clamp(3rem, 6vw, 4rem); }
+}
+
+@media (max-width: 740px) {
+    .home-shell { width: min(100% - 36px, 600px); }
+    .home-header { flex-wrap: wrap; gap: 12px; padding-block: 12px; }
+    .home-header .home-actions { gap: 12px; }
+    .home-links { order: 3; width: 100%; padding-block: 6px; }
+    .home-hero { grid-template-columns: minmax(0, 1fr); padding-block: 52px; }
+    .home-heading-break { display: none; }
+    .home-body .home-intro h1 { max-width: 13ch; font-size: clamp(2.5rem, 10vw, 4rem) !important; }
+    .home-features, .home-workflow ol, .home-roles { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .home-footer { flex-wrap: wrap; gap: 14px; }
+}
+
+@media (max-width: 360px) {
+    .home-hero .home-actions { flex-wrap: wrap; gap: 8px 14px; }
+    .home-preview-content { padding: 8px; }
+    .home-preview-queue { padding-inline: 10px; }
+}

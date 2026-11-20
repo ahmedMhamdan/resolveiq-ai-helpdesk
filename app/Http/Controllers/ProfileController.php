@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SaveUserProfile;
 use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
@@ -49,7 +49,7 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, SaveUserProfile $saveProfile)
     {
         $user = $this->currentUser($request);
 
@@ -64,17 +64,7 @@ class ProfileController extends Controller
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        unset($data['avatar']);
-
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar_path && str_starts_with($user->avatar_path, 'avatars/')) {
-                Storage::disk('public')->delete($user->avatar_path);
-            }
-
-            $data['avatar_path'] = $request->file('avatar')->store('avatars', 'public');
-        }
-
-        $user->update($data);
+        $saveProfile($user, $data);
 
         return redirect()
             ->route('profile.show')

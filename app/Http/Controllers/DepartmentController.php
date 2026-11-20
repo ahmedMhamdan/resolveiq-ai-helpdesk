@@ -57,7 +57,7 @@ class DepartmentController extends Controller
 
     public function destroy(Department $department)
     {
-        if ($department->tickets()->exists()) {
+        if ($department->tickets()->withTrashed()->exists()) {
             return redirect()
                 ->route('departments.index')
                 ->with('error', 'Cannot delete a department that has tickets.');

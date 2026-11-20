@@ -18,7 +18,7 @@
   --primary: #2563eb;
   --primary-soft: #eff6ff;
   --accent: #7c3aed;
-  --success: #16a34a;
+  --success: #511a9f;
   --warning: #f59e0b;
   --danger: #ef4444;
 
@@ -54,7 +54,7 @@ body.dark,
   --primary: #06b6d4;
   --primary-soft: rgba(6, 182, 212, .12);
   --accent: #8b5cf6;
-  --success: #22c55e;
+  --success: #6622c5;
   --warning: #f59e0b;
   --danger: #fb7185;
 
@@ -239,21 +239,6 @@ button {
 
 .nav .disabled {
   opacity: .55;
-}
-
-.sidebar-card {
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  background: linear-gradient(135deg, var(--primary-soft), rgba(124, 58, 237, .08));
-}
-
-.sidebar-card h4 {
-  margin: 0 0 8px;
-}
-
-.sidebar-card p {
-  margin: 0;
-  color: var(--muted);
 }
 
 /* =========================================================
@@ -500,8 +485,8 @@ h1 {
 
 .btn-edit-soft {
   color: #fff;
-  background: linear-gradient(135deg, #14b8a6, #22c55e);
-  border: 1px solid rgba(34, 197, 94, .32);
+  background: linear-gradient(135deg, #14b8a6, #6622c5);
+  border: 1px solid rgba( 102, 34, 197, .32);
   box-shadow: 0 14px 34px rgba(20, 184, 166, .22);
 }
 
@@ -523,95 +508,6 @@ h1 {
 /* =========================================================
    8. Theme switch
 ========================================================= */
-.theme-switch {
-  width: 112px;
-  height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 7px;
-  padding: 6px 8px;
-  border: 1px solid rgba(148, 163, 184, .22);
-  border-radius: 999px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, .08);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, .14);
-  backdrop-filter: blur(14px);
-  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-normal) var(--ease-out);
-}
-
-.theme-switch:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 44px rgba(99, 102, 241, .24);
-}
-
-.theme-icon {
-  width: 20px;
-  height: 20px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 auto;
-  color: #64748b;
-  transition: transform var(--motion-normal) var(--ease-out), opacity var(--motion-normal) var(--ease-out), color var(--motion-normal) var(--ease-out);
-}
-
-.theme-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.theme-icon.sun {
-  color: #f59e0b;
-}
-
-.theme-icon.moon {
-  color: #818cf8;
-  opacity: .55;
-}
-
-.switch-track {
-  position: relative;
-  width: 44px;
-  height: 24px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #dbeafe, #c7d2fe);
-  box-shadow: inset 0 2px 8px rgba(15, 23, 42, .18);
-}
-
-.switch-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #fff, #eef2ff);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, .22);
-  transition: transform var(--motion-normal) var(--ease-out), background var(--motion-normal) var(--ease-out);
-}
-
-html[data-theme="dark"] .theme-icon.sun,
-body.dark .theme-icon.sun {
-  opacity: .5;
-}
-
-html[data-theme="dark"] .theme-icon.moon,
-body.dark .theme-icon.moon {
-  opacity: 1;
-  color: #c4b5fd;
-  transform: rotate(-8deg);
-}
-
-html[data-theme="dark"] .switch-track,
-body.dark .switch-track {
-  background: linear-gradient(135deg, #312e81, #020617);
-}
-
-html[data-theme="dark"] .switch-thumb,
-body.dark .switch-thumb {
-  transform: translateX(20px);
-  background: linear-gradient(135deg, #8b5cf6, #38bdf8);
-}
 
 /* =========================================================
    9. Cards and stats
@@ -914,7 +810,7 @@ tbody tr:hover {
 .badge.pending,
 .status-pending { background: #fef3c7; color: #b45309; }
 .badge.solved,
-.status-solved { background: #dcfce7; color: #15803d; }
+.status-solved { background: #eadefa; color: #421580; }
 .badge.closed,
 .status-closed { background: #e5e7eb; color: #374151; }
 
@@ -923,7 +819,7 @@ tbody tr:hover {
 [data-theme="dark"] .badge.pending,
 [data-theme="dark"] .status-pending { background: rgba(245, 158, 11, .16); color: #fbbf24; }
 [data-theme="dark"] .badge.solved,
-[data-theme="dark"] .status-solved { background: rgba(34, 197, 94, .16); color: #4ade80; }
+[data-theme="dark"] .status-solved { background: rgba( 102, 34, 197, .16); color: #884ade; }
 [data-theme="dark"] .badge.closed,
 [data-theme="dark"] .status-closed { background: rgba(148, 163, 184, .16); color: #cbd5e1; }
 
@@ -1022,9 +918,9 @@ tbody tr:hover {
 
 .flash-message {
   margin-bottom: 20px;
-  color: #22c55e;
-  border-color: rgba(34, 197, 94, .32);
-  background: rgba(34, 197, 94, .12);
+  color: #6622c5;
+  border-color: rgba( 102, 34, 197, .32);
+  background: rgba( 102, 34, 197, .12);
   font-weight: 650;
   animation: flashIn 360ms var(--ease-out) both;
 }
@@ -2479,13 +2375,13 @@ body:not(.dark) .profile-stat-member {
 }
 .btn-restore-soft {
     color: #fff;
-    background: linear-gradient(135deg, #16a34a, #22c55e);
-    border: 1px solid rgba(34, 197, 94, .32);
-    box-shadow: 0 14px 34px rgba(34, 197, 94, .22);
+    background: linear-gradient(135deg, #511a9f, #6622c5);
+    border: 1px solid rgba( 102, 34, 197, .32);
+    box-shadow: 0 14px 34px rgba( 102, 34, 197, .22);
 }
 
 .btn-restore-soft:hover {
-    box-shadow: 0 18px 45px rgba(34, 197, 94, .32);
+    box-shadow: 0 18px 45px rgba( 102, 34, 197, .32);
 }
 .priority.unset {
     color: var(--muted);
@@ -2895,9 +2791,9 @@ html[dir="rtl"] .riq-pagination-links {
 }
 
 .role-agent {
-    color: #22c55e;
-    background: rgba(34, 197, 94, .13);
-    border-color: rgba(34, 197, 94, .22);
+    color: #6622c5;
+    background: rgba( 102, 34, 197, .13);
+    border-color: rgba( 102, 34, 197, .22);
 }
 
 .role-admin {
@@ -3029,9 +2925,9 @@ body:not(.dark) .users-role-actions .role-select:hover {
 
 .btn-assign-agent {
     color: #fff;
-    background: linear-gradient(135deg, #22c55e, #14b8a6);
-    border: 1px solid rgba(34, 197, 94, .28);
-    box-shadow: 0 12px 28px rgba(34, 197, 94, .20);
+    background: linear-gradient(135deg, #6622c5, #14b8a6);
+    border: 1px solid rgba( 102, 34, 197, .28);
+    box-shadow: 0 12px 28px rgba( 102, 34, 197, .20);
 }
 
 .btn-assign-agent:hover {
@@ -4350,11 +4246,11 @@ body.modal-open {
   box-shadow: 0 18px 35px rgba(0, 0, 0, .14);
 }
 
-.kb-feature-item:nth-child(1) { background: rgba(34, 197, 94, .08); }
+.kb-feature-item:nth-child(1) { background: rgba( 102, 34, 197, .08); }
 .kb-feature-item:nth-child(2) { background: rgba(56, 189, 248, .08); animation-delay: .08s; }
 .kb-feature-item:nth-child(3) { background: rgba(168, 85, 247, .08); animation-delay: .16s; }
 
-.kb-feature-item:nth-child(1) .kb-feature-icon { color: #22c55e; background: rgba(34, 197, 94, .14); }
+.kb-feature-item:nth-child(1) .kb-feature-icon { color: #6622c5; background: rgba( 102, 34, 197, .14); }
 .kb-feature-item:nth-child(2) .kb-feature-icon { color: #38bdf8; background: rgba(56, 189, 248, .14); }
 .kb-feature-item:nth-child(3) .kb-feature-icon { color: #a855f7; background: rgba(168, 85, 247, .14); }
 
@@ -4809,23 +4705,6 @@ body.modal-open {
   min-height: 48px;
 }
 
-.sidebar-card {
-  margin-top: 22px;
-  padding: 16px 18px;
-  flex: 0 0 auto;
-}
-
-.sidebar-card h4 {
-  margin-bottom: 8px;
-  font-size: 1rem;
-  line-height: 1.25;
-}
-
-.sidebar-card p {
-  line-height: 1.55;
-  font-size: 13px;
-}
-
 @media (max-height: 760px) {
   .sidebar {
     padding-top: 18px;
@@ -4847,11 +4726,6 @@ body.modal-open {
     min-height: 44px;
     padding-top: 10px;
     padding-bottom: 10px;
-  }
-
-  .sidebar-card {
-    margin-top: 18px;
-    padding: 14px 16px;
   }
 }
 
@@ -5197,10 +5071,10 @@ body.dark .profile-avatar-uploader {
     padding: 15px 18px;
     margin-bottom: 20px;
     border-radius: 16px;
-    color: #22c55e;
+    color: #6622c5;
     font-weight: 800;
-    background: rgba(34, 197, 94, 0.08);
-    border: 1px solid rgba(34, 197, 94, 0.22);
+    background: rgba( 102, 34, 197, 0.08);
+    border: 1px solid rgba( 102, 34, 197, 0.22);
     animation: verifyTextFadeIn 0.45s ease-out both;
 }
 
@@ -5221,9 +5095,7 @@ body.dark .profile-avatar-uploader {
 ========================================================= */
 .mobile-sidebar-toggle,
 .sidebar-close,
-.sidebar-backdrop,
-.mobile-quick-actions,
-.mobile-sidebar-account {
+.sidebar-backdrop {
   display: none;
 }
 
@@ -5369,14 +5241,6 @@ body.dark .profile-avatar-uploader {
     font-size: 12px !important;
   }
 
-  .sidebar-card {
-    display: block !important;
-  }
-
-  .mobile-sidebar-account {
-    display: none !important;
-  }
-
   .topbar {
     height: auto !important;
   }
@@ -5423,7 +5287,6 @@ body.dark .profile-avatar-uploader {
   }
 
   .shortcut,
-  .top-actions .theme-switch,
   .top-actions .user-box,
   .top-actions .logout-form,
   .top-actions .new-ticket-btn {
@@ -5451,67 +5314,6 @@ body.dark .profile-avatar-uploader {
     right: 14px !important;
     left: 14px !important;
     width: auto !important;
-  }
-
-
-  .mobile-action-pill {
-    min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 12px;
-    border: 1px solid var(--border);
-    color: var(--text);
-    background: var(--panel);
-    font-size: .78rem;
-    font-weight: 850;
-    white-space: nowrap;
-  }
-
-  .mobile-action-primary {
-    color: #fff !important;
-    border-color: rgba(56, 189, 248, .28);
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-  }
-
-  .mobile-profile-pill {
-    justify-content: flex-start;
-    overflow: hidden;
-  }
-
-  .mobile-profile-pill > span:last-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mobile-profile-avatar {
-    width: 24px;
-    height: 24px;
-    flex: 0 0 24px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    border-radius: 50%;
-    color: #fff;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    font-size: .72rem;
-    font-weight: 900;
-  }
-
-  .mobile-profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .mobile-logout-inline-form {
-    margin: 0 !important;
-  }
-
-  .mobile-logout-pill {
-    width: 100%;
-    cursor: pointer;
   }
 
   .page-title,
@@ -5694,13 +5496,6 @@ body.dark .profile-avatar-uploader {
     min-height: 42px;
     padding-left: 38px;
     font-size: .76rem;
-  }
-
-
-  .mobile-action-pill {
-    height: 36px;
-    padding: 0 9px;
-    font-size: .73rem;
   }
 
   .tickets-table tbody {
@@ -6018,16 +5813,6 @@ body.dark .profile-avatar-uploader {
     grid-row: 1 !important;
   }
 
-  .mobile-quick-actions {
-    grid-column: 1 / -1 !important;
-    grid-row: 2 !important;
-  }
-
-  .mobile-action-pill {
-    height: 38px !important;
-    border-radius: 14px !important;
-  }
-
   .search {
     padding-right: 16px !important;
     direction: ltr;
@@ -6046,10 +5831,6 @@ body.dark .profile-avatar-uploader {
     grid-template-rows: 42px auto !important;
     gap: 7px !important;
     margin-bottom: 16px !important;
-  }
-
-  .mobile-quick-actions {
-    margin-top: 7px !important;
   }
 }
 
@@ -6324,7 +6105,6 @@ body.dark .profile-avatar-uploader {
 }
 
 /* Keep the removed mobile account block hidden even if old markup remains cached. */
-.mobile-sidebar-account,
 .mobile-drawer-account {
   display: none !important;
 }
@@ -6553,9 +6333,9 @@ body.dark .profile-avatar-uploader {
 }
 
 .deleted-search-status.is-success {
-  color: #16a34a;
-  border-color: rgba(34, 197, 94, .28);
-  background: rgba(34, 197, 94, .10);
+  color: #511a9f;
+  border-color: rgba( 102, 34, 197, .28);
+  background: rgba( 102, 34, 197, .10);
 }
 
 .deleted-search-status.is-warning {
@@ -6892,9 +6672,9 @@ body.dark .profile-avatar-uploader {
 }
 
 .unassigned-search-status.is-success {
-  color: #22c55e;
-  border-color: rgba(34, 197, 94, .22);
-  background: rgba(34, 197, 94, .08);
+  color: #6622c5;
+  border-color: rgba( 102, 34, 197, .22);
+  background: rgba( 102, 34, 197, .08);
 }
 
 .unassigned-search-status.is-warning {
@@ -7950,9 +7730,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 }
 
 .overdue-search-status.is-success {
-  color: #22c55e !important;
-  border-color: rgba(34, 197, 94, .22) !important;
-  background: rgba(34, 197, 94, .08) !important;
+  color: #6622c5 !important;
+  border-color: rgba( 102, 34, 197, .22) !important;
+  background: rgba( 102, 34, 197, .08) !important;
 }
 
 .overdue-search-status.is-warning {
@@ -8156,9 +7936,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 }
 
 .tickets-filter-status.is-success {
-  color: #22c55e !important;
-  border-color: rgba(34, 197, 94, .22) !important;
-  background: rgba(34, 197, 94, .08) !important;
+  color: #6622c5 !important;
+  border-color: rgba( 102, 34, 197, .22) !important;
+  background: rgba( 102, 34, 197, .08) !important;
 }
 
 .tickets-filter-status.is-warning {
@@ -8262,9 +8042,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 }
 
 .activity-search-status.is-success {
-  color: #22c55e !important;
-  border-color: rgba(34, 197, 94, .22) !important;
-  background: rgba(34, 197, 94, .08) !important;
+  color: #6622c5 !important;
+  border-color: rgba( 102, 34, 197, .22) !important;
+  background: rgba( 102, 34, 197, .08) !important;
 }
 
 .activity-search-status.is-warning {
@@ -8780,9 +8560,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 }
 
 .users-search-status.is-success {
-  color: #22c55e !important;
-  border-color: rgba(34, 197, 94, .22) !important;
-  background: rgba(34, 197, 94, .08) !important;
+  color: #6622c5 !important;
+  border-color: rgba( 102, 34, 197, .22) !important;
+  background: rgba( 102, 34, 197, .08) !important;
 }
 
 .users-search-status.is-warning {
@@ -8906,9 +8686,9 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 }
 
 .kb-search-status.is-success {
-  color: #22c55e !important;
-  border-color: rgba(34, 197, 94, .22) !important;
-  background: rgba(34, 197, 94, .08) !important;
+  color: #6622c5 !important;
+  border-color: rgba( 102, 34, 197, .22) !important;
+  background: rgba( 102, 34, 197, .08) !important;
 }
 
 .kb-search-status.is-warning {
@@ -9813,10 +9593,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 @media (max-width: 860px) {
 
-  .mobile-quick-actions:has(.mobile-action-primary) {
-    grid-template-columns: minmax(74px, .82fr) minmax(0, 1fr) 44px minmax(64px, .68fr) !important;
-  }
-
 
 
   .mobile-theme-icon {
@@ -9825,20 +9601,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     display: grid !important;
     place-items: center !important;
     transition: opacity var(--motion-normal) var(--ease-out), transform var(--motion-normal) var(--ease-out);
-  }
-
-  .mobile-theme-sun {
-    position: absolute !important;
-    left: 7px !important;
-    color: #f59e0b !important;
-    opacity: 1 !important;
-  }
-
-  .mobile-theme-moon {
-    position: absolute !important;
-    right: 7px !important;
-    color: #a78bfa !important;
-    opacity: .45 !important;
   }
 
   .mobile-theme-thumb {
@@ -9853,95 +9615,20 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     transition: left var(--motion-normal) var(--ease-out), transform var(--motion-normal) var(--ease-out);
   }
 
-
-  html[data-theme="dark"] .mobile-theme-sun,
-  body.dark .mobile-theme-sun {
-    opacity: .45 !important;
-    transform: rotate(-12deg) scale(.92) !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-moon,
-  body.dark .mobile-theme-moon {
-    opacity: 1 !important;
-  }
-
   html[data-theme="dark"] .mobile-theme-thumb,
   body.dark .mobile-theme-thumb {
     left: 8px !important;
   }
 }
-
-@media (max-width: 380px) {
-  .mobile-quick-actions:has(.mobile-action-primary) {
-    grid-template-columns: minmax(68px, .78fr) minmax(0, 1fr) 42px minmax(60px, .66fr) !important;
-    gap: 6px !important;
-  }
-
-  .mobile-theme-pill {
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-  }
-}
 /* =========================================================
    Mobile quick actions - 2x2 with theme button
 ========================================================= */
-
-@media (max-width: 860px) {
-
-  .mobile-quick-actions .mobile-action-pill,
-  .mobile-quick-actions .mobile-theme-pill {
-    width: 100% !important;
-    min-width: 0 !important;
-    height: 38px !important;
-    padding: 0 10px !important;
-    border-radius: 14px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 7px !important;
-    font-size: .76rem !important;
-    font-weight: 850 !important;
-    white-space: nowrap !important;
-  }
-
-
-  .mobile-theme-pill::before {
-    display: none !important;
-    content: none !important;
-  }
-}
-
-@media (max-width: 430px) {
-
-  .mobile-quick-actions .mobile-action-pill,
-  .mobile-quick-actions .mobile-theme-pill {
-    height: 37px !important;
-    font-size: .72rem !important;
-  }
-}
 /* =========================================================
    Mobile theme button - sun/moon icons only
    Put this at the very end of resolveiq.css
 ========================================================= */
 
 @media (max-width: 860px) {
-
-
-  .mobile-theme-pill {
-    gap: 2px !important;
-  }
-
-  .mobile-theme-pill::before,
-  .mobile-theme-pill::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  .mobile-theme-svg {
-    flex: 0 0 auto !important;
-    display: block !important;
-  }
 
   .mobile-theme-divider {
     width: 1px !important;
@@ -9959,255 +9646,30 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 @media (max-width: 860px) {
 
-  .mobile-theme-pill {
-    border: 1px solid rgba(148, 163, 184, .28) !important;
-    color: #020617 !important;
-    background: rgba(255, 255, 255, .92) !important;
-  }
-
-  .mobile-theme-pill::before,
-  .mobile-theme-pill::after,
   .mobile-theme-divider {
     display: none !important;
     content: none !important;
-  }
-
-  .mobile-theme-svg {
-    grid-area: 1 / 1 !important;
-    width: 16px !important;
-    height: 16px !important;
-    color: currentColor !important;
-    transition: transform var(--motion-fast) var(--ease-out), opacity var(--motion-fast) var(--ease-out);
-  }
-
-  .mobile-theme-moon {
-    display: none !important;
-  }
-
-  .mobile-theme-sun {
-    display: block !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    box-shadow: 0 10px 22px rgba(0, 0, 0, .20) !important;
-  }
-
-
-
-  html[data-theme="light"] .mobile-theme-pill,
-  body:not(.dark) .mobile-theme-pill {
-    color: #020617 !important;
-    background: #ffffff !important;
-    border-color: rgba(203, 213, 225, .95) !important;
-  }
-
-  html[data-theme="light"] .mobile-theme-sun,
-  body:not(.dark) .mobile-theme-sun {
-    display: block !important;
-    color: #020617 !important;
-  }
-
-  html[data-theme="light"] .mobile-theme-moon,
-  body:not(.dark) .mobile-theme-moon {
-    display: none !important;
-  }
-}
-
-@media (max-width: 430px) {
-  .mobile-quick-actions {
-    grid-template-columns: minmax(82px, .9fr) minmax(0, 1.1fr) 40px minmax(66px, .74fr) !important;
-  }
-
-  .mobile-theme-pill {
-    width: 40px !important;
-    min-width: 40px !important;
-    max-width: 40px !important;
-    height: 34px !important;
-    border-radius: 12px !important;
-  }
-
-  .mobile-theme-svg {
-    width: 15px !important;
-    height: 15px !important;
   }
 }
 /* =========================================================
    Mobile theme button - centered single icon
 ========================================================= */
-
-@media (max-width: 860px) {
-  .mobile-theme-pill {
-    place-items: center !important;
-    justify-content: center !important;
-    align-content: center !important;
-  }
-
-
-
-
-
-
-
-
-}
 /* =========================================================
    Mobile theme icon - exact center fix
 ========================================================= */
-
-@media (max-width: 860px) {
-  .mobile-theme-pill {
-    line-height: 1 !important;
-  }
-
-  .mobile-theme-pill .mobile-theme-sun,
-  .mobile-theme-pill .mobile-theme-moon,
-  .mobile-theme-pill .mobile-theme-icon {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    width: 18px !important;
-    height: 18px !important;
-    display: grid !important;
-    place-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-    transform: translate(-50%, -50%) !important;
-  }
-
-
-  html[data-theme="light"] .mobile-theme-pill {
-    border-color: #e2e8f0 !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    border-color: #1e293b !important;
-  }
-}
 /* =========================================================
    Mobile theme button - final centered single icon fix
 ========================================================= */
 
 @media (max-width: 860px) {
-  .mobile-theme-pill {
-    position: relative !important;
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 38px !important;
-    padding: 0 !important;
-    display: block !important;
-    border-radius: 14px !important;
-    overflow: hidden !important;
-    box-shadow: none !important;
-  }
 
   .mobile-theme-thumb {
     display: none !important;
-  }
-
-  .mobile-theme-pill .mobile-theme-icon,
-  .mobile-theme-pill .mobile-theme-sun,
-  .mobile-theme-pill .mobile-theme-moon {
-    position: absolute !important;
-    left: 50% !important;
-    right: auto !important;
-    top: 50% !important;
-    width: 18px !important;
-    height: 18px !important;
-    display: grid !important;
-    place-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    opacity: 1 !important;
-    line-height: 1 !important;
-    transform: translate(-50%, -50%) !important;
-  }
-
-  .mobile-theme-pill svg {
-    width: 17px !important;
-    height: 17px !important;
-    display: block !important;
-    margin: 0 !important;
-    transform: none !important;
-  }
-
-  html[data-theme="light"] .mobile-theme-pill {
-    color: #0f172a !important;
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-  }
-
-  html[data-theme="light"] .mobile-theme-sun {
-    display: grid !important;
-    color: #0f172a !important;
-  }
-
-  html[data-theme="light"] .mobile-theme-moon {
-    display: none !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-pill,
-  body.dark .mobile-theme-pill {
-    color: #e5e7eb !important;
-    background: #0f172a !important;
-    border: 1px solid #1e293b !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-sun,
-  body.dark .mobile-theme-sun {
-    display: none !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-moon,
-  body.dark .mobile-theme-moon {
-    display: grid !important;
-    color: #c4b5fd !important;
-    transform: translate(-50%, -50%) !important;
   }
 }
 /* =========================================================
    Mobile theme button - switch animation
 ========================================================= */
-
-@media (max-width: 860px) {
-  .mobile-theme-pill {
-    transition:
-      transform 220ms var(--ease-out),
-      box-shadow 260ms var(--ease-out),
-      background-color 260ms var(--ease-out),
-      color 260ms var(--ease-out),
-      border-color 260ms var(--ease-out) !important;
-  }
-
-  .mobile-theme-pill:active {
-    transform: scale(.92) !important;
-  }
-
-  .mobile-theme-pill.is-switching {
-    animation: mobileThemeButtonPop 520ms var(--ease-out) both;
-  }
-
-  .mobile-theme-pill.is-switching .mobile-theme-sun,
-  .mobile-theme-pill.is-switching .mobile-theme-moon {
-    animation: mobileThemeIconSpin 520ms var(--ease-out) both;
-  }
-
-  html[data-theme="light"] .mobile-theme-pill.is-switching {
-    box-shadow:
-      0 0 0 5px rgba(245, 158, 11, .14),
-      0 12px 24px rgba(15, 23, 42, .10) !important;
-  }
-
-  html[data-theme="dark"] .mobile-theme-pill.is-switching,
-  body.dark .mobile-theme-pill.is-switching {
-    box-shadow:
-      0 0 0 5px rgba(139, 92, 246, .16),
-      0 12px 24px rgba(0, 0, 0, .24) !important;
-  }
-}
 
 @keyframes mobileThemeButtonPop {
   0% {
@@ -10321,32 +9783,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     gap: 7px;
   }
 
-  .auth-app-navbar .theme-switch {
-    width: 50px;
-    height: 44px;
-    padding: 0;
-    justify-content: center;
-    border-radius: 15px;
-  }
-
-  .auth-app-navbar .theme-switch .theme-icon,
-  .auth-app-navbar .theme-switch .switch-track {
-    display: none;
-  }
-
-  .auth-app-navbar .theme-switch::before {
-    content: "☀";
-    color: #f59e0b;
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  html[data-theme="dark"] .auth-app-navbar .theme-switch::before,
-  body.dark .auth-app-navbar .theme-switch::before {
-    content: "☾";
-    color: #c4b5fd;
-  }
-
   .auth-nav-action-btn {
     min-height: 44px;
     padding-inline: 13px;
@@ -10367,10 +9803,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   .auth-nav-action-btn {
     padding-inline: 11px;
     font-size: .8rem;
-  }
-
-  .auth-app-navbar .theme-switch {
-    width: 44px;
   }
 }
 /* =========================================================
@@ -10506,85 +9938,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
    44. Mobile quick actions compact row fix
    Fixes agent mobile dashboard gaps when the New Ticket action is hidden.
 ========================================================= */
-@media (max-width: 860px) {
-  .mobile-quick-actions {
-    width: 100% !important;
-    display: flex !important;
-    grid-template-columns: none !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    flex-wrap: nowrap !important;
-    gap: 8px !important;
-    margin: 8px 0 18px !important;
-  }
-
-  .mobile-quick-actions .mobile-action-pill {
-    width: auto !important;
-    min-width: 0 !important;
-    height: 38px !important;
-    padding: 0 11px !important;
-    border-radius: 14px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 7px !important;
-    font-size: .74rem !important;
-    font-weight: 850 !important;
-    white-space: nowrap !important;
-  }
-
-  .mobile-quick-actions .mobile-profile-pill {
-    flex: 1 1 auto !important;
-    justify-content: flex-start !important;
-    overflow: hidden !important;
-  }
-
-  .mobile-quick-actions .mobile-action-primary {
-    flex: 1 1 auto !important;
-    justify-content: center !important;
-  }
-
-  .mobile-quick-actions .mobile-theme-pill {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-    padding: 0 !important;
-  }
-
-  .mobile-quick-actions .mobile-logout-inline-form {
-    flex: 0 0 auto !important;
-    margin: 0 !important;
-  }
-
-  .mobile-quick-actions .mobile-logout-pill {
-    flex: 0 0 auto !important;
-    min-width: 68px !important;
-  }
-}
-
-@media (max-width: 430px) {
-  .mobile-quick-actions {
-    gap: 7px !important;
-  }
-
-  .mobile-quick-actions .mobile-action-pill {
-    height: 36px !important;
-    padding: 0 9px !important;
-    font-size: .71rem !important;
-  }
-
-  .mobile-quick-actions .mobile-theme-pill {
-    flex-basis: 40px !important;
-    width: 40px !important;
-    min-width: 40px !important;
-    max-width: 40px !important;
-  }
-
-  .mobile-quick-actions .mobile-logout-pill {
-    min-width: 64px !important;
-  }
-}
 /* =========================================================
    Email Verification Result Page - Animation Fix
 ========================================================= */
@@ -10640,10 +9993,10 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 }
 
 .verification-result-icon.is-success {
-    color: #22c55e;
-    background: rgba(34, 197, 94, .12);
-    border: 1px solid rgba(34, 197, 94, .28);
-    box-shadow: 0 18px 45px rgba(34, 197, 94, .13);
+    color: #6622c5;
+    background: rgba( 102, 34, 197, .12);
+    border: 1px solid rgba( 102, 34, 197, .28);
+    box-shadow: 0 18px 45px rgba( 102, 34, 197, .13);
 }
 
 .verification-result-icon.is-error {
@@ -10783,14 +10136,6 @@ body {
 }
 
 /* Keep only the switch itself animated and lightweight. */
-.theme-switch,
-.theme-switch *,
-.switch-track,
-.switch-thumb,
-.theme-icon,
-.theme-icon svg {
-  transition-duration: 140ms !important;
-}
 
 /* Heavy surfaces should not animate slowly when CSS variables change. */
 .sidebar,
@@ -10810,7 +10155,6 @@ body {
 .deleted-tickets-card,
 .unassigned-table-card,
 .public-preview-card,
-.mobile-action-pill,
 .form-group input,
 .form-group select,
 .form-group textarea,
@@ -10918,10 +10262,6 @@ html[dir="rtl"] .filters select {
    AI Knowledge Sources icon size fix
 ========================================================= */
 
-.ai-kb-sources {
-    overflow: hidden;
-}
-
 .ai-kb-sources strong {
     display: inline-flex;
     align-items: center;
@@ -10929,26 +10269,6 @@ html[dir="rtl"] .filters select {
     margin-bottom: 10px;
     font-size: .92rem;
     line-height: 1.4;
-}
-
-.ai-kb-sources strong svg {
-    width: 18px !important;
-    height: 18px !important;
-    min-width: 18px !important;
-    max-width: 18px !important;
-    max-height: 18px !important;
-    flex: 0 0 18px !important;
-    display: inline-block !important;
-}
-
-.ai-kb-sources ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.ai-kb-sources li {
-    line-height: 1.6;
-    word-break: break-word;
 }
 
 /* =========================================================
@@ -11188,8 +10508,7 @@ body:not(.dark) .ai-scope-notice {
 /* =========================================================
    43. Automatic language switch and RTL polish
 ========================================================= */
-.language-switch-form,
-.mobile-language-form {
+.language-switch-form {
   margin: 0;
 }
 
@@ -11274,33 +10593,6 @@ body:not(.dark) .ai-scope-notice {
   stroke-width: 2px;
 }
 
-.mobile-language-form {
-  min-width: 0;
-}
-
-.mobile-language-pill {
-  width: 44px !important;
-  min-width: 44px !important;
-  padding: 0 !important;
-  justify-content: center !important;
-  border-color: rgba(99, 102, 241, .26) !important;
-  background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, .12), transparent 44%),
-    var(--panel) !important;
-}
-
-.mobile-language-pill .language-toggle-svg {
-  width: 31px;
-  height: 31px;
-}
-
-.mobile-language-pill .language-switch-code {
-  width: 28px;
-  height: 28px;
-  border-radius: 10px;
-  font-size: 11px;
-}
-
 /* Arabic mode keeps the product layout polished while making text natural. */
 html[dir="rtl"] body {
   text-align: right;
@@ -11382,10 +10674,6 @@ html[dir="rtl"] .notification-mini-content small {
   direction: rtl;
 }
 
-html[dir="rtl"] .mobile-action-pill {
-  direction: rtl;
-}
-
 html[dir="rtl"] input[type="email"],
 html[dir="rtl"] input[type="url"],
 html[dir="rtl"] input[type="tel"],
@@ -11400,9 +10688,7 @@ html[dir="rtl"] [data-no-auto-translate] {
   text-align: left;
 }
 
-html[dir="rtl"] .language-switch,
-html[dir="rtl"] .mobile-language-pill,
-html[dir="rtl"] .theme-switch {
+html[dir="rtl"] .language-switch {
   direction: ltr;
 }
 
@@ -11457,10 +10743,6 @@ html[dir="rtl"]:not(.ui-translated) [data-auto-translate-attribute] {
   html[dir="rtl"] .notifications-menu {
     right: 14px !important;
     left: 14px !important;
-  }
-
-html[dir="rtl"] .mobile-quick-actions {
-    direction: rtl;
   }
 }
 
@@ -11535,38 +10817,6 @@ html[dir="rtl"] .mobile-quick-actions {
   }
 }
 
-@media (max-width: 860px) {
-  .mobile-language-form {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-  }
-
-  .mobile-quick-actions .mobile-language-pill {
-    flex: 0 0 42px !important;
-    width: 42px !important;
-    min-width: 42px !important;
-    max-width: 42px !important;
-    height: 38px !important;
-    padding: 0 !important;
-  }
-
-  .mobile-quick-actions .mobile-action-primary {
-    max-width: 116px !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-  }
-
-  .mobile-quick-actions .mobile-action-primary span {
-    display: block;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
 /* =========================================================
    45. Mobile topbar cleanup after language switch
    Keep one language control on mobile and prevent action-row crowding.
@@ -11580,87 +10830,6 @@ html[dir="rtl"] .mobile-quick-actions {
     display: flex !important;
     justify-content: flex-end !important;
     min-width: 44px !important;
-  }
-
-  .mobile-quick-actions {
-    width: 100% !important;
-    display: grid !important;
-    grid-template-columns: minmax(74px, 1fr) minmax(88px, 1.25fr) 40px 40px minmax(64px, .85fr) !important;
-    align-items: center !important;
-    gap: 7px !important;
-    margin: 10px 0 18px !important;
-    direction: ltr !important;
-  }
-
-  html[dir="rtl"] .mobile-quick-actions {
-    direction: rtl !important;
-  }
-
-  .mobile-quick-actions .mobile-action-pill {
-    width: 100% !important;
-    height: 38px !important;
-    min-width: 0 !important;
-    padding: 0 9px !important;
-    border-radius: 14px !important;
-    font-size: .74rem !important;
-    line-height: 1 !important;
-  }
-
-  .mobile-quick-actions .mobile-action-primary,
-  .mobile-quick-actions .mobile-profile-pill,
-  .mobile-quick-actions .mobile-logout-pill {
-    max-width: none !important;
-    overflow: hidden !important;
-  }
-
-  .mobile-quick-actions .mobile-action-primary span,
-  .mobile-quick-actions .mobile-profile-pill > span:last-child,
-  .mobile-quick-actions .mobile-logout-pill span {
-    min-width: 0 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-
-  .mobile-quick-actions .mobile-theme-pill,
-  .mobile-quick-actions .mobile-language-pill {
-    width: 40px !important;
-    min-width: 40px !important;
-    max-width: 40px !important;
-    padding: 0 !important;
-  }
-
-  .mobile-language-form {
-    width: 40px !important;
-    min-width: 40px !important;
-    max-width: 40px !important;
-  }
-
-  .mobile-language-pill .language-switch-code {
-    width: 27px !important;
-    height: 27px !important;
-    font-size: 10px !important;
-  }
-}
-
-@media (max-width: 430px) {
-  .mobile-quick-actions {
-    grid-template-columns: minmax(60px, .85fr) minmax(78px, 1fr) 38px 38px minmax(56px, .75fr) !important;
-    gap: 6px !important;
-  }
-
-  .mobile-quick-actions .mobile-action-pill {
-    height: 36px !important;
-    padding: 0 7px !important;
-    font-size: .68rem !important;
-  }
-
-  .mobile-quick-actions .mobile-theme-pill,
-  .mobile-quick-actions .mobile-language-pill,
-  .mobile-language-form {
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
   }
 }
 
@@ -11712,37 +10881,4 @@ html[dir="rtl"] .mobile-quick-actions {
 [data-theme="dark"] .language-switch:hover {
   border-color: rgba(6, 182, 212, .32) !important;
   box-shadow: 0 8px 18px rgba(0, 0, 0, .18) !important;
-}
-
-.mobile-language-form {
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-}
-
-.mobile-quick-actions .mobile-language-pill,
-.mobile-language-pill {
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-  height: 38px !important;
-  border-color: var(--border) !important;
-  background: var(--panel) !important;
-  box-shadow: none !important;
-}
-
-.mobile-language-pill:hover {
-  color: var(--text) !important;
-  background: var(--panel-soft) !important;
-}
-
-.mobile-language-pill .language-switch-code {
-  width: auto !important;
-  min-width: 26px !important;
-  height: 22px !important;
-  border: 0 !important;
-  color: inherit !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 10px !important;
 }

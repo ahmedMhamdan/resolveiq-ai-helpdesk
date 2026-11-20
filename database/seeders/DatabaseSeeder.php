@@ -365,13 +365,18 @@ class DatabaseSeeder extends Seeder
         ];
 
         $createdTickets = [];
+        $latestDemoTicket = now();
 
-        foreach ($ticketTemplates as $ticketData) {
+        foreach ($ticketTemplates as $position => $ticketData) {
             $status = $ticketData['status'];
 
-            $ticket = Ticket::withTrashed()->updateOrCreate(
-                ['ticket_number' => $ticketData['number']],
-                [
+            $ticket = Ticket::withTrashed()->firstOrNew(['ticket_number' => $ticketData['number']]);
+
+            if (! $ticket->exists) {
+                $ticket->created_at = $latestDemoTicket->copy()->subMinutes($position);
+            }
+
+            $ticket->fill([
                     'user_id' => $ticketData['customer']->id,
                     'agent_id' => $ticketData['agent']?->id,
                     'department_id' => $ticketData['department']->id,
@@ -382,8 +387,7 @@ class DatabaseSeeder extends Seeder
                     'due_at' => $ticketData['due_at'],
                     'resolved_at' => $status === 'solved' ? now()->subDays(1) : null,
                     'closed_at' => $status === 'closed' ? now()->subHours(8) : null,
-                ]
-            );
+            ])->save();
 
             if (method_exists($ticket, 'restore') && $ticket->trashed()) {
                 $ticket->restore();

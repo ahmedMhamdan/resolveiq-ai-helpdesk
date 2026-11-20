@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\TicketEventNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TicketReplyController extends Controller
@@ -16,9 +17,7 @@ class TicketReplyController extends Controller
     public function index(Request $request, Ticket $ticket): JsonResponse
     {
         $user = $this->currentUser($request);
-        $role = $this->roleName($user);
-
-        if (! $this->canViewTicket($user, $ticket)) {
+        if (! $user->can('view', $ticket)) {
             return response()->json([
                 'message' => 'You are not allowed to view replies for this ticket.',
             ], 403);
@@ -26,9 +25,7 @@ class TicketReplyController extends Controller
 
         $replies = $ticket->replies()
             ->with('user.role')
-            ->when($role === 'user', function ($query) {
-                $query->where('is_internal_note', false);
-            })
+            ->visibleTo($user)
             ->oldest()
             ->get()
             ->map(fn (TicketReply $reply) => $this->formatReply($reply))
@@ -43,9 +40,9 @@ class TicketReplyController extends Controller
     public function store(Request $request, Ticket $ticket): JsonResponse
     {
         $user = $this->currentUser($request);
-        $role = $this->roleName($user);
+        $role = $user->roleName();
 
-        if (! $this->canViewTicket($user, $ticket)) {
+        if (! $user->can('view', $ticket)) {
             return response()->json([
                 'message' => 'You are not allowed to reply to this ticket.',
             ], 403);
@@ -64,31 +61,26 @@ class TicketReplyController extends Controller
 
         $isInternalNote = $request->boolean('is_internal_note');
 
-        $reply = $ticket->replies()->create([
-            'user_id' => $user->id,
-            'message' => $data['message'],
-            'is_internal_note' => $isInternalNote,
-        ]);
-
-        if (
-            ! $isInternalNote &&
-            in_array($role, ['admin', 'agent'], true) &&
-            is_null($ticket->first_response_at)
-        ) {
-            $ticket->fill([
-                'first_response_at' => now(),
-                'status' => $ticket->status === 'open' ? 'pending' : $ticket->status,
+        $reply = DB::transaction(function () use ($ticket, $user, $data, $isInternalNote) {
+            $reply = $ticket->replies()->create([
+                'user_id' => $user->id,
+                'message' => $data['message'],
+                'is_internal_note' => $isInternalNote,
             ]);
 
-            $ticket->save();
-        }
+            if (! $isInternalNote && $user->isSupportStaff()) {
+                $ticket->recordFirstResponse();
+            }
 
-        $ticket->activityLogs()->create([
-            'user_id' => $user->id,
-            'action' => $isInternalNote ? 'Internal note added via API' : 'Reply added via API',
-            'old_value' => null,
-            'new_value' => $isInternalNote ? 'internal_note' : 'reply',
-        ]);
+            $ticket->activityLogs()->create([
+                'user_id' => $user->id,
+                'action' => $isInternalNote ? 'Internal note added via API' : 'Reply added via API',
+                'new_value' => $isInternalNote ? 'internal_note' : 'reply',
+            ]);
+
+            return $reply;
+        });
+
 
         $reply->load('user.role');
         $ticket->loadMissing(['user', 'agent']);
@@ -142,26 +134,6 @@ class TicketReplyController extends Controller
         abort_unless($user instanceof User, 403);
 
         return $user;
-    }
-
-    private function roleName(User $user): string
-    {
-        return strtolower($user->role?->name ?? 'user');
-    }
-
-    private function canViewTicket(User $user, Ticket $ticket): bool
-    {
-        $role = $this->roleName($user);
-
-        if ($role === 'admin') {
-            return true;
-        }
-
-        if ($role === 'agent') {
-            return (int) $ticket->agent_id === (int) $user->id;
-        }
-
-        return (int) $ticket->user_id === (int) $user->id;
     }
 
     private function formatReply(TicketReply $reply): array

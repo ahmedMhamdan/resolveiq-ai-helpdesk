@@ -25,6 +25,20 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Role::class);
     }
 
+    public function roleName(): string
+    {
+        return match (strtolower($this->role?->name ?? '')) {
+            'admin' => 'admin',
+            'agent' => 'agent',
+            default => 'user',
+        };
+    }
+
+    public function isSupportStaff(): bool
+    {
+        return $this->roleName() !== 'user';
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
@@ -56,11 +70,15 @@ class User extends Authenticatable implements MustVerifyEmail
             return '';
         }
 
-        if (str_starts_with($this->avatar_path, 'images/')) {
-            return asset($this->avatar_path);
+        $path = ltrim($this->avatar_path, '/');
+
+        if (str_starts_with($path, 'https://') || str_starts_with($path, 'http://')) {
+            return $path;
         }
 
-        return asset('storage/' . $this->avatar_path);
+        return asset(str_starts_with($path, 'images/') || str_starts_with($path, 'storage/')
+            ? $path
+            : 'storage/'.$path);
     }
 
     public function sendPasswordResetNotification($token): void

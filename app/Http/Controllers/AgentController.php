@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SaveUserProfile;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\TicketReply;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class AgentController extends Controller
@@ -32,7 +33,7 @@ class AgentController extends Controller
         return view('agents.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, SaveUserProfile $saveProfile)
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
@@ -45,17 +46,8 @@ class AgentController extends Controller
             ->where('name', 'agent')
             ->firstOrFail();
 
-        $agent = User::query()->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role_id' => $agentRole->id,
-        ]);
-
-        if ($request->hasFile('avatar')) {
-            $agent->avatar_path = $this->uploadAvatar($request, $agent, 'agent');
-            $agent->save();
-        }
+        $agent = new User(['role_id' => $agentRole->id]);
+        $saveProfile($agent, $data);
 
         return redirect()
             ->route('agents.index')
@@ -69,7 +61,7 @@ class AgentController extends Controller
         return view('agents.edit', compact('agent'));
     }
 
-    public function update(Request $request, User $agent)
+    public function update(Request $request, User $agent, SaveUserProfile $saveProfile)
     {
         $this->abortIfNotAgent($agent);
 
@@ -85,21 +77,11 @@ class AgentController extends Controller
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $agent->fill([
-            'name' => $data['name'],
-            'email' => $data['email'],
-        ]);
-
-        if (! empty($data['password'])) {
-            $agent->password = Hash::make($data['password']);
+        if (empty($data['password'])) {
+            unset($data['password']);
         }
 
-        if ($request->hasFile('avatar')) {
-            $this->deleteUploadedAvatar($agent);
-            $agent->avatar_path = $this->uploadAvatar($request, $agent, 'agent');
-        }
-
-        $agent->save();
+        $saveProfile($agent, $data);
 
         return redirect()
             ->route('agents.index')
@@ -120,15 +102,10 @@ class AgentController extends Controller
             ->where('name', 'user')
             ->firstOrFail();
 
-        Ticket::query()
-            ->where('agent_id', $agent->id)
-            ->update([
-                'agent_id' => null,
-            ]);
-
-        $agent->update([
-            'role_id' => $userRole->id,
-        ]);
+        DB::transaction(function () use ($agent, $userRole) {
+            Ticket::withTrashed()->where('agent_id', $agent->id)->update(['agent_id' => null]);
+            $agent->update(['role_id' => $userRole->id]);
+        });
 
         return redirect()
             ->route('agents.index')
@@ -139,8 +116,8 @@ class AgentController extends Controller
     {
         $this->abortIfNotAgent($agent);
 
-        $hasTickets = Ticket::query()
-            ->where('agent_id', $agent->id)
+        $hasTickets = Ticket::withTrashed()
+            ->where(fn (Builder $query) => $query->where('agent_id', $agent->id)->orWhere('user_id', $agent->id))
             ->exists();
 
         $hasReplies = TicketReply::query()
@@ -162,20 +139,6 @@ class AgentController extends Controller
         return redirect()
             ->route('agents.index')
             ->with('success', 'Agent deleted successfully.');
-    }
-
-    private function uploadAvatar(Request $request, User $agent, string $prefix): string
-    {
-        $directory = public_path('images/avatars/uploads');
-
-        File::ensureDirectoryExists($directory);
-
-        $avatar = $request->file('avatar');
-        $fileName = $prefix . '-' . $agent->id . '-' . time() . '.' . $avatar->getClientOriginalExtension();
-
-        $avatar->move($directory, $fileName);
-
-        return 'images/avatars/uploads/' . $fileName;
     }
 
     private function deleteUploadedAvatar(User $agent): void

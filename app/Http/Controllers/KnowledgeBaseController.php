@@ -3,20 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\KnowledgeArticle;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class KnowledgeBaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->string('search', strict: true)->trim()->toString();
+
         $articles = KnowledgeArticle::query()
             ->with('user')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(fn ($query) => $query
+                    ->whereLike('title', "%{$search}%")
+                    ->orWhereLike('content', "%{$search}%")
+                    ->orWhereLike('status', "%{$search}%")
+                    ->orWhereHas('user', fn ($author) => $author->whereLike('name', "%{$search}%")));
+            })
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
-        return view('knowledge-base.index', compact('articles'));
+        return view('knowledge-base.index', compact('articles', 'search'));
     }
 
     public function create()
@@ -32,16 +41,10 @@ class KnowledgeBaseController extends Controller
             'status' => ['required', 'in:draft,published'],
         ]);
 
-        $adminId = User::query()
-            ->whereHas('role', function ($query) {
-                $query->where('name', 'admin');
-            })
-            ->value('id');
-
         KnowledgeArticle::query()->create([
-            'user_id' => $adminId,
+            'user_id' => $request->user()->id,
             'title' => $data['title'],
-            'slug' => Str::slug($data['title']) . '-' . time(),
+            'slug' => (Str::slug($data['title']) ?: 'article').'-'.Str::lower(Str::ulid()->toBase32()),
             'content' => $data['content'],
             'status' => $data['status'],
         ]);
@@ -66,7 +69,6 @@ class KnowledgeBaseController extends Controller
 
         $article->update([
             'title' => $data['title'],
-            'slug' => Str::slug($data['title']) . '-' . $article->id,
             'content' => $data['content'],
             'status' => $data['status'],
         ]);

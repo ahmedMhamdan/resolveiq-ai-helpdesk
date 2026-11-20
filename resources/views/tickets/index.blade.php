@@ -54,7 +54,7 @@
     <section class="card table-card tickets-index-card">
         <div class="table-head">
             <form class="filters" method="GET" action="{{ route('tickets.index') }}">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('tickets.search_placeholder') }}" data-auto-translate-attribute="placeholder">
+                <input type="text" name="search" value="{{ request()->string('search', strict: true) }}" placeholder="{{ __('tickets.search_placeholder') }}" data-auto-translate-attribute="placeholder">
 
                 <select name="status">
                     <option value="">{{ __('tickets.all_status') }}</option>

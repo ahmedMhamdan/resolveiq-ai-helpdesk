@@ -3,6 +3,9 @@
 @section('title', __('tickets.deleted_tickets'))
 
 @section('content')
+@php
+    $searchActive = request()->string('search', strict: true)->trim()->isNotEmpty();
+@endphp
 <div class="page-head">
     <div>
         <h1 data-auto-translate>{{ __('tickets.deleted_tickets') }}</h1>
@@ -25,13 +28,11 @@
             method="GET"
             action="{{ route('tickets.trashed') }}#deleted-ticket-list"
             class="filters deleted-ticket-search"
-            data-live-table=".deleted-tickets-table"
-            data-live-empty="#deleted-empty-message"
         >
             <input
                 type="search"
                 name="search"
-                value="{{ request('search') }}"
+                value="{{ request()->string('search', strict: true) }}"
                 placeholder="{{ __('tickets.search_deleted') }}"
                 data-auto-translate-attribute="placeholder"
                 autocomplete="off"
@@ -40,9 +41,11 @@
 
             <button type="submit" data-auto-translate>{{ __('common.search') }}</button>
 
-            <button type="button" class="btn btn-secondary deleted-ticket-reset" hidden data-auto-translate>
+            @if ($searchActive)
+                    <a href="{{ route('tickets.trashed') }}" class="btn btn-secondary deleted-ticket-reset" data-auto-translate>
                 {{ __('common.reset') }}
-            </button>
+            </a>
+                @endif
         </form>
     </div>
 
@@ -191,93 +194,17 @@
                 @empty
                     <tr>
                         <td colspan="9" data-auto-translate>
-                            {{ __('tickets.no_deleted_found') }}
+                            {{ __($searchActive ? 'tickets.no_matching_deleted' : 'tickets.no_deleted_found') }}
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
-
-        <p id="deleted-empty-message" class="live-search-empty" hidden data-auto-translate>
-            {{ __('tickets.no_matching_deleted') }}
-        </p>
     </div>
 
     <div class="pagination-wrap">
         {{ $tickets->links('vendor.pagination.resolveiq') }}
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.querySelector('.deleted-ticket-search');
-
-        if (!form) {
-            return;
-        }
-
-        const input = form.querySelector('.deleted-ticket-search-input');
-        const reset = form.querySelector('.deleted-ticket-reset');
-        const table = document.querySelector(form.dataset.liveTable);
-        const empty = document.querySelector(form.dataset.liveEmpty);
-
-        if (!input || !table) {
-            return;
-        }
-
-        const rows = Array.from(table.querySelectorAll('tbody tr.deleted-ticket-row'));
-
-        function getRowText(row) {
-            const clone = row.cloneNode(true);
-
-            clone.querySelectorAll('button, form').forEach(function (element) {
-                element.remove();
-            });
-
-            return clone.textContent.replace(/\s+/g, ' ').trim().toLowerCase();
-        }
-
-        function runSearch() {
-            const term = input.value.replace(/\s+/g, ' ').trim().toLowerCase();
-            let visibleCount = 0;
-
-            rows.forEach(function (row) {
-                const shouldShow = !term || getRowText(row).includes(term);
-
-                row.classList.toggle('is-hidden', !shouldShow);
-
-                if (shouldShow) {
-                    visibleCount++;
-                }
-            });
-
-            if (reset) {
-                reset.hidden = !term;
-            }
-
-            if (empty) {
-                empty.hidden = rows.length === 0 || visibleCount > 0;
-            }
-        }
-
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-            runSearch();
-            input.blur();
-        });
-
-        if (reset) {
-            reset.addEventListener('click', function () {
-                input.value = '';
-                runSearch();
-                input.focus();
-            });
-        }
-
-        if (input.value.trim()) {
-            runSearch();
-        }
-    });
-</script>
 
 @endsection

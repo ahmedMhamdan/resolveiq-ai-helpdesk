@@ -91,10 +91,12 @@
             <p class="page-subtitle" data-auto-translate>{{ __('knowledge.articles_subtitle') }}</p>
         </div>
 
-        <form class="filters kb-search-form" id="kbSearchForm">
+        <form method="GET" action="{{ route('knowledge.index') }}" class="filters kb-search-form">
             <input
                 type="search"
-                id="kbSearchInput"
+                name="search"
+                value="{{ $search }}"
+                aria-label="{{ __('knowledge.search_placeholder') }}"
                 placeholder="{{ __('knowledge.search_placeholder') }}"
                 data-auto-translate-attribute="placeholder"
                 autocomplete="off"
@@ -102,11 +104,9 @@
 
             <button type="submit" class="kb-search-btn" data-auto-translate>{{ __('knowledge.search') }}</button>
 
-            <button type="button" class="btn btn-secondary kb-search-reset" id="kbSearchReset" hidden data-auto-translate>
-                {{ __('knowledge.reset') }}
-            </button>
-
-            <div class="kb-search-status" id="kbSearchStatus" hidden></div>
+            @if ($search !== '')
+                <a href="{{ route('knowledge.index') }}" class="btn btn-secondary kb-search-reset">{{ __('knowledge.reset') }}</a>
+            @endif
         </form>
     </div>
 
@@ -124,17 +124,8 @@
 
             <tbody>
                 @forelse ($articles as $article)
-                    @php
-                        $articleSearchText = Str::lower(trim(
-                            $article->title . ' ' .
-                            strip_tags($article->content) . ' ' .
-                            $article->status . ' ' .
-                            ($article->user?->name ?? __('common.system')) . ' ' .
-                            $article->created_at->format('M d, Y')
-                        ));
-                    @endphp
 
-                    <tr class="kb-article-row" data-search="{{ $articleSearchText }}">
+                    <tr class="kb-article-row">
                         <td data-label="{{ __('knowledge.article') }}">
                             <strong>{{ $article->title }}</strong>
                             <div class="text-muted">
@@ -186,18 +177,16 @@
                                     </svg>
                                 </div>
 
-                                <strong data-auto-translate>{{ __('knowledge.no_articles') }}</strong>
-                                <p data-auto-translate>{{ __('knowledge.no_articles_desc') }}</p>
+                                <strong data-auto-translate>{{ __($search === '' ? 'knowledge.no_articles' : 'knowledge.no_matching') }}</strong>
+                                @if ($search === '')
+                                    <p data-auto-translate>{{ __('knowledge.no_articles_desc') }}</p>
+                                @endif
                             </div>
                         </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
-
-        <div class="kb-live-empty" id="kbLiveEmpty" hidden data-auto-translate>
-            {{ __('knowledge.no_matching') }}
-        </div>
     </div>
 
     <div class="pagination">
@@ -205,97 +194,4 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const kbMessages = <?php echo json_encode([
-            'no_matching' => __('knowledge.no_matching'),
-            'search_applied' => __('common.search_applied'),
-            'articles_found' => __('knowledge.articles_found'),
-            'no_results' => __('knowledge.no_results_for'),
-        ]); ?>;
-
-        const card = document.querySelector('.kb-articles-card');
-        const form = document.getElementById('kbSearchForm');
-        const input = document.getElementById('kbSearchInput');
-        const reset = document.getElementById('kbSearchReset');
-        const status = document.getElementById('kbSearchStatus');
-        const empty = document.getElementById('kbLiveEmpty');
-        const rows = Array.from(document.querySelectorAll('.kb-article-row'));
-
-        if (!card || !form || !input || !reset || !status || !empty) {
-            return;
-        }
-
-        const setStatus = (message, type) => {
-            status.hidden = false;
-            status.textContent = message;
-            status.className = `kb-search-status is-visible ${type}`;
-        };
-
-        const clearStatus = () => {
-            status.hidden = true;
-            status.textContent = '';
-            status.className = 'kb-search-status';
-        };
-
-        const runSearch = () => {
-            const query = input.value.trim().toLowerCase();
-            let matchedCount = 0;
-
-            rows.forEach((row) => {
-                const text = row.dataset.search || row.textContent.toLowerCase();
-                const isMatch = query === '' || text.includes(query);
-
-                row.classList.toggle('is-hidden', !isMatch);
-                row.classList.remove('is-search-match');
-
-                if (isMatch) {
-                    matchedCount++;
-
-                    if (query !== '') {
-                        row.classList.add('is-search-match');
-                    }
-                }
-            });
-
-            empty.hidden = !(query !== '' && matchedCount === 0);
-            reset.hidden = query === '';
-            card.classList.toggle('live-search-no-results', query !== '' && matchedCount === 0);
-
-            card.classList.remove('search-pulse');
-            void card.offsetWidth;
-            card.classList.add('search-pulse');
-
-            if (query === '') {
-                clearStatus();
-                return;
-            }
-
-            if (matchedCount > 0) {
-                setStatus(`${kbMessages.search_applied} ${matchedCount} ${kbMessages.articles_found}`, 'is-success');
-            } else {
-                setStatus(`{{ __('knowledge.no_results_for') }} "${query}".`, 'is-warning');
-            }
-        };
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            runSearch();
-        });
-
-        reset.addEventListener('click', () => {
-            input.value = '';
-
-            rows.forEach((row) => {
-                row.classList.remove('is-hidden', 'is-search-match');
-            });
-
-            empty.hidden = true;
-            reset.hidden = true;
-            card.classList.remove('live-search-no-results', 'search-pulse');
-            clearStatus();
-            input.focus();
-        });
-    });
-</script>
 @endsection
