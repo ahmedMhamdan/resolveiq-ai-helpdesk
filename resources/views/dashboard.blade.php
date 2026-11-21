@@ -96,9 +96,7 @@
                 <form method="GET" action="{{ route('tickets.index') }}" class="dashboard-ticket-search-form">
                     <div class="dashboard-ticket-search-box">
                         <span class="dashboard-ticket-search-icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M21 21L16.7 16.7M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                            <x-icon name="search" />
                         </span>
 
                         <input
@@ -229,7 +227,7 @@
                     data-auto-translate-attribute="placeholder"
                 >
 
-                <button type="submit" class="btn btn-sm btn-primary activity-search-btn" id="activitySearchBtn" data-auto-translate>
+                <button type="submit" class="btn btn-sm btn-secondary activity-search-btn" id="activitySearchBtn" data-auto-translate>
                     {{ __('dashboard.search') }}
                 </button>
 
@@ -336,8 +334,8 @@
                     <h3 id="activityModalTitle" data-auto-translate>{{ __('common.activity') }}</h3>
                 </div>
 
-                <button type="button" class="activity-modal-close" id="activityModalClose">
-                    ×
+                <button type="button" class="activity-modal-close" id="activityModalClose" aria-label="{{ __('common.close') }}">
+                    <x-icon name="close" />
                 </button>
             </div>
 

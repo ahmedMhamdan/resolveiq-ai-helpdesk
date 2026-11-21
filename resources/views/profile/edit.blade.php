@@ -107,7 +107,7 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ route('profile.show') }}" class="btn btn-danger-soft">
+            <a href="{{ route('profile.show') }}" class="btn btn-secondary">
                 {{ __('profile.cancel') }}
             </a>
 

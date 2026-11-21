@@ -135,10 +135,7 @@
 
                 <form class="search-wrap topbar-search-form" method="GET" action="{{ route('tickets.index') }}" role="search">
                     <span class="search-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="M20 20L16.65 16.65"></path>
-                        </svg>
+                        <x-icon name="search" />
                     </span>
 
                     <input
@@ -220,19 +217,7 @@
                             aria-label="Notifications"
                             title="Notifications"
                         >
-                            <svg
-                                class="notification-svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.9"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                            >
-                                <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5" />
-                                <path d="M10 20a2 2 0 0 0 4 0" />
-                            </svg>
+                            <x-icon name="bell" class="notification-svg" />
 
                             @if ($unreadNotificationsCount > 0)
                                 <strong>{{ $unreadNotificationsCount > 9 ? '9+' : $unreadNotificationsCount }}</strong>
@@ -299,7 +284,7 @@
 
                     <x-theme-toggle id="themeToggle" />
 
-                    <a href="{{ route('profile.show') }}" class="user-box">
+                    <a href="{{ route('profile.show') }}" class="user-box" aria-label="{{ __('profile.title') }}" title="{{ $currentUserName }}">
                         <div class="avatar">
                             @if ($currentUserAvatarUrl)
                                 <img
@@ -320,8 +305,9 @@
 
                     <form action="{{ url('/logout') }}" method="POST" class="logout-form">
                         @csrf
-                        <button type="submit" class="btn btn-secondary logout-btn">
-                            <span data-auto-translate>Logout</span>
+                        <button type="submit" class="btn btn-secondary logout-btn" aria-label="{{ __('common.logout') }}">
+                            <span class="header-logout-icon"><x-icon name="logout" /></span>
+                            <span class="header-logout-text" data-auto-translate>Logout</span>
                         </button>
                     </form>
                 </div>

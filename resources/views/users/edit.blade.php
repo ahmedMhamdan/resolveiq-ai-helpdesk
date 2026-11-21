@@ -128,7 +128,7 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ url('/users/' . $user->id) }}" class="btn btn-danger-soft">
+            <a href="{{ url('/users/' . $user->id) }}" class="btn btn-secondary">
                 {{ __('users.cancel') }}
             </a>
 

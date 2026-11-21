@@ -73,7 +73,7 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ route('agents.index') }}" class="btn btn-danger-soft">
+            <a href="{{ route('agents.index') }}" class="btn btn-secondary">
                 {{ __('agents.cancel') }}
             </a>
 

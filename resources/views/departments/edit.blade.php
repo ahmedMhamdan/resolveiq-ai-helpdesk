@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-actions create-actions">
-            <a href="{{ route('departments.index') }}" class="btn btn-danger-soft">
+            <a href="{{ route('departments.index') }}" class="btn btn-secondary">
                 {{ __('departments.cancel') }}
             </a>
 

@@ -223,8 +223,8 @@
                                                         @csrf
                                                         @method('DELETE')
 
-                                                        <button type="submit" class="attachment-delete-btn">
-                                                            ×
+                                                        <button type="submit" class="attachment-delete-btn" aria-label="{{ __('tickets.confirm_delete_attachment') }}">
+                                                            <x-icon name="close" />
                                                         </button>
                                                     </form>
                                                 @endif

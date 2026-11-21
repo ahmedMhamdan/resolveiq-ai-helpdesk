@@ -5,19 +5,17 @@
     --home-line: #e1d8e9;
     --home-panel: #fdfbff;
     --home-accent: #6841a9;
-    --home-button: #533293;
     background: var(--home-paper);
     color: var(--home-ink);
 }
 
 html[data-theme="dark"] .home-body {
-    --home-ink: #f1e9f9;
-    --home-muted: #bcb0cd;
-    --home-paper: #181323;
-    --home-line: #4b3a60;
-    --home-panel: #251e33;
-    --home-accent: #d9bfff;
-    --home-button: #6844ac;
+    --home-ink: var(--text);
+    --home-muted: var(--muted);
+    --home-paper: var(--bg);
+    --home-line: var(--border);
+    --home-panel: var(--panel);
+    --home-accent: var(--primary);
 }
 
 .home-shell {
@@ -106,17 +104,8 @@ html[data-theme="dark"] .home-body {
 
 .home-button {
     padding: 10px 16px;
-    border-radius: 8px;
-    background: var(--home-button);
-    color: #fff;
     font-size: .925rem;
     font-weight: 700;
-}
-
-.home-header .home-button:hover,
-.home-button:hover {
-    background: #7148bb;
-    color: #fff;
 }
 
 .home-button svg,
@@ -127,10 +116,10 @@ html[data-theme="dark"] .home-body {
 
 .home-preview {
     overflow: hidden;
-    border: 1px solid #564570;
+    border: 1px solid #3b3b3f;
     border-radius: 14px;
-    background: #281d3f;
-    color: #f5efff;
+    background: #1b1b1d;
+    color: #f2f2f3;
 }
 
 .home-preview-toolbar,
@@ -145,7 +134,7 @@ html[data-theme="dark"] .home-body {
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 14px 19px;
-    border-bottom: 1px solid #564570;
+    border-bottom: 1px solid #3b3b3f;
 }
 
 .home-preview-toolbar > span {
@@ -156,7 +145,7 @@ html[data-theme="dark"] .home-body {
 }
 
 .home-preview small {
-    color: #cbbce3;
+    color: #b5b5bb;
     font-size: .775rem;
 }
 
@@ -205,9 +194,9 @@ html[data-theme="dark"] .home-body {
 
 .home-preview-draft {
     padding: 13px 16px;
-    border: 1px solid #564570;
+    border: 1px solid #3b3b3f;
     border-radius: 8px;
-    background: #35264e;
+    background: #242426;
 }
 
 .home-preview-draft-head {
@@ -215,8 +204,8 @@ html[data-theme="dark"] .home-body {
     font-weight: 700;
 }
 
-.home-preview-draft-head svg { color: #e0c7ff; }
-.home-preview-draft p { margin: 8px 0; color: #e8dff4; font-size: .9rem; line-height: 1.5; }
+.home-preview-draft-head svg { color: #d5c5f0; }
+.home-preview-draft p { margin: 8px 0; color: #dadadd; font-size: .9rem; line-height: 1.5; }
 
 .home-section {
     padding-block: clamp(42px, 6vw, 80px);

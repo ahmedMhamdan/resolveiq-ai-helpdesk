@@ -83,13 +83,13 @@
                     <p id="aiTicketDescription" dir="auto" aria-live="polite"></p>
                 </section>
 
-                <div class="ai-action-grid ai-action-grid-five">
+                <div class="ai-action-grid ai-action-grid-five" role="group" aria-label="{{ __('common.actions') }}">
                     <button
                         type="button"
                         class="ai-action-card {{ $selectedMode === 'summary' ? 'active' : '' }}"
                         data-mode="summary"
+                        aria-pressed="{{ $selectedMode === 'summary' ? 'true' : 'false' }}"
                     >
-                        <span data-auto-translate>{{ __('ai.summary') }}</span>
                         <strong data-auto-translate>{{ __('ai.generate_summary') }}</strong>
                         <small data-auto-translate>{{ __('ai.summary_desc') }}</small>
                     </button>
@@ -98,8 +98,8 @@
                         type="button"
                         class="ai-action-card {{ $selectedMode === 'reply' ? 'active' : '' }}"
                         data-mode="reply"
+                        aria-pressed="{{ $selectedMode === 'reply' ? 'true' : 'false' }}"
                     >
-                        <span data-auto-translate>{{ __('ai.reply') }}</span>
                         <strong data-auto-translate>{{ __('ai.suggest_reply') }}</strong>
                         <small data-auto-translate>{{ __('ai.reply_desc') }}</small>
                     </button>
@@ -108,8 +108,8 @@
                         type="button"
                         class="ai-action-card {{ $selectedMode === 'priority' ? 'active' : '' }}"
                         data-mode="priority"
+                        aria-pressed="{{ $selectedMode === 'priority' ? 'true' : 'false' }}"
                     >
-                        <span data-auto-translate>{{ __('ai.priority') }}</span>
                         <strong data-auto-translate>{{ __('ai.suggest_priority') }}</strong>
                         <small data-auto-translate>{{ __('ai.priority_desc') }}</small>
                     </button>
@@ -118,8 +118,8 @@
                         type="button"
                         class="ai-action-card {{ $selectedMode === 'due_date' ? 'active' : '' }}"
                         data-mode="due_date"
+                        aria-pressed="{{ $selectedMode === 'due_date' ? 'true' : 'false' }}"
                     >
-                        <span data-auto-translate>{{ __('ai.due_date') }}</span>
                         <strong data-auto-translate>{{ __('ai.suggest_due_date') }}</strong>
                         <small data-auto-translate>{{ __('ai.due_date_desc') }}</small>
                     </button>
@@ -128,8 +128,8 @@
                         type="button"
                         class="ai-action-card {{ $selectedMode === 'custom' ? 'active' : '' }}"
                         data-mode="custom"
+                        aria-pressed="{{ $selectedMode === 'custom' ? 'true' : 'false' }}"
                     >
-                        <span data-auto-translate>{{ __('ai.custom') }}</span>
                         <strong data-auto-translate>{{ __('ai.custom_instruction') }}</strong>
                         <small data-auto-translate>{{ __('ai.custom_desc') }}</small>
                     </button>
@@ -165,8 +165,6 @@
         </section>
 
         <aside class="card ai-output-card">
-            <div class="ai-output-icon">AI</div>
-
             <h2 data-auto-translate>{{ __('ai.ai_output') }}</h2>
 
             <div class="ai-output-box {{ $ticketAi ? 'has-output' : '' }}" id="aiOutputBox">
@@ -225,22 +223,7 @@
                         @endif
                     @else
                     <div class="ai-empty-state">
-                        <div class="ai-empty-orb">
-                            <svg
-                                class="ai-empty-svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.8"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                            >
-                                <path d="M12 3l1.7 4.8L18.5 9.5l-4.8 1.7L12 16l-1.7-4.8L5.5 9.5l4.8-1.7L12 3z" />
-                                <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" />
-                                <path d="M5 14l.6 1.7L7.3 16.3l-1.7.6L5 18.6l-.6-1.7-1.7-.6 1.7-.6L5 14z" />
-                            </svg>
-                        </div>
+                        <x-icon name="spark" class="ai-empty-icon" />
 
                         <strong data-auto-translate>{{ __('ai.no_output_yet') }}</strong>
 
@@ -611,8 +594,11 @@
 
             aiCards.forEach(card => {
                 card.addEventListener('click', () => {
-                    aiCards.forEach(item => item.classList.remove('active'));
-                    card.classList.add('active');
+                    aiCards.forEach(item => {
+                        const selected = item === card;
+                        item.classList.toggle('active', selected);
+                        item.setAttribute('aria-pressed', String(selected));
+                    });
 
                     if (modeInput) {
                         modeInput.value = card.dataset.mode || 'summary';

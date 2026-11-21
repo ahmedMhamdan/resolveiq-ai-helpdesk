@@ -131,7 +131,7 @@
             </div>
 
             <div class="form-actions create-actions">
-                <a href="{{ route('tickets.index') }}" class="btn btn-danger-soft">
+                <a href="{{ route('tickets.index') }}" class="btn btn-secondary">
                     {{ __('tickets.cancel') }}
                 </a>
 

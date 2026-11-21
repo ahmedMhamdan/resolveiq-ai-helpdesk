@@ -136,7 +136,7 @@ button {
 }
 
 [data-theme="dark"] .sidebar {
-  background: rgba(15, 23, 42, .72);
+  background: rgba(17, 17, 19, .72);
 }
 
 .brand {
@@ -244,60 +244,6 @@ button {
 /* =========================================================
    5. Topbar and search
 ========================================================= */
-.topbar {
-  height: 74px;
-  display: grid;
-  grid-template-columns: minmax(360px, 720px) auto;
-  gap: 18px;
-  align-items: center;
-  margin-bottom: 26px;
-}
-
-.search-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 720px;
-}
-
-.search-wrap::before {
-  display: none;
-  content: none;
-}
-
-.search-icon {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  pointer-events: none;
-  transform: translateY(-50%);
-}
-
-.search-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.search {
-  width: 100%;
-  min-height: 56px;
-  padding: 16px 64px 16px 56px;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  outline: none;
-  color: var(--text);
-  background: var(--panel);
-  font-size: 1rem;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, .045);
-}
-
-.search::placeholder {
-  color: var(--muted);
-}
 
 .shortcut {
   position: absolute;
@@ -310,23 +256,6 @@ button {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--panel-soft);
-}
-
-.top-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--panel);
 }
 
 .avatar,
@@ -391,10 +320,7 @@ h1 {
 /* =========================================================
    7. Buttons
 ========================================================= */
-.btn,
-.top-btn,
-.theme-toggle,
-.filters button {
+.top-btn, .theme-toggle {
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -404,31 +330,29 @@ h1 {
   font-weight: 650;
   transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-normal) var(--ease-out), opacity var(--motion-fast) var(--ease-out);
 }
-
 .btn,
-.btn-primary,
-.top-btn.primary,
-.new-ticket-btn,
-.filter-btn,
 .filters button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 11px 15px;
+  font-weight: 650;
+}
+
+.top-btn.primary, .new-ticket-btn, .filter-btn {
   color: #fff;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   box-shadow: 0 14px 34px rgba(99, 102, 241, .28);
 }
 
-.btn-secondary,
-.btn.secondary,
-.top-btn,
-.theme-toggle {
+.top-btn, .theme-toggle {
   color: var(--text);
   background: var(--panel-soft);
   border: 1px solid var(--border);
   box-shadow: none;
 }
 
-.btn::before,
-.top-btn::before,
-.filters button::before {
+.top-btn::before {
   content: "";
   position: absolute;
   top: -80%;
@@ -441,68 +365,25 @@ h1 {
   z-index: -1;
 }
 
-.btn:hover,
-.top-btn:hover,
-.filters button:hover {
+.top-btn:hover {
   transform: translateY(-2px);
 }
 
-.btn:hover::before,
-.top-btn:hover::before,
-.filters button:hover::before {
+.top-btn:hover::before {
   left: 135%;
 }
 
-.btn:active,
-.top-btn:active,
-.filters button:active {
+.top-btn:active {
   transform: translateY(0) scale(.98);
 }
 
-.btn-primary:hover,
-.new-ticket-btn:hover,
-.filter-btn:hover,
-.filters button:hover {
+.new-ticket-btn:hover, .filter-btn:hover {
   box-shadow: 0 18px 45px rgba(99, 102, 241, .38);
 }
 
 .btn-sm {
   padding: 9px 12px;
   font-size: .85rem;
-  border-radius: 12px;
-}
-
-.btn-danger-soft {
-  color: #fff;
-  background: linear-gradient(135deg, #ef4444, #fb7185);
-  border: 1px solid rgba(248, 113, 113, .35);
-  box-shadow: 0 14px 34px rgba(239, 68, 68, .22);
-}
-
-.btn-danger-soft:hover {
-  box-shadow: 0 18px 45px rgba(239, 68, 68, .32);
-}
-
-.btn-edit-soft {
-  color: #fff;
-  background: linear-gradient(135deg, #14b8a6, #6622c5);
-  border: 1px solid rgba( 102, 34, 197, .32);
-  box-shadow: 0 14px 34px rgba(20, 184, 166, .22);
-}
-
-.btn-edit-soft:hover {
-  box-shadow: 0 18px 45px rgba(20, 184, 166, .32);
-}
-
-.btn-deleted-tickets {
-  color: #fff;
-  background: linear-gradient(135deg, #f97316, #fb7185);
-  border: 1px solid rgba(251, 113, 133, .28);
-  box-shadow: 0 14px 34px rgba(249, 115, 22, .22);
-}
-
-.btn-deleted-tickets:hover {
-  box-shadow: 0 18px 45px rgba(249, 115, 22, .30);
 }
 
 /* =========================================================
@@ -532,7 +413,7 @@ h1 {
 
 [data-theme="dark"] .card,
 [data-theme="dark"] .table-card {
-  background: rgba(15, 23, 42, .82);
+  background: rgba(17, 17, 19, .82);
 }
 
 .card {
@@ -918,11 +799,12 @@ tbody tr:hover {
 
 .flash-message {
   margin-bottom: 20px;
-  color: #6622c5;
-  border-color: rgba( 102, 34, 197, .32);
-  background: rgba( 102, 34, 197, .12);
   font-weight: 650;
-  animation: flashIn 360ms var(--ease-out) both;
+}
+
+.flash-message:not(.flash-error) {
+  color: var(--text);
+  background: var(--panel-soft);
 }
 
 /* Date picker */
@@ -1023,7 +905,7 @@ body.dark input[type="date"] {
   overflow: hidden;
   padding: 18px 18px 18px 22px;
   border-radius: 18px;
-  background: rgba(15, 23, 42, .32);
+  background: rgba(17, 17, 19, .32);
   border: 1px solid rgba(148, 163, 184, .16);
 }
 
@@ -1069,22 +951,22 @@ body:not(.dark) .meta-box {
 
 html[data-theme="dark"] .meta-requester,
 body.dark .meta-requester {
-  background: linear-gradient(135deg, rgba(56, 189, 248, .10), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(56, 189, 248, .10), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="dark"] .meta-agent,
 body.dark .meta-agent {
-  background: linear-gradient(135deg, rgba(139, 92, 246, .12), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(139, 92, 246, .12), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="dark"] .meta-department,
 body.dark .meta-department {
-  background: linear-gradient(135deg, rgba(20, 184, 166, .11), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(20, 184, 166, .11), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="dark"] .meta-created,
 body.dark .meta-created {
-  background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(17, 17, 19, .55));
 }
 
 .thread {
@@ -1213,31 +1095,10 @@ body:not(.dark) .internal-label {
 }
 
 .reply-delete-btn {
-  border: 1px solid rgba(248, 113, 113, .32);
-  background: rgba(248, 113, 113, .12);
-  color: #fb7185;
-  border-radius: 999px;
   padding: 7px 12px;
   font-size: 12px;
   font-weight: 650;
   cursor: pointer;
-}
-
-.reply-delete-btn:hover {
-  background: rgba(248, 113, 113, .2);
-}
-
-html[data-theme="light"] .reply-delete-btn,
-body:not(.dark) .reply-delete-btn {
-  color: #e11d48;
-  border-color: #fda4af;
-  background: #ffe4e6;
-}
-
-html[data-theme="light"] .reply-delete-btn:hover,
-body:not(.dark) .reply-delete-btn:hover {
-  color: #be123c;
-  background: #fecdd3;
 }
 
 .reply-attachments-field {
@@ -1381,8 +1242,7 @@ body:not(.dark) .reply-delete-btn:hover {
   margin-left: 7px;
 }
 
-.selected-file-remove,
-.attachment-delete-btn {
+.selected-file-remove {
   width: 28px;
   height: 28px;
   min-width: 28px;
@@ -1401,8 +1261,22 @@ body:not(.dark) .reply-delete-btn:hover {
   cursor: pointer;
 }
 
-.selected-file-remove:hover,
-.attachment-delete-btn:hover {
+.attachment-delete-btn {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.selected-file-remove:hover {
   background: rgba(248, 113, 113, .22);
 }
 
@@ -1529,18 +1403,8 @@ body:not(.dark) .reply-delete-btn:hover {
 }
 
 .ai-card .btn {
-  border-radius: 18px;
   padding: 14px 20px;
-  color: #fff;
   font-weight: 800;
-  border: 1px solid rgba(124, 58, 237, .28);
-  background: linear-gradient(135deg, #a78bfa, #7c3aed);
-  box-shadow: 0 14px 30px rgba(124, 58, 237, .20);
-}
-
-.ai-card .btn:hover {
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-  box-shadow: 0 18px 40px rgba(124, 58, 237, .28);
 }
 
 .ai-page-head {
@@ -1614,20 +1478,8 @@ body:not(.dark) .reply-delete-btn:hover {
 .ai-action-card {
   min-height: 160px;
   padding: 20px;
-  border: 1px solid rgba(139, 92, 246, .20);
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(139, 92, 246, .10), rgba(56, 189, 248, .04)), var(--panel-soft);
-  color: var(--text);
   text-align: left;
-  box-shadow: none;
   cursor: pointer;
-  transition: transform var(--motion-fast) var(--ease-out), border-color var(--motion-normal) var(--ease-out), background-color var(--motion-normal) var(--ease-out);
-}
-
-.ai-action-card::before,
-.ai-action-card::after {
-  display: none !important;
-  content: none !important;
 }
 
 .ai-action-card span {
@@ -1655,41 +1507,6 @@ body:not(.dark) .reply-delete-btn:hover {
   font-weight: 500;
 }
 
-.ai-action-card:hover,
-.ai-action-card.active {
-  transform: translateY(-3px);
-  border-color: rgba(56, 189, 248, .55);
-  background: linear-gradient(135deg, rgba(56, 189, 248, .16), rgba(139, 92, 246, .18)), var(--panel-soft);
-}
-
-html[data-theme="light"] .ai-action-card,
-body:not(.dark) .ai-action-card {
-  background: linear-gradient(180deg, #fff, #f5f3ff);
-  border-color: #ddd6fe;
-}
-
-html[data-theme="light"] .ai-action-card:hover,
-html[data-theme="light"] .ai-action-card.active,
-body:not(.dark) .ai-action-card:hover,
-body:not(.dark) .ai-action-card.active {
-  background: linear-gradient(135deg, #eff6ff, #f3e8ff);
-  border-color: #a78bfa;
-}
-
-html[data-theme="dark"] .ai-action-card,
-body.dark .ai-action-card {
-  background: linear-gradient(180deg, rgba(30, 41, 59, .85), rgba(15, 23, 42, .90));
-  border-color: rgba(148, 163, 184, .16);
-}
-
-html[data-theme="dark"] .ai-action-card:hover,
-html[data-theme="dark"] .ai-action-card.active,
-body.dark .ai-action-card:hover,
-body.dark .ai-action-card.active {
-  background: linear-gradient(135deg, rgba(56, 189, 248, .13), rgba(139, 92, 246, .18)), rgba(15, 23, 42, .92);
-  border-color: rgba(139, 92, 246, .44);
-}
-
 .ai-generate-row,
 .ai-use-reply-form {
   display: flex;
@@ -1704,19 +1521,6 @@ body.dark .ai-action-card.active {
   top: 22px;
   min-height: 500px;
   padding: 28px;
-}
-
-.ai-output-icon {
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 20px;
-  border-radius: 18px;
-  color: #fff;
-  font-weight: 900;
-  background: linear-gradient(135deg, #38bdf8, #8b5cf6);
-  box-shadow: 0 16px 36px rgba(139, 92, 246, .24);
 }
 
 .ai-output-card h2 {
@@ -1734,14 +1538,9 @@ body.dark .ai-action-card.active {
   flex-direction: column;
   gap: 8px;
   padding: 22px;
-  border: 1px dashed rgba(139, 92, 246, .28);
-  border-radius: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
   background: var(--panel-soft);
-}
-
-.ai-output-box.has-output {
-  border-style: solid;
-  border-color: rgba(139, 92, 246, .32);
 }
 
 .ai-output-box strong {
@@ -1787,12 +1586,15 @@ body.dark .ai-action-card.active {
 /* =========================================================
    18. Page-specific safeguards
 ========================================================= */
-.ticket-create-card,
-.ticket-create-card:hover,
-.deleted-tickets-card,
-.deleted-tickets-card:hover {
+.ticket-create-card, .ticket-create-card:hover, .deleted-tickets-card:hover {
   transform: none !important;
   background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  box-shadow: none !important;
+}
+.deleted-tickets-card {
+  transform: none !important;
   color: var(--text) !important;
   border-color: var(--border) !important;
   box-shadow: none !important;
@@ -1883,10 +1685,6 @@ body.dark select option:disabled {
 /* =========================================================
    19. Animations
 ========================================================= */
-.topbar .btn-primary,
-.topbar .new-ticket-btn {
-  animation: softFloat 3.8s ease-in-out infinite;
-}
 
 /* Keep theme switching light on mobile/low-power devices. */
 
@@ -1990,11 +1788,6 @@ body.dark select option:disabled {
   .card-head {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .top-actions {
-    justify-content: flex-start;
-    flex-wrap: wrap;
   }
 
   .ticket-meta-grid,
@@ -2147,35 +1940,19 @@ body.dark select option:disabled {
   margin: 0 0 18px;
 }
 
-.user-box {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    transform var(--motion-fast) var(--ease-out),
-    border-color var(--motion-normal) var(--ease-out),
-    box-shadow var(--motion-normal) var(--ease-out);
-}
-
-.user-box:hover {
-  transform: translateY(-2px);
-  border-color: rgba(99, 102, 241, .42);
-  box-shadow: 0 14px 34px rgba(99, 102, 241, .16);
-}
-
 html[data-theme="dark"] .profile-stat-assigned,
 body.dark .profile-stat-assigned {
-  background: linear-gradient(135deg, rgba(56, 189, 248, .10), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(56, 189, 248, .10), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="dark"] .profile-stat-replies,
 body.dark .profile-stat-replies {
-  background: linear-gradient(135deg, rgba(139, 92, 246, .12), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(139, 92, 246, .12), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="dark"] .profile-stat-member,
 body.dark .profile-stat-member {
-  background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(15, 23, 42, .55));
+  background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(17, 17, 19, .55));
 }
 
 html[data-theme="light"] .profile-stat-assigned,
@@ -2356,11 +2133,6 @@ body:not(.dark) .profile-stat-member {
 }
 
 /* remove button shine only in 403 page */
-.error-page-card .btn::before,
-.error-page-card .btn::after {
-    content: none !important;
-    display: none !important;
-}
 
 @keyframes lockPulse {
     0%, 100% {
@@ -2372,16 +2144,6 @@ body:not(.dark) .profile-stat-member {
         transform: scale(1.04);
         box-shadow: 0 0 28px rgba(239, 68, 68, 0.18);
     }
-}
-.btn-restore-soft {
-    color: #fff;
-    background: linear-gradient(135deg, #511a9f, #6622c5);
-    border: 1px solid rgba( 102, 34, 197, .32);
-    box-shadow: 0 14px 34px rgba( 102, 34, 197, .22);
-}
-
-.btn-restore-soft:hover {
-    box-shadow: 0 18px 45px rgba( 102, 34, 197, .32);
 }
 .priority.unset {
     color: var(--muted);
@@ -2420,11 +2182,6 @@ body:not(.dark) .profile-stat-member {
     flex-wrap: wrap;
 }
 
-html[dir="rtl"] .riq-page-btn:first-child,
-html[dir="rtl"] .riq-page-btn:last-child {
-    transform: scaleX(-1);
-}
-
 .riq-page-btn {
     min-width: 38px;
     height: 38px;
@@ -2432,16 +2189,7 @@ html[dir="rtl"] .riq-page-btn:last-child {
     align-items: center;
     justify-content: center;
     padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--muted);
-    background: var(--panel-soft);
     font-weight: 750;
-    transition:
-        transform var(--motion-fast) var(--ease-out),
-        background-color var(--motion-normal) var(--ease-out),
-        color var(--motion-normal) var(--ease-out),
-        border-color var(--motion-normal) var(--ease-out);
 }
 
 .riq-page-btn:first-child,
@@ -2453,19 +2201,6 @@ html[dir="rtl"] .riq-page-btn:last-child {
 
 html[dir="rtl"] .riq-pagination-links {
     gap: 6px;
-}
-
-.riq-page-btn:hover {
-    color: var(--text);
-    border-color: rgba(99, 102, 241, .45);
-    transform: translateY(-2px);
-}
-
-.riq-page-btn.active {
-    color: #fff;
-    border-color: transparent;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    box-shadow: 0 12px 28px rgba(99, 102, 241, .26);
 }
 
 .riq-page-btn.disabled,
@@ -2826,7 +2561,7 @@ html[dir="rtl"] .riq-pagination-links {
     outline: none;
 
     color: var(--text);
-    background-color: rgba(15, 23, 42, .85);
+    background-color: rgba(17, 17, 19, .85);
     background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-size: 16px;
@@ -2845,7 +2580,6 @@ html[dir="rtl"] .riq-pagination-links {
 .users-role-actions .btn {
     height: 42px;
     padding: 0 18px;
-    border-radius: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2889,17 +2623,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
    Unassigned Tickets
 ========================= */
 
-.btn-unassigned-tickets {
-    color: #fff;
-    background: linear-gradient(135deg, #0ea5e9, #14b8a6);
-    border: 1px solid rgba(20, 184, 166, .28);
-    box-shadow: 0 14px 34px rgba(14, 165, 233, .22);
-}
-
-.btn-unassigned-tickets:hover {
-    box-shadow: 0 18px 45px rgba(20, 184, 166, .30);
-}
-
 .unassigned-table-card {
     width: 100%;
 }
@@ -2922,17 +2645,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
 .unassigned-table .role-select {
     min-width: 145px;
 }
-
-.btn-assign-agent {
-    color: #fff;
-    background: linear-gradient(135deg, #6622c5, #14b8a6);
-    border: 1px solid rgba( 102, 34, 197, .28);
-    box-shadow: 0 12px 28px rgba( 102, 34, 197, .20);
-}
-
-.btn-assign-agent:hover {
-    box-shadow: 0 16px 36px rgba(20, 184, 166, .30);
-}
 /* Fix priority select style in Unassigned Tickets page */
 .unassigned-table .priority-assign-select,
 .unassigned-table select.role-select {
@@ -2946,7 +2658,7 @@ body:not(.dark) .users-role-actions .role-select:hover {
 
     border-radius: 18px;
     border: 1px solid rgba(148, 163, 184, .28);
-    background-color: rgba(15, 23, 42, .85);
+    background-color: rgba(17, 17, 19, .85);
 
     background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -2976,23 +2688,11 @@ body:not(.dark) .users-role-actions .role-select:hover {
 .unassigned-table .btn-assign-agent {
     height: 42px;
     padding: 0 16px;
-    border-radius: 13px;
     font-size: 0.9rem;
 }
 /* =========================
    Overdue Tickets
 ========================= */
-
-.btn-overdue-tickets {
-    color: #fff;
-    background: linear-gradient(135deg, #ef4444, #f97316);
-    border: 1px solid rgba(249, 115, 22, .32);
-    box-shadow: 0 14px 34px rgba(239, 68, 68, .22);
-}
-
-.btn-overdue-tickets:hover {
-    box-shadow: 0 18px 45px rgba(249, 115, 22, .32);
-}
 
 .overdue-table th,
 .overdue-table td {
@@ -3030,31 +2730,9 @@ body:not(.dark) .users-role-actions .role-select:hover {
 /* =========================
    Reopen Ticket
 ========================= */
-
-.btn-reopen-ticket {
-    color: #fff;
-    background: linear-gradient(135deg, #f59e0b, #f97316);
-    border: 1px solid rgba(249, 115, 22, .32);
-    box-shadow: 0 14px 34px rgba(245, 158, 11, .22);
-}
-
-.btn-reopen-ticket:hover {
-    box-shadow: 0 18px 45px rgba(249, 115, 22, .32);
-}
 /* =========================
    Close Ticket
 ========================= */
-
-.btn-close-ticket {
-    color: #fff;
-    background: linear-gradient(135deg, #ef4444, #fb7185);
-    border: 1px solid rgba(248, 113, 113, .32);
-    box-shadow: 0 14px 34px rgba(239, 68, 68, .22);
-}
-
-.btn-close-ticket:hover {
-    box-shadow: 0 18px 45px rgba(239, 68, 68, .32);
-}
 
 /* =========================
    Ticket AI Assistant
@@ -3114,32 +2792,11 @@ body:not(.dark) .users-role-actions .role-select:hover {
     content: none !important;
 }
 
-.ticket-ai-mini-card .btn::before,
-.ticket-ai-mini-card .btn::after,
-.btn-ai-workspace::before,
-.btn-ai-workspace::after {
-    display: none !important;
-    content: none !important;
-}
-
 .btn-ai-workspace {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: fit-content;
-    color: #fff !important;
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-    border: 1px solid rgba(139, 92, 246, .35);
-    border-radius: 18px;
-    box-shadow: 0 14px 34px rgba(139, 92, 246, .22);
-    transition:
-        transform var(--motion-fast) var(--ease-out),
-        box-shadow var(--motion-normal) var(--ease-out);
-}
-
-.btn-ai-workspace:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 45px rgba(139, 92, 246, .32);
 }
 .ai-action-grid-four {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -3277,10 +2934,6 @@ body:not(.dark) .users-role-actions .role-select:hover {
     gap: 12px;
 }
 
-.ai-empty-orb {
-    font-size: 22px;
-}
-
 .ai-empty-state strong {
     color: var(--text);
     font-size: 1.05rem;
@@ -3311,14 +2964,8 @@ body:not(.dark) .users-role-actions .role-select:hover {
     padding: 24px;
 }
 
-.ai-action-grid-five .ai-action-card > span {
-    margin: 0;
-    align-self: flex-start;
-}
-
 .ai-action-grid-five .ai-action-card strong {
     margin: 0;
-    min-height: 52px;
     display: flex;
     align-items: flex-start;
     line-height: 1.25;
@@ -3459,54 +3106,13 @@ body:not(.dark) .users-role-actions .role-select:hover {
 }
 .top-notification-btn {
     position: relative;
-    width: 52px;
-    height: 52px;
-    display: grid;
     place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    color: var(--text);
-    background: var(--panel);
-    box-shadow: var(--shadow-soft);
-    transition:
-        transform var(--motion-fast) var(--ease-out),
-        border-color var(--motion-normal) var(--ease-out),
-        background-color var(--motion-normal) var(--ease-out),
-        box-shadow var(--motion-normal) var(--ease-out),
-        color var(--motion-normal) var(--ease-out);
-}
-
-.top-notification-btn:hover {
-    transform: translateY(-2px);
-    color: var(--primary);
-    border-color: rgba(99, 102, 241, .28);
-    background: var(--panel-soft);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, .14);
 }
 
 .top-notification-btn .notification-svg {
     width: 21px;
     height: 21px;
     display: block;
-}
-
-.top-notification-btn.has-unread {
-    color: var(--primary);
-    border-color: rgba(99, 102, 241, .34);
-    background: linear-gradient(180deg, var(--panel), var(--panel-soft));
-    box-shadow: 0 16px 36px rgba(99, 102, 241, .16);
-}
-
-.top-notification-btn.has-unread::after {
-    content: "";
-    position: absolute;
-    top: 11px;
-    right: 12px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--danger);
-    box-shadow: 0 0 0 4px rgba(239, 68, 68, .15);
 }
 
 .top-notification-btn strong {
@@ -3671,7 +3277,7 @@ body:not(.dark) .users-role-actions .role-select:hover {
 
 html[data-theme="dark"] .meta-due,
 body.dark .meta-due {
-    background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(15, 23, 42, .55));
+    background: linear-gradient(135deg, rgba(245, 158, 11, .11), rgba(17, 17, 19, .55));
 }
 
 .meta-overdue::before {
@@ -3680,7 +3286,7 @@ body.dark .meta-due {
 
 html[data-theme="dark"] .meta-overdue,
 body.dark .meta-overdue {
-    background: linear-gradient(135deg, rgba(239, 68, 68, .13), rgba(15, 23, 42, .55));
+    background: linear-gradient(135deg, rgba(239, 68, 68, .13), rgba(17, 17, 19, .55));
 }
 
 .meta-muted-note {
@@ -3832,11 +3438,7 @@ body.dark .meta-overdue {
 }
 
 .activity-view-btn {
-    border: 1px solid var(--border);
-    border-radius: 999px;
     padding: 7px 11px;
-    color: var(--primary);
-    background: var(--primary-soft);
     font-size: 12px;
     font-weight: 800;
 }
@@ -3862,8 +3464,12 @@ body.dark .meta-overdue {
         grid-template-columns: 14px 1fr;
     }
 
-    .activity-view-btn,
     .activity-item > small:last-child {
+        grid-column: 2;
+        justify-self: flex-start;
+    }
+
+    .activity-view-btn {
         grid-column: 2;
         justify-self: flex-start;
     }
@@ -3876,7 +3482,7 @@ body.dark .meta-overdue {
     border-radius: 16px;
     outline: none;
     color: var(--text);
-    background: rgba(15, 23, 42, .85);
+    background: rgba(17, 17, 19, .85);
     font-weight: 750;
 }
 
@@ -3936,36 +3542,6 @@ body:not(.dark) .unassigned-table .unassigned-due-date-input:focus {
 html[data-theme="light"] .unassigned-table .unassigned-due-date-input,
 body:not(.dark) .unassigned-table .unassigned-due-date-input {
     color-scheme: light;
-}
-.ai-empty-orb {
-    position: relative;
-    width: 64px;
-    height: 64px;
-    display: grid;
-    place-items: center;
-    border-radius: 22px;
-    color: #fff;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    box-shadow: 0 18px 42px rgba(99, 102, 241, .28);
-    animation: aiEmptyFloat 3.4s ease-in-out infinite;
-}
-
-.ai-empty-orb::before {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(56, 189, 248, .22), rgba(139, 92, 246, .22));
-    filter: blur(14px);
-    opacity: .75;
-    z-index: -1;
-    animation: aiEmptyGlow 2.8s ease-in-out infinite;
-}
-
-.ai-empty-svg {
-    width: 30px;
-    height: 30px;
-    animation: aiEmptySpark 2.6s ease-in-out infinite;
 }
 
 @keyframes aiEmptyFloat {
@@ -4063,7 +3639,7 @@ body:not(.dark) .ai-output-line-strong {
   display: grid;
   place-items: center;
   padding: 22px;
-  background: rgba(2, 6, 23, .72);
+  background: rgba(17, 17, 19, .72);
   backdrop-filter: blur(8px);
 }
 
@@ -4109,10 +3685,6 @@ body:not(.dark) .ai-output-line-strong {
   height: 38px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  color: var(--text);
-  background: var(--panel-soft);
   font-size: 24px;
 }
 
@@ -4808,7 +4380,7 @@ body.modal-open {
     padding: 0;
     border-radius: 30px;
     border: 1px solid rgba(148, 163, 184, .28);
-    background: rgba(15, 23, 42, .42);
+    background: rgba(17, 17, 19, .42);
     box-shadow: 0 20px 42px rgba(15, 23, 42, .20);
 }
 
@@ -4912,12 +4484,12 @@ html[data-theme="dark"] .agent-avatar-uploader,
 body.dark .agent-avatar-uploader {
     background:
         linear-gradient(135deg, rgba(6, 182, 212, .10), rgba(139, 92, 246, .10)),
-        rgba(15, 23, 42, .56);
+        rgba(17, 17, 19, .56);
 }
 
 html[data-theme="dark"] .agent-avatar-uploader .edit-avatar-preview,
 body.dark .agent-avatar-uploader .edit-avatar-preview {
-    background: rgba(2, 6, 23, .44);
+    background: rgba(17, 17, 19, .44);
     box-shadow: 0 20px 42px rgba(0, 0, 0, .24);
 }
 
@@ -5056,7 +4628,7 @@ html[data-theme="dark"] .profile-avatar-uploader,
 body.dark .profile-avatar-uploader {
     background:
         linear-gradient(135deg, rgba(6, 182, 212, .10), rgba(139, 92, 246, .10)),
-        rgba(15, 23, 42, .56);
+        rgba(17, 17, 19, .56);
 }
 
 @media (max-width: 700px) {
@@ -5093,8 +4665,6 @@ body.dark .profile-avatar-uploader {
 /* =========================================================
    29. Final mobile drawer, compact header, and tickets cards
 ========================================================= */
-.mobile-sidebar-toggle,
-.sidebar-close,
 .sidebar-backdrop {
   display: none;
 }
@@ -5143,7 +4713,7 @@ body.dark .profile-avatar-uploader {
 
   html[data-theme="dark"] .sidebar,
   body.dark .sidebar {
-    background: rgba(2, 6, 23, .96) !important;
+    background: rgba(17, 17, 19, .96) !important;
   }
 
   body.sidebar-open .sidebar {
@@ -5156,7 +4726,7 @@ body.dark .profile-avatar-uploader {
     inset: 0;
     z-index: 210;
     display: block;
-    background: rgba(2, 6, 23, .55);
+    background: rgba(17, 17, 19, .55);
     backdrop-filter: blur(3px);
   }
 
@@ -5189,14 +4759,7 @@ body.dark .profile-avatar-uploader {
   }
 
   .sidebar-close {
-    width: 42px;
-    height: 42px;
-    display: inline-grid !important;
     place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    color: var(--text);
-    background: var(--panel-soft);
     font-size: 25px;
   }
 
@@ -5234,60 +4797,7 @@ body.dark .profile-avatar-uploader {
     display: inline !important;
   }
 
-  .sidebar .nav-icon {
-    flex: 0 0 28px !important;
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 12px !important;
-  }
-
-  .topbar {
-    height: auto !important;
-  }
-
-  .mobile-sidebar-toggle {
-    width: 44px;
-    height: 44px;
-    display: inline-flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 0;
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    color: var(--text);
-    background: var(--panel);
-  }
-
-  .mobile-sidebar-toggle span {
-    width: 4px;
-    height: 4px;
-    border-radius: 999px;
-    background: currentColor;
-  }
-
-  .search-wrap {
-    width: 100%;
-    max-width: none;
-    min-width: 0;
-  }
-
-  .search {
-    width: 100%;
-    height: 44px;
-    min-height: 44px;
-    padding: 0 12px 0 40px;
-    border-radius: 15px;
-    font-size: .8rem;
-  }
-
-  .search-icon {
-    left: 14px;
-  }
-
   .shortcut,
-  .top-actions .user-box,
   .top-actions .logout-form,
   .top-actions .new-ticket-btn {
     display: none !important;
@@ -5297,15 +4807,6 @@ body.dark .profile-avatar-uploader {
   .top-actions .notifications-dropdown {
     width: 44px;
     height: 44px;
-  }
-
-  .top-notification-btn {
-    width: 44px !important;
-    height: 44px !important;
-    min-height: 44px !important;
-    padding: 0 !important;
-    border-radius: 15px !important;
-    box-shadow: none !important;
   }
 
   .notifications-menu {
@@ -5339,7 +4840,6 @@ body.dark .profile-avatar-uploader {
     min-height: 40px;
     width: 100%;
     padding: 0 10px;
-    border-radius: 13px;
     font-size: .78rem;
     display: inline-flex;
     align-items: center;
@@ -5362,8 +4862,12 @@ body.dark .profile-avatar-uploader {
     grid-column: 1 / -1;
   }
 
-  .tickets-index-card .filters input,
-  .tickets-index-card .filters select,
+  .tickets-index-card .filters input, .tickets-index-card .filters select {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+  }
+
   .tickets-index-card .filters button,
   .tickets-index-card .filters .btn {
     width: 100%;
@@ -5484,18 +4988,9 @@ body.dark .profile-avatar-uploader {
   }
 
 
-  .mobile-sidebar-toggle,
-  .top-notification-btn,
   .top-actions .notifications-dropdown {
     width: 42px !important;
     height: 42px !important;
-  }
-
-  .search {
-    height: 42px;
-    min-height: 42px;
-    padding-left: 38px;
-    font-size: .76rem;
   }
 
   .tickets-table tbody {
@@ -5700,18 +5195,11 @@ body.dark .profile-avatar-uploader {
     height: auto !important;
     gap: 8px !important;
     padding: 14px !important;
-    border-radius: 18px !important;
   }
 
   .ai-action-grid-five .ai-action-card[data-mode="custom"] {
     grid-column: 1 / -1 !important;
     min-height: 104px !important;
-  }
-
-  .ai-action-grid-five .ai-action-card > span {
-    margin: 0 !important;
-    padding: 5px 8px !important;
-    font-size: .66rem !important;
   }
 
   .ai-action-grid-five .ai-action-card strong {
@@ -5732,13 +5220,6 @@ body.dark .profile-avatar-uploader {
   .ai-generate-btn { width: 100% !important; min-width: 0 !important; }
   .ai-generate-btn.is-loading { min-width: 0 !important; }
 
-  .ai-output-icon {
-    width: 48px !important;
-    height: 48px !important;
-    margin-bottom: 16px !important;
-    border-radius: 16px !important;
-  }
-
   .ai-output-box {
     min-height: 0 !important;
     padding: 16px !important;
@@ -5746,12 +5227,6 @@ body.dark .profile-avatar-uploader {
   }
 
   .ai-output-box:not(.has-output) { min-height: 172px !important; }
-
-  .ai-empty-orb {
-    width: 52px !important;
-    height: 52px !important;
-    border-radius: 17px !important;
-  }
 
   .ai-empty-state { gap: 10px !important; }
   .ai-empty-state span { font-size: .88rem !important; line-height: 1.55 !important; }
@@ -5785,52 +5260,10 @@ body.dark .profile-avatar-uploader {
    Search stays on top row; quick actions stay below it.
 ========================================================= */
 @media (max-width: 860px) {
-  .topbar {
-    display: grid !important;
-    grid-template-columns: 44px minmax(0, 1fr) 44px !important;
-    grid-template-rows: 44px auto !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin: 0 0 18px !important;
-  }
-
-  .mobile-sidebar-toggle {
-    grid-column: 1 !important;
-    grid-row: 1 !important;
-  }
-
-  .search-wrap {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-  }
-
-  .top-actions {
-    display: contents !important;
-  }
 
   .top-actions .notifications-dropdown {
     grid-column: 3 !important;
     grid-row: 1 !important;
-  }
-
-  .search {
-    padding-right: 16px !important;
-    direction: ltr;
-    text-align: left;
-  }
-
-  .search[type="search"]::-webkit-search-cancel-button {
-    cursor: pointer;
-    margin-left: 8px;
-  }
-}
-
-@media (max-width: 430px) {
-  .topbar {
-    grid-template-columns: 42px minmax(0, 1fr) 42px !important;
-    grid-template-rows: 42px auto !important;
-    gap: 7px !important;
-    margin-bottom: 16px !important;
   }
 }
 
@@ -5919,10 +5352,6 @@ body.dark .profile-avatar-uploader {
     align-items: center;
     justify-content: center;
     padding: 0 14px;
-    border: 0;
-    border-radius: 13px;
-    color: #fff;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
     font-size: .82rem;
     font-weight: 850;
     white-space: nowrap;
@@ -5982,7 +5411,6 @@ body.dark .profile-avatar-uploader {
     .dashboard-ticket-search-btn {
         height: 34px;
         padding-inline: 12px;
-        border-radius: 12px;
         font-size: .78rem;
     }
 
@@ -6015,7 +5443,7 @@ body.dark .profile-avatar-uploader {
         padding: 14px !important;
         border: 1px solid var(--border) !important;
         border-radius: 18px !important;
-        background: rgba(15, 23, 42, .42) !important;
+        background: rgba(17, 17, 19, .42) !important;
     }
 
     .dashboard-mobile-cards-table td {
@@ -6142,7 +5570,6 @@ body.dark .profile-avatar-uploader {
     width: 100% !important;
     min-height: 42px !important;
     justify-content: center !important;
-    border-radius: 15px !important;
   }
 
   .dashboard-mobile-cards-table,
@@ -6178,7 +5605,7 @@ body.dark .profile-avatar-uploader {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     animation: none !important;
   }
 
@@ -6254,17 +5681,6 @@ body.dark .profile-avatar-uploader {
 ========================================================= */
 .deleted-ticket-row.is-hidden {
   display: none !important;
-}
-
-.btn-page-back {
-  color: #fff !important;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
-  border: 1px solid rgba(14, 165, 233, .35) !important;
-  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
-}
-
-.btn-page-back:hover {
-  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
 }
 
 .deleted-ticket-search {
@@ -6434,7 +5850,6 @@ body.dark .profile-avatar-uploader {
 @media (max-width: 760px) {
   .deleted-tickets-card {
     overflow: visible !important;
-    border-radius: 22px !important;
   }
 
   .deleted-tickets-card .card-head {
@@ -6450,13 +5865,17 @@ body.dark .profile-avatar-uploader {
     gap: 10px !important;
   }
 
-  .deleted-ticket-search input,
-  .deleted-ticket-search button,
-  .deleted-ticket-search .btn {
+  .deleted-ticket-search input, .deleted-ticket-search button {
     width: 100% !important;
     min-width: 0 !important;
     height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .deleted-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
   }
 
   .deleted-tickets-wrap {
@@ -6487,7 +5906,7 @@ body.dark .profile-avatar-uploader {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
   }
@@ -6589,7 +6008,6 @@ body.dark .profile-avatar-uploader {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 14px !important;
   }
 
   .deleted-tickets-table td[colspan] {
@@ -6764,18 +6182,6 @@ body.dark .profile-avatar-uploader {
 }
 
 /* Create Ticket page: make Back to Tickets match the rest of the action buttons. */
-body:has(.ticket-create-card) .page-head a.btn-secondary,
-body:has(.ticket-create-card) .page-head .btn.secondary {
-  color: #fff !important;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
-  border: 1px solid rgba(14, 165, 233, .35) !important;
-  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
-}
-
-body:has(.ticket-create-card) .page-head a.btn-secondary:hover,
-body:has(.ticket-create-card) .page-head .btn.secondary:hover {
-  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
-}
 
 /* Unassigned page: clean avatars and make ticket text match Deleted/Overdue. */
 .unassigned-table .ticket-link span,
@@ -6835,11 +6241,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 
 @media (min-width: 761px) {
   .unassigned-table-card {
-    border-radius: 28px !important;
     overflow: hidden !important;
-    background:
-      radial-gradient(circle at top right, rgba(6, 182, 212, .08), transparent 32%),
-      var(--surface) !important;
   }
 
   .unassigned-table-card .table-head,
@@ -6934,7 +6336,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 
   .unassigned-table th {
     padding: 17px 22px !important;
-    background: rgba(15, 23, 42, .12) !important;
+    background: rgba(17, 17, 19, .12) !important;
     font-size: 11.5px !important;
   }
 
@@ -6972,7 +6374,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 @media (max-width: 760px) {
   .unassigned-table-card {
     overflow: visible !important;
-    border-radius: 22px !important;
   }
 
   .unassigned-table-card .table-head,
@@ -6989,13 +6390,17 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     gap: 10px !important;
   }
 
-  .unassigned-ticket-search input,
-  .unassigned-ticket-search button,
-  .unassigned-ticket-search .btn {
+  .unassigned-ticket-search input, .unassigned-ticket-search button {
     width: 100% !important;
     min-width: 0 !important;
     height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .unassigned-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
   }
 
 
@@ -7026,10 +6431,13 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   }
 
 
-  .unassigned-table .users-role-actions .role-select,
-  .unassigned-table .users-role-actions .btn,
-  .unassigned-table .priority-assign-select,
-  .unassigned-table .unassigned-due-date-input {
+  .unassigned-table .users-role-actions .role-select, .unassigned-table .priority-assign-select, .unassigned-table .unassigned-due-date-input {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+
+  .unassigned-table .users-role-actions .btn {
     width: 100% !important;
     min-width: 0 !important;
   }
@@ -7136,11 +6544,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   .deleted-tickets-card,
   .unassigned-table-card,
   .table-card:has(.overdue-table) {
-    border-radius: 28px !important;
     overflow: hidden !important;
-    background:
-      radial-gradient(circle at top right, rgba(6, 182, 212, .08), transparent 32%),
-      var(--surface) !important;
   }
 
   .tickets-index-card .table-head,
@@ -7259,18 +6663,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     color: var(--muted) !important;
   }
 
-  .tickets-index-card .filters button,
-  .tickets-index-card .filters .btn,
-  .deleted-ticket-search .deleted-ticket-search-btn,
-  .deleted-ticket-search .deleted-ticket-reset,
-  .overdue-ticket-search button,
-  .overdue-ticket-search .btn,
-  .overdue-search-form button,
-  .overdue-search-form .btn,
-  .table-card:has(.overdue-table) .filters button,
-  .table-card:has(.overdue-table) .filters .btn,
-  .unassigned-ticket-search .unassigned-ticket-search-btn,
-  .unassigned-ticket-search .unassigned-ticket-reset {
+  .deleted-ticket-search .deleted-ticket-search-btn, .deleted-ticket-search .deleted-ticket-reset, .unassigned-ticket-search .unassigned-ticket-search-btn, .unassigned-ticket-search .unassigned-ticket-reset {
     width: auto !important;
     min-width: 86px !important;
     height: 50px !important;
@@ -7279,6 +6672,24 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     justify-content: center !important;
     padding: 0 19px !important;
     border-radius: 16px !important;
+    white-space: nowrap !important;
+  }
+
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn,
+  .overdue-ticket-search button,
+  .overdue-ticket-search .btn,
+  .overdue-search-form button,
+  .overdue-search-form .btn,
+  .table-card:has(.overdue-table) .filters button,
+  .table-card:has(.overdue-table) .filters .btn {
+    width: auto !important;
+    min-width: 86px !important;
+    height: 50px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 19px !important;
     white-space: nowrap !important;
   }
 
@@ -7298,7 +6709,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     box-shadow: none !important;
   }
 
-  .tickets-index-card .table-wrap,
   .deleted-tickets-wrap,
   .unassigned-table-card .table-wrap,
   .table-card:has(.overdue-table) .table-wrap {
@@ -7310,7 +6720,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   .overdue-table th,
   .unassigned-table th {
     padding: 17px 22px !important;
-    background: rgba(15, 23, 42, .12) !important;
+    background: rgba(17, 17, 19, .12) !important;
     font-size: 11.5px !important;
   }
 
@@ -7380,7 +6790,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   .unassigned-table-card,
   .table-card:has(.overdue-table) {
     overflow: visible !important;
-    border-radius: 22px !important;
   }
 
   .tickets-index-card .table-head,
@@ -7409,32 +6818,26 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     margin: 0 !important;
   }
 
-  .tickets-index-card .filters input,
-  .tickets-index-card .filters select,
-  .tickets-index-card .filters button,
-  .tickets-index-card .filters .btn,
-  .deleted-ticket-search input,
-  .deleted-ticket-search button,
-  .deleted-ticket-search .btn,
-  .overdue-ticket-search input,
-  .overdue-ticket-search select,
-  .overdue-ticket-search button,
-  .overdue-ticket-search .btn,
-  .overdue-search-form input,
-  .overdue-search-form select,
-  .overdue-search-form button,
-  .overdue-search-form .btn,
-  .table-card:has(.overdue-table) .filters input,
-  .table-card:has(.overdue-table) .filters select,
-  .table-card:has(.overdue-table) .filters button,
-  .table-card:has(.overdue-table) .filters .btn,
-  .unassigned-ticket-search input,
-  .unassigned-ticket-search button,
-  .unassigned-ticket-search .btn {
+  .tickets-index-card .filters input, .tickets-index-card .filters select, .deleted-ticket-search input, .deleted-ticket-search button, .overdue-ticket-search input, .overdue-ticket-search select, .overdue-search-form input, .overdue-search-form select, .table-card:has(.overdue-table) .filters input, .table-card:has(.overdue-table) .filters select, .unassigned-ticket-search input, .unassigned-ticket-search button {
     width: 100% !important;
     min-width: 0 !important;
     height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .tickets-index-card .filters button,
+  .tickets-index-card .filters .btn,
+  .deleted-ticket-search .btn,
+  .overdue-ticket-search button,
+  .overdue-ticket-search .btn,
+  .overdue-search-form button,
+  .overdue-search-form .btn,
+  .table-card:has(.overdue-table) .filters button,
+  .table-card:has(.overdue-table) .filters .btn,
+  .unassigned-ticket-search .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
   }
 
   .tickets-index-card .table-wrap,
@@ -7482,7 +6885,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
     transform: none !important;
@@ -7667,17 +7070,20 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     justify-content: stretch !important;
   }
 
-  .tickets-table .row-actions .btn,
-  .deleted-ticket-actions .btn,
-  .overdue-table .row-actions .btn,
-  .unassigned-table .users-role-actions .btn,
-  .unassigned-table .users-role-actions .role-select,
-  .unassigned-table .priority-assign-select,
-  .unassigned-table .unassigned-due-date-input {
+  .unassigned-table .users-role-actions .role-select, .unassigned-table .priority-assign-select, .unassigned-table .unassigned-due-date-input {
     width: 100% !important;
     min-width: 0 !important;
     min-height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .tickets-table .row-actions .btn,
+  .deleted-ticket-actions .btn,
+  .overdue-table .row-actions .btn,
+  .unassigned-table .users-role-actions .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
   }
 
   .tickets-table td[colspan],
@@ -7774,33 +7180,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
 ========================================================= */
 
 /* Color all Back buttons in page headers/actions */
-.btn-page-back,
-.page-head a.btn-secondary,
-.page-head a.btn.secondary,
-.page-actions a.btn-secondary,
-.page-actions a.btn.secondary,
-.ticket-actions a.btn-secondary,
-.ticket-actions a.btn.secondary,
-.ticket-show-actions a.btn-secondary,
-.ticket-show-actions a.btn.secondary {
-  color: #fff !important;
-  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
-  border: 1px solid rgba(14, 165, 233, .35) !important;
-  box-shadow: 0 12px 28px rgba(14, 165, 233, .22) !important;
-}
-
-.btn-page-back:hover,
-.page-head a.btn-secondary:hover,
-.page-head a.btn.secondary:hover,
-.page-actions a.btn-secondary:hover,
-.page-actions a.btn.secondary:hover,
-.ticket-actions a.btn-secondary:hover,
-.ticket-actions a.btn.secondary:hover,
-.ticket-show-actions a.btn-secondary:hover,
-.ticket-show-actions a.btn.secondary:hover {
-  color: #fff !important;
-  box-shadow: 0 16px 36px rgba(14, 165, 233, .32) !important;
-}
 
 /* Mobile only: arrange Ticket Show action buttons cleanly */
 @media (max-width: 760px) {
@@ -7814,12 +7193,14 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     align-items: stretch !important;
   }
 
+  .page-head .page-actions form, .ticket-actions form, .ticket-show-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
   .page-head .page-actions .btn,
   .ticket-actions .btn,
-  .ticket-show-actions .btn,
-  .page-head .page-actions form,
-  .ticket-actions form,
-  .ticket-show-actions form {
+  .ticket-show-actions .btn {
     width: 100% !important;
     margin: 0 !important;
   }
@@ -7829,7 +7210,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   .ticket-show-actions .btn {
     min-height: 46px !important;
     padding: 0 10px !important;
-    border-radius: 14px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -7856,12 +7236,12 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
   }
 
   /* Edit and Close get more balanced space */
+  .page-head .page-actions > a[href*="edit"], .ticket-actions > a[href*="edit"], .ticket-show-actions > a[href*="edit"] {
+    grid-column: span 1 !important;
+  }
   .page-head .page-actions > a.btn-edit-soft,
-  .page-head .page-actions > a[href*="edit"],
   .ticket-actions > a.btn-edit-soft,
-  .ticket-actions > a[href*="edit"],
-  .ticket-show-actions > a.btn-edit-soft,
-  .ticket-show-actions > a[href*="edit"] {
+  .ticket-show-actions > a.btn-edit-soft {
     grid-column: span 1 !important;
   }
 
@@ -7902,17 +7282,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
    Topbar search clear button - desktop only
    Mobile stays unchanged.
 ========================================================= */
-
-@media (min-width: 861px) {
-  .topbar .search[type="search"] {
-    padding-right: 78px !important;
-  }
-
-  .topbar .search[type="search"]::-webkit-search-cancel-button {
-    cursor: pointer;
-    margin-right: 16px;
-  }
-}
 
 /* =========================================================
    Tickets index filter message
@@ -8147,8 +7516,11 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     justify-content: stretch !important;
   }
 
-  .activity-search-form input,
-  .activity-search-form button,
+  .activity-search-form input, .activity-search-form button {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
   .activity-search-form .btn {
     width: 100% !important;
     min-width: 0 !important;
@@ -8209,7 +7581,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
     transform: none !important;
@@ -8325,7 +7697,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 13px !important;
     font-size: .82rem !important;
   }
 
@@ -8377,7 +7748,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
     transform: none !important;
@@ -8516,7 +7887,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 13px !important;
     font-size: .82rem !important;
   }
 
@@ -8589,14 +7959,21 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     border-radius: 16px !important;
   }
 
-  .users-search-form button,
-  .users-search-form .btn {
+  .users-search-form button {
     height: 50px !important;
     min-width: 86px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     border-radius: 16px !important;
+  }
+
+  .users-search-form .btn {
+    height: 50px !important;
+    min-width: 86px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .users-search-status {
@@ -8613,13 +7990,17 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     gap: 10px !important;
   }
 
-  .users-search-form input,
-  .users-search-form button,
-  .users-search-form .btn {
+  .users-search-form input, .users-search-form button {
     width: 100% !important;
     min-width: 0 !important;
     height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .users-search-form .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
   }
 
   .users-search-status {
@@ -8750,8 +8131,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     border-radius: 16px !important;
   }
 
-  .kb-search-form button,
-  .kb-search-form .btn {
+  .kb-search-form button {
     width: auto !important;
     min-width: 86px !important;
     height: 50px !important;
@@ -8759,9 +8139,16 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     border-radius: 16px !important;
   }
 
+  .kb-search-form .btn {
+    width: auto !important;
+    min-width: 86px !important;
+    height: 50px !important;
+    padding: 0 19px !important;
+  }
+
   .kb-articles-table th {
     padding: 17px 22px !important;
-    background: rgba(15, 23, 42, .12) !important;
+    background: rgba(17, 17, 19, .12) !important;
     font-size: 11.5px !important;
   }
 
@@ -8818,13 +8205,17 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     gap: 10px !important;
   }
 
-  .kb-search-form input,
-  .kb-search-form button,
-  .kb-search-form .btn {
+  .kb-search-form input, .kb-search-form button {
     width: 100% !important;
     min-width: 0 !important;
     height: 42px !important;
     border-radius: 14px !important;
+  }
+
+  .kb-search-form .btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 42px !important;
   }
 
   .kb-search-status {
@@ -8863,7 +8254,7 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
     transform: none !important;
@@ -8958,7 +8349,6 @@ body:has(.ticket-create-card) .page-head .btn.secondary:hover {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 13px !important;
     font-size: .82rem !important;
   }
 
@@ -9069,17 +8459,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
   margin: 0 !important;
 }
 
-.btn-downgrade-user {
-  color: #fff !important;
-  background: linear-gradient(135deg, #0ea5e9, #6366f1) !important;
-  border: 1px solid rgba(99, 102, 241, .32) !important;
-  box-shadow: 0 12px 28px rgba(99, 102, 241, .22) !important;
-}
-
-.btn-downgrade-user:hover {
-  box-shadow: 0 16px 36px rgba(99, 102, 241, .32) !important;
-}
-
 .agents-table-card .agents-row-actions {
   justify-content: center !important;
 }
@@ -9150,9 +8529,13 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     width: 100% !important;
   }
 
-  .agents-table .agents-downgrade-form .btn,
-  .agents-table .agents-row-actions .btn,
   .agents-table .agents-row-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .agents-table .agents-downgrade-form .btn,
+  .agents-table .agents-row-actions .btn {
     width: 100% !important;
     margin: 0 !important;
   }
@@ -9165,7 +8548,6 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
   .agents-table .btn-downgrade-user {
     min-height: 40px !important;
-    border-radius: 13px !important;
   }
 }
 /* =========================================================
@@ -9224,7 +8606,7 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     padding: 14px !important;
     border: 1px solid var(--border) !important;
     border-radius: 18px !important;
-    background: rgba(15, 23, 42, .42) !important;
+    background: rgba(17, 17, 19, .42) !important;
     box-shadow: none !important;
     animation: none !important;
     transform: none !important;
@@ -9346,14 +8728,16 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     justify-content: stretch !important;
   }
 
-  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .role-select {
+    min-width: 0 !important;
+  }
+
   .unassigned-table .users-role-actions .btn {
     min-width: 0 !important;
   }
 
   .unassigned-table .users-role-actions .btn {
     min-height: 42px !important;
-    border-radius: 14px !important;
   }
 
   .unassigned-table td[colspan] {
@@ -9365,10 +8749,10 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
 
 @media (max-width: 380px) {
 
-  .unassigned-table .priority-assign-select,
-  .unassigned-table .unassigned-due-date-input,
-  .unassigned-table .role-select,
-  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .priority-assign-select, .unassigned-table .unassigned-due-date-input, .unassigned-table .role-select, .unassigned-table .users-role-actions .role-select {
+    max-width: 165px !important;
+  }
+
   .unassigned-table .users-role-actions .btn {
     max-width: 165px !important;
   }
@@ -9564,7 +8948,12 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     max-width: 178px !important;
   }
 
-  .unassigned-table .users-role-actions .role-select,
+  .unassigned-table .users-role-actions .role-select {
+    width: 100% !important;
+    max-width: 178px !important;
+    justify-self: start !important;
+  }
+
   .unassigned-table .users-role-actions .btn {
     width: 100% !important;
     max-width: 178px !important;
@@ -9634,7 +9023,7 @@ body:has(.ticket-create-card form[action*="knowledge"]) .page-head + .table-card
     width: 1px !important;
     height: 15px !important;
     display: block !important;
-    background: rgba(15, 23, 42, .25) !important;
+    background: rgba(17, 17, 19, .25) !important;
   }
 
 }
@@ -10138,29 +9527,11 @@ body {
 /* Keep only the switch itself animated and lightweight. */
 
 /* Heavy surfaces should not animate slowly when CSS variables change. */
-.sidebar,
-.topbar,
-.card,
-.table-card,
-.auth-card,
-.ai-card,
-.ai-workspace-card,
-.ai-output-card,
-.profile-main-card,
-.profile-info-card,
-.profile-activity-card,
-.notifications-menu,
-.notification-summary-card,
-.ticket-create-card,
+.sidebar, .card, .table-card, .auth-card, .ai-card, .ai-workspace-card, .ai-output-card, .profile-main-card, .profile-info-card, .profile-activity-card, .notifications-menu, .notification-summary-card, .ticket-create-card, .public-preview-card, .form-group input, .form-group select, .form-group textarea, .filters input, .filters select {
+  transition-duration: 120ms !important;
+}
 .deleted-tickets-card,
-.unassigned-table-card,
-.public-preview-card,
-.form-group input,
-.form-group select,
-.form-group textarea,
-.search,
-.filters input,
-.filters select {
+.unassigned-table-card {
   transition-duration: 120ms !important;
 }
 
@@ -10173,15 +9544,6 @@ body.theme-changing *,
 }
 
 /* Mobile devices feel smoother without constant floating header CTA animation. */
-@media (max-width: 860px) {
-  .topbar .btn-primary,
-  .topbar .new-ticket-btn,
-  .ai-empty-orb,
-  .ai-empty-orb::before,
-  .ai-empty-svg {
-    animation: none !important;
-  }
-}
 
 /* Keep accessibility preference respected at the very end of the file. */
 @media (prefers-reduced-motion: reduce) {
@@ -10198,36 +9560,6 @@ body.theme-changing *,
 ========================================================= */
 
 /* Keep the search clear X small and close to the right side */
-.topbar .search[type="search"] {
-    padding-right: 34px !important;
-}
-
-html[dir="rtl"] .topbar .search[type="search"] {
-    padding-right: 56px !important;
-    padding-left: 34px !important;
-}
-
-.topbar .search[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 10px;
-    height: 10px;
-    margin-right: 2px;
-    cursor: pointer;
-    opacity: .75;
-    background:
-        linear-gradient(45deg, transparent 42%, var(--muted) 43%, var(--muted) 57%, transparent 58%),
-        linear-gradient(-45deg, transparent 42%, var(--muted) 43%, var(--muted) 57%, transparent 58%);
-}
-
-html[dir="rtl"] .topbar .search[type="search"]::-webkit-search-cancel-button {
-    margin-right: 0;
-    margin-left: 2px;
-}
-
-.topbar .search[type="search"]::-webkit-search-cancel-button:hover {
-    opacity: 1;
-}
 
 /* Restore and move AI ticket select arrow slightly left */
 .ai-form-area select {
@@ -10508,63 +9840,11 @@ body:not(.dark) .ai-scope-notice {
 /* =========================================================
    43. Automatic language switch and RTL polish
 ========================================================= */
-.language-switch-form {
-  margin: 0;
-}
-
-.language-switch {
-  width: 58px;
-  height: 58px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 1px solid rgba(148, 163, 184, .22);
-  border-radius: 20px;
-  color: var(--text);
-  background:
-    radial-gradient(circle at 35% 20%, rgba(56, 189, 248, .22), transparent 44%),
-    radial-gradient(circle at 75% 70%, rgba(124, 92, 255, .2), transparent 44%),
-    var(--panel);
-  box-shadow: var(--shadow-soft);
-  transition:
-    transform var(--motion-fast) var(--ease-out),
-    border-color var(--motion-normal) var(--ease-out),
-    box-shadow var(--motion-normal) var(--ease-out),
-    background-color var(--motion-normal) var(--ease-out);
-}
-
-.language-switch:hover {
-  transform: translateY(-2px);
-  border-color: rgba(34, 211, 238, .42);
-  box-shadow: 0 18px 42px rgba(14, 165, 233, .2);
-}
 
 .language-toggle-svg {
   width: 34px;
   height: 34px;
   display: block;
-}
-
-.language-switch-code {
-  width: 32px;
-  height: 32px;
-  display: inline-grid;
-  place-items: center;
-  border: 1px solid rgba(34, 211, 238, .72);
-  border-radius: 11px;
-  color: #e0faff;
-  background: linear-gradient(135deg, rgba(8, 47, 73, .96), rgba(30, 41, 59, .96));
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, .06),
-    0 8px 20px rgba(6, 182, 212, .18);
-  font-size: 12px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: 0;
-  direction: ltr;
-  text-align: center;
-  user-select: none;
 }
 
 .language-toggle-bg {
@@ -10620,8 +9900,6 @@ html[dir="rtl"] .nav a,
 html[dir="rtl"] .nav .disabled,
 html[dir="rtl"] .nav-link,
 html[dir="rtl"] .sidebar-link,
-html[dir="rtl"] .top-actions,
-html[dir="rtl"] .user-box,
 html[dir="rtl"] .person,
 html[dir="rtl"] .agent-person,
 html[dir="rtl"] .user-person,
@@ -10637,17 +9915,6 @@ html[dir="rtl"] .nav a:hover,
 html[dir="rtl"] .nav-link:hover,
 html[dir="rtl"] .sidebar-link:hover {
   transform: translateX(-4px);
-}
-
-html[dir="rtl"] .search {
-  padding: 16px 56px 16px 20px;
-  direction: rtl;
-  text-align: right;
-}
-
-html[dir="rtl"] .search-icon {
-  right: 20px;
-  left: auto;
 }
 
 html[dir="rtl"] .shortcut {
@@ -10688,14 +9955,6 @@ html[dir="rtl"] [data-no-auto-translate] {
   text-align: left;
 }
 
-html[dir="rtl"] .language-switch {
-  direction: ltr;
-}
-
-html[dir="rtl"] .topbar {
-  direction: rtl;
-}
-
 html[dir="rtl"] .topbar-search-form {
   direction: rtl;
 }
@@ -10729,17 +9988,6 @@ html[dir="rtl"]:not(.ui-translated) [data-auto-translate-attribute] {
     box-shadow: -24px 0 70px rgba(0, 0, 0, .34);
   }
 
-  html[dir="rtl"] .search {
-    padding: 0 40px 0 12px !important;
-    direction: rtl;
-    text-align: right;
-  }
-
-  html[dir="rtl"] .search-icon {
-    right: 14px;
-    left: auto;
-  }
-
   html[dir="rtl"] .notifications-menu {
     right: 14px !important;
     left: 14px !important;
@@ -10750,65 +9998,6 @@ html[dir="rtl"]:not(.ui-translated) [data-auto-translate-attribute] {
    44. Stable topbar action sizing
 ========================================================= */
 @media (min-width: 861px) {
-  .topbar {
-    grid-template-columns: minmax(320px, 1fr) max-content !important;
-  }
-
-  .top-actions {
-    flex: 0 0 auto;
-    flex-wrap: nowrap !important;
-    gap: 10px !important;
-    min-width: 0;
-  }
-
-  .topbar .new-ticket-btn {
-    width: 150px !important;
-    min-width: 150px !important;
-    max-width: 150px !important;
-    height: 54px !important;
-    padding: 0 14px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    font-size: clamp(14px, 0.95vw, 20px) !important;
-    line-height: 1 !important;
-  }
-
-  .topbar .new-ticket-btn span {
-    display: flex !important;
-    width: 100% !important;
-    height: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: hidden !important;
-    text-align: center !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-    line-height: 1 !important;
-  }
-
-  html[dir="rtl"] .topbar .new-ticket-btn {
-    font-size: 17px !important;
-  }
-
-  .language-switch-form {
-    flex: 0 0 54px !important;
-    width: 54px !important;
-    min-width: 54px !important;
-    max-width: 54px !important;
-  }
-
-  .language-switch {
-    width: 54px !important;
-    min-width: 54px !important;
-    max-width: 54px !important;
-    height: 54px !important;
-    border-radius: 18px !important;
-    overflow: hidden !important;
-  }
 
   .language-switch .language-toggle-svg {
     width: 34px !important;
@@ -10821,64 +10010,8 @@ html[dir="rtl"]:not(.ui-translated) [data-auto-translate-attribute] {
    45. Mobile topbar cleanup after language switch
    Keep one language control on mobile and prevent action-row crowding.
 ========================================================= */
-@media (max-width: 860px) {
-  .top-actions .language-switch-form {
-    display: none !important;
-  }
-
-  .top-actions {
-    display: flex !important;
-    justify-content: flex-end !important;
-    min-width: 44px !important;
-  }
-}
 
 
 /* =========================================================
    46. Quiet language switch polish
 ========================================================= */
-.language-switch-form {
-  flex: 0 0 46px !important;
-  width: 46px !important;
-  min-width: 46px !important;
-  max-width: 46px !important;
-}
-
-.language-switch {
-  width: 46px !important;
-  min-width: 46px !important;
-  max-width: 46px !important;
-  height: 38px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 999px !important;
-  color: var(--muted) !important;
-  background: var(--panel) !important;
-  box-shadow: none !important;
-}
-
-.language-switch:hover {
-  transform: translateY(-1px) !important;
-  color: var(--text) !important;
-  border-color: rgba(37, 99, 235, .32) !important;
-  background: var(--panel-soft) !important;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, .07) !important;
-}
-
-.language-switch-code {
-  width: auto !important;
-  min-width: 30px !important;
-  height: 24px !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  color: inherit !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0 !important;
-}
-
-[data-theme="dark"] .language-switch:hover {
-  border-color: rgba(6, 182, 212, .32) !important;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .18) !important;
-}

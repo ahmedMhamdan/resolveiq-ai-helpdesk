@@ -60,6 +60,13 @@
         @case('close')
             <path d="m6 6 12 12M18 6 6 18"/>
             @break
+        @case('search')
+            <circle cx="10.8" cy="10.8" r="6.3"/>
+            <path d="m15.3 15.3 4 4"/>
+            @break
+        @case('bell')
+            <path d="M18 9a6 6 0 0 0-12 0c0 7-2.5 7-2.5 8h17c0-1-2.5-1-2.5-8m-8 11a2.3 2.3 0 0 0 4 0"/>
+            @break
         @case('menu')
             <path d="M4 6h16M4 12h16M4 18h16"/>
             @break
